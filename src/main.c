@@ -6,29 +6,41 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/09 18:28:33 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/09/11 18:25:24 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int main(void)
+void	handle_input(t_input *input, char **envp)
 {
-	char *line;
-
-	while(1)
+	if (lexical_analysis(input, input->line))
+		return ;
+	if (ft_strcmp(input->line, "env") == 0)
 	{
-		minishell();
-		line = readline("Ingresa una línea de texto: ");
-		add_history(line);
-		if(line != NULL)
-			printf("La línea ingresada es: %s\n", line);
-		else
-		{
-			printf("Line == NULL\n");
-			break;
-		}
-		rl_on_new_line();
+		while (*envp)
+			printf("%s\n", *envp++);
 	}
-	return 0;
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	t_input	input;
+
+	(void)argv;
+	if (argc == 1)
+	{
+		while(1)
+		{
+			input.line = readline("$megashell> ");
+			add_history(input.line);
+			if(input.line != NULL)
+				handle_input(&input, envp);
+			else
+				return (0);
+			rl_on_new_line();
+		}
+	}
+	printf(USAGE_ERROR);
+	return (1);
 }
