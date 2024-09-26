@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/11 18:25:13 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:13:36 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,18 @@ typedef enum
 	NOT_OPERATORS
 }			state;
 
+
+typedef enum
+{
+	TOKEN_STRING,
+    TOKEN_PIPE,
+    TOKEN_REDIRECT_IN,
+    TOKEN_REDIRECT_OUT,
+    TOKEN_REDIRECT_APPEND,
+	TOKEN_QUOTED_STRING,
+    TOKEN_INVALID
+}			token_type;
+
 typedef enum
 {
 	INPUT_SPACE = 0,
@@ -38,29 +50,51 @@ typedef enum
 	INPUT_ELSE
 } 			input;
 
+typedef struct s_tree
+{
+	char			*data;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}				t_tree;
+
+typedef struct s_token
+{
+	char			*value;
+	token_type		type;
+	struct s_token	*next;
+}				t_token;
+
+
 typedef struct s_automata
 {
-	char	**alphabet;
-	int		previous_state;
-	int		state;
+	t_token			*tokens;
+	char			**alphabet;
+	char			*token_start;
+	char			buffer[20000];
+	int				buffer_pos;
+	int				between_words;
+	int				previous_state;
+	int				state;
+	int				i;
 }				t_automata;
 
 typedef struct s_input
 {
-	char	*line;
-	char	**tokens;
+	char			*line;
+	char			**tokens;
 }				t_input;
 
 void	handle_input(t_input *input, char **envp);
 
 // PARSING
-int		lexical_analysis(t_input *input, char *line);
-void	automata_init(t_automata *automata);
-int		transition_table(int i, int j);
-int		get_input(char c);
+t_token		*lexer(char *line);
+void		automata_init(t_automata *automata);
+int			transition_table(int i, int j);
+int			get_input(char c);
 
 
 // UTILS
-int		ft_strlen(char *str);
-void	ft_bzero(void *s, size_t n);
-int		ft_strcmp(const char *str1, const char *str2);
+char		*ft_strdup(const char *s1);
+void		ft_bzero(void *s, size_t n);
+int			ft_strcmp(const char *str1, const char *str2);
+int			ft_strlen(char *str);

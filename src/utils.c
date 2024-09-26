@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/11 13:48:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/09/19 12:37:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int ft_strlen(char *str)
     }
     return i;
 }
-
 
 void	ft_bzero(void *s, size_t n)
 {
@@ -45,4 +44,26 @@ int	ft_strcmp(const char *str1, const char *str2)
 		str2++;
 	}
 	return *(unsigned char *)str1 - *(unsigned char *)str2;
+}
+
+char	*ft_strdup(const char *s1)
+{
+	size_t	i;	
+	size_t	j;
+	char	*s2;
+
+	i = 0;
+	j = 0;
+	while (s1[j])
+		j++;
+	s2 = (char *)malloc((j + 1) * sizeof (const char));
+	if (s2 == NULL)
+		return (NULL);
+	while (i < j)
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
 }

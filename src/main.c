@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/11 18:25:24 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/09/19 13:20:27 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 void	handle_input(t_input *input, char **envp)
 {
-	if (lexical_analysis(input, input->line))
-		return ;
+	t_token	*tokens;
+
+	tokens = lexer(input->line);
+	while (tokens != NULL)
+	{
+        printf("Token: %s\n", tokens->value);
+        tokens = tokens->next;
+    }
+	return ;
 	if (ft_strcmp(input->line, "env") == 0)
 	{
 		while (*envp)
