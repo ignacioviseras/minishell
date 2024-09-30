@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/19 16:13:36 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:38:32 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ typedef enum
 {
 	TOKEN_STRING,
     TOKEN_PIPE,
-    TOKEN_REDIRECT_IN,
-    TOKEN_REDIRECT_OUT,
-    TOKEN_REDIRECT_APPEND,
+    TOKEN_IN,
+	TOKEN_HEREDOC,
+    TOKEN_OUT,
+    TOKEN_APPEND,
 	TOKEN_QUOTED_STRING,
     TOKEN_INVALID
 }			token_type;
@@ -70,8 +71,7 @@ typedef struct s_automata
 	t_token			*tokens;
 	char			**alphabet;
 	char			*token_start;
-	char			buffer[20000];
-	int				buffer_pos;
+	char			buf[256];
 	int				between_words;
 	int				previous_state;
 	int				state;
@@ -90,11 +90,17 @@ void	handle_input(t_input *input, char **envp);
 t_token		*lexer(char *line);
 void		automata_init(t_automata *automata);
 int			transition_table(int i, int j);
-int			get_input(char c);
-
+int			get_input_type(char c);
 
 // UTILS
 char		*ft_strdup(const char *s1);
 void		ft_bzero(void *s, size_t n);
 int			ft_strcmp(const char *str1, const char *str2);
 int			ft_strlen(char *str);
+
+// TOKENIZER
+void	tokenizer(t_automata *automata, char *input, int *i);
+void	tokenize_words(t_automata *automata, char *input, int *i);
+void	tokenize_words(t_automata *automata, char *input, int *i);
+void	add_token(t_token **head, t_token *new_token);
+t_token	*create_token(token_type type, char *value);

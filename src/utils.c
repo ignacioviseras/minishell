@@ -6,23 +6,23 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/19 12:37:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:41:19 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-    int i;
+	int	i;
 
 	i = 0;
-    while (*str != '\0')
-    {
-        str++;
-        i++;
-    }
-    return i;
+	while (*str != '\0')
+	{
+		str++;
+		i++;
+	}
+	return (i);
 }
 
 void	ft_bzero(void *s, size_t n)
@@ -43,7 +43,7 @@ int	ft_strcmp(const char *str1, const char *str2)
 		str1++;
 		str2++;
 	}
-	return *(unsigned char *)str1 - *(unsigned char *)str2;
+	return (*(unsigned char *)str1 - *(unsigned char *)str2);
 }
 
 char	*ft_strdup(const char *s1)
