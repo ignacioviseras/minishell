@@ -6,35 +6,61 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/30 15:38:37 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:54:50 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/*
+ *	Deterministic Finite Automaton (DFA)
+ *	
+ *	This table is deterministic because for every status and input symbol,
+ *	there is exactly one next status. A transition table defines how the 
+ *	DFA moves from one status to another	upon reading an input symbol.
+ *	
+ *		- Each row represents the status of the DFA.
+ *		- Each column represents the symbol from the alphabet
+ *		- Each cell contains the next status to which the DFA transitions
+ *	
+ *	In this case, the transition table is ONLY used to determine the
+ *	validity of the input.
+*/
 int	transition_table(int i, int j)
 {
-	const int	states[8][5] = {
-		//   \s  |  "  '  ^
-	{0, 3, 1, 2, 7}, // 0 Empty input
-	{1, 1, 6, 1, 1}, // 1 Open double quotes
-	{2, 2, 2, 6, 2}, // 2 Open single quotes
-	{5, 4, 4, 4, 7}, // 3 Pipe open
-	{4, 4, 4, 4, 4}, // 4 Invalid input
-	{5, 4, 1, 2, 7}, // 5 Spaces without words
-	{6, 3, 1, 2, 7}, // 6 Spaces between words
-	{6, 3, 1, 2, 7}, // 7 Not operators
+	const int status[][8] = {
+//   \S,  |,  <,  >,  ",  ',  ^
+	{ 0,  8,  8,  8,  1,  2, 11},   // 0  Empty input
+	{ 1,  1,  1,  1,  10, 1,  1},   // 1  Open double quotes
+	{ 2,  2,  2,  2,  2, 10,  2},   // 2  Open single quotes
+	{ 9,  8,  8,  8,  1,  2, 11},   // 3  Pipe open
+	{ 9,  8,  5,  8,  1,  2, 11},   // 4  Less open
+	{ 9,  8,  8,  8,  1,  2, 11},   // 5  Heredoc open
+	{ 9,  8,  8,  7,  1,  2, 11},   // 6  Greater open
+	{ 9,  8,  8,  8,  1,  2, 11},   // 7  Append open
+	{ 8,  8,  8,  8,  8,  8,  8},   // 8  Invalid input
+	{ 9,  1,  1,  1,  1,  2, 11},   // 9  Spaces without words
+	{10,  3,  4,  6,  1,  2, 11},   // 10 Spaces between words
+	{10,  3,  4,  6,  1,  2, 11},   // 11 Not operators
 	};
 
-	return (states[i][j]);
+	return (status[i][j]);
 }
 
-int	get_input_type(char c)
+/*
+ *	Returns the value assigned to each character of the input string
+ *	to use it on the transition table.
+*/
+int	get_symbol(char c)
 {
 	if (c == ' ')
 		return (INPUT_SPACE);
 	if (c == '|')
 		return (INPUT_PIPE);
+	if (c == '<')
+		return (INPUT_LESS);
+	if (c == '>')
+		return (INPUT_GREATER);
 	if (c == '"')
 		return (INPUT_DOUBLE_QUOTE);
 	if (c == '\'')
@@ -42,23 +68,52 @@ int	get_input_type(char c)
 	return (INPUT_ELSE);
 }
 
-void	skip_spaces(const char *input, int *i)
+/* 
+ *	Checks whether the input is valid or not, based on the status returned
+ *	by the DFA transition table.
+ */
+int	input_checker(t_automata *automata, char *input, int i)
 {
-	while (input[*i] && input[*i] == ' ')
-		(*i)++;
+	if (input[i] == '\0')
+	{
+		automata->status = \
+		transition_table(automata->previous_status, get_symbol(input[i - 1]));
+		if (automata->status > 0 && automata->status < 6)
+		{
+			printf("syntax error\n");
+			return (1);
+		}
+	}
+	automata->status = \
+	transition_table(automata->previous_status, get_symbol(input[i]));
+	automata->previous_status = automata->status;
+	if (automata->status == INVALID_INPUT)
+	{
+		printf("syntax error\n");
+		return (1);
+	}
+	return (0);
 }
 
+/*
+ * Initialize each value of the referenced automata 
+ */
 void	automata_init(t_automata *automata)
 {
 	automata->tokens = NULL;
-	automata->state = 0;
-	automata->previous_state = 0;
-	memset(automata->buf, 0, sizeof(automata->buf));
+	automata->status = 0;
+	automata->previous_status = 0;
+	ft_memset(automata->buf, 0, sizeof(automata->buf));
 }
 
-// Automata-Driven Lexer:
-// This lexer will use a Deterministic Finite Automaton (DFA) to 
-// process the input string, handle state transitions, and produce tokens.
+/*
+ *	Automata-Driven Lexer
+ *
+ *	This lexer will use a Deterministic Finite Automaton (DFA) to 
+ *	process the input string, handle state transitions, and produce tokens.
+ *
+ *	Returns an array of tokens to create a binary tree.
+ */
 t_token	*lexer(char *input)
 {
 	t_automata	automata;
@@ -71,15 +126,12 @@ t_token	*lexer(char *input)
 		skip_spaces(input, &i);
 		if (input[i] == '\0')
 			break ;
-		tokenizer(&automata, input, &i);
-		automata.state = \
-		transition_table(automata.previous_state, get_input_type(input[i]));
-		automata.previous_state = automata.state;
-		if (automata.state == INVALID_INPUT)
-		{
-			printf("Invalid input detected\n");
+		if (input_checker(&automata, input, i) == 1)
 			return (NULL);
-		}
+		tokenizer(&automata, input, &i);
 	}
+	if (input_checker(&automata, input, i) == 1)
+			return (NULL);
+	printf("\n");
 	return (automata.tokens);
 }

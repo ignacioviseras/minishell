@@ -6,23 +6,31 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/30 15:39:00 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:52:16 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/*
+ * Creates a new token with the specified type and value, 
+ * allocating memory and duplicating the token's value string.
+ */
 t_token	*create_token(token_type type, char *value)
 {
 	t_token	*token;
 
-	token = (t_token *)malloc(sizeof(t_token));
+	token = malloc(sizeof(t_token));
 	token->type = type;
-	token->value = strdup(value);
+	token->value = ft_strdup(value);
 	token->next = NULL;
 	return (token);
 }
 
+/*
+ * Adds a new token to the end of the token list. 
+ * If the list is empty, the new token becomes the head.
+ */
 void	add_token(t_token **head, t_token *new_token)
 {
 	t_token	*temp;
@@ -38,7 +46,12 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
-void	tokenize_words(t_automata *automata, char *input, int *i)
+/*
+ * Tokenizes strings based on quotes or delimiters. 
+ * If the input starts with a quote (' or "), it extracts the quoted string. 
+ * Otherwise, it tokenizes until encountering a space or operator (|, >, <). 
+ */
+void	tokenize_strings(t_automata *automata, char *input, int *i)
 {
 	int		start;
 	char	quote;
@@ -53,7 +66,7 @@ void	tokenize_words(t_automata *automata, char *input, int *i)
 			(*i)++;
 		strncpy(automata->buf, input + start, *i - start);
 		automata->buf[*i - start] = '\0';
-		add_token(&automata->tokens, create_token(TOKEN_STRING, automata->buf));
+		add_token(&automata->tokens, create_token(TOKEN_QUOTED_STRING, automata->buf));
 	}
 	else
 	{
@@ -67,6 +80,10 @@ void	tokenize_words(t_automata *automata, char *input, int *i)
 	}
 }
 
+/*
+ *	The tokenizer is in charge of separating everything into tokens,
+ *	differentiating between operators, redirections and strings.
+ */
 void	tokenizer(t_automata *automata, char *input, int *i)
 {
 	if (input[*i] == '|')
@@ -78,9 +95,9 @@ void	tokenizer(t_automata *automata, char *input, int *i)
 		|| (input[*i] == '<' && input[*i + 1] != '<'))
 	{
 		if (input[(*i)++] == '>')
-			add_token(&automata->tokens, create_token(TOKEN_OUT, ">"));
+			add_token(&automata->tokens, create_token(TOKEN_OUTPUT, ">"));
 		else
-			add_token(&automata->tokens, create_token(TOKEN_IN, "<"));
+			add_token(&automata->tokens, create_token(TOKEN_INPUT, "<"));
 	}
 	else if ((input[*i] == '>' && input[*i + 1] == '>') \
 		|| (input[*i] == '<' && input[*i + 1] == '<'))
@@ -92,5 +109,5 @@ void	tokenizer(t_automata *automata, char *input, int *i)
 		(*i) += 2;
 	}
 	else
-		tokenize_words(automata, input, i);
+		tokenize_strings(automata, input, i);
 }
