@@ -6,11 +6,24 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/09/30 15:41:19 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:43:04 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	*ft_memset(void *b, int c, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		((char *)b)[i] = c;
+		i++;
+	}
+	return (b);
+}
 
 int	ft_strlen(char *str)
 {
