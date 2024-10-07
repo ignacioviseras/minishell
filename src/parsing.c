@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 16:54:20 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/04 15:09:54 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:59:03 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 
 void	parsing(t_token *tokens)
 {
-	//t_tree	ast;
 	int	i;
 
 	i = 1;
@@ -35,5 +34,4 @@ void	parsing(t_token *tokens)
 		printf("Token %i: %s\n", i++, tokens->value);
 		tokens = tokens->next;
 	}
-	//ast = build_ast(tokens);
 }

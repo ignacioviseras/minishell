@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/07 14:25:39 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:09:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,40 +17,22 @@
 
 #define USAGE_ERROR "Correct use: ./minishell\n"
 
-//* Each status represents one row in the DFA's transition table.
-typedef enum 
-{
-	EMPTY,
-	OPEN_DOUBLE_QUOTES,
-	OPEN_SINGLE_QUOTES,
-	PIPE_OPEN,
-	LESS_OPEN,
-	HEREDOC_OPEN,
-	GREATER_OPEN,
-	APPEND_OPEN,
-	INVALID_INPUT,
-	SPACE_WITHOUT_WORDS,
-	SPACE_BETWEEN_WORDS,
-	NOT_OPERATORS
-}			status;
-
 //* Types of tokens, used to create the AST in the parser.
-typedef enum
+typedef enum token_type
 {
 	TOKEN_PIPE,
-	TOKEN_STRING,
-	TOKEN_INPUT,
-	TOKEN_HEREDOC,
 	TOKEN_OUTPUT,
+	TOKEN_INPUT,
 	TOKEN_APPEND,
-	TOKEN_QUOTED_STRING,
+	TOKEN_HEREDOC,
+	TOKEN_STRING,
 }			token_type;
 
 /*
  *	Automaton's alphabet, each symbol represents one column in
  *	the DFA's transition table. 
  */
-typedef enum
+typedef enum input
 {
 	INPUT_SPACE,
 	INPUT_PIPE,
@@ -75,7 +57,6 @@ typedef struct s_tree
  * Each token holds a string value, a type, and a pointer to the next
  * token in the list.
  */
-
 typedef struct s_token
 {
 	char			*value;
@@ -90,14 +71,12 @@ typedef struct s_token
  *	 - Buffer: Used for each of the tokens. It's limited to 256 due to the
  * 	   filename length limits of most Unix file systems.
  *	 - Status: Stores the value returned by the transition table.
- *	 - Previous status: Well, I don't think I need to explain it tbh.
  */
 typedef struct s_automata
 {
 	t_token			*tokens;
 	char			buf[256];
 	int				status;
-	int				previous_status;
 }				t_automata;
 
 
@@ -112,6 +91,7 @@ int					get_symbol(char c);
 void				*ft_memset(void *b, int c, size_t len);
 void				skip_spaces(const char *input, int *i);
 void				ft_bzero(void *s, size_t n);
+char				ft_lstlastchar(t_token *lst);
 char				*ft_strdup(const char *s1);
 int					ft_strlen(char *str);
 int					ft_strcmp(const char *str1, const char *str2);

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/07 13:39:09 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:58:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	tokenize_strings(t_automata *automata, char *input, int *i)
 	int		start;
 	char	quote;
 
-	
 	start = *i;
 	while (input[*i] && input[*i] != ' ' && input[*i] != '|' \
 		&& input[*i] != '>' && input[*i] != '<')

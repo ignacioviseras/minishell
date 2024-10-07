@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/07 14:53:48 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:58:49 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	handle_input(char *input, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
+
 	(void)argv;
 	if (argc == 1)
 	{
