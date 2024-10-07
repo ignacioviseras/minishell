@@ -6,42 +6,36 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/07 15:05:23 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:58:15 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /*
- *	Deterministic Finite Automaton (DFA)
- *	
- *	This table is deterministic because for every status and input symbol,
- *	there is exactly one next status. A transition table defines how the 
- *	DFA moves from one status to another	upon reading an input symbol.
- *	
+ * A transition table that returns the next state based on the current state (i)
+ * and input (j).
+ *
  *		- Each row represents the status of the DFA.
- *		- Each column represents the symbol from the alphabet
- *		- Each cell contains the next status to which the DFA transitions
- *	
- *	In this case, the transition table is used to determine the
- *	validity of the input.
-*/
+ *		- Each column represents the input type.
+ *		- Each cell contains the next status to which the DFA transitions.
+ */
 int	transition_table(int i, int j)
 {
-	const int status[][8] = {
-//   \S,  |,  <,  >,  ",  ',  ^
-	{ 0,  8,  4,  6,  1,  2, 11},   // 0  Empty input
-	{ 1,  1,  1,  1,  10, 1,  1},   // 1  Open double quotes
-	{ 2,  2,  2,  2,  2, 10,  2},   // 2  Open single quotes
-	{ 9,  8,  8,  8,  1,  2, 11},   // 3  Pipe open
-	{ 9,  8,  5,  8,  1,  2, 11},   // 4  Less open
-	{ 9,  8,  8,  8,  1,  2, 11},   // 5  Heredoc open
-	{ 9,  8,  8,  7,  1,  2, 11},   // 6  Greater open
-	{ 9,  8,  8,  8,  1,  2, 11},   // 7  Append open
-	{ 8,  8,  8,  8,  8,  8,  8},   // 8  Invalid input
-	{ 9,  1,  1,  1,  1,  2, 11},   // 9  Spaces without words
-	{10,  3,  4,  6,  1,  2, 11},   // 10 Spaces between words
-	{10,  3,  4,  6,  1,  2, 11},   // 11 Not operators
+	const int	status[][8] = {
+		//   \S,  |,  <,  >,  ",  ',  ^
+	{0, 8, 4, 6, 1, 2, 11},		// 0  Empty input
+	{1, 1, 1, 1, 10, 1, 1},		// 1  Open double quotes
+	{2, 2, 2, 2, 2, 10, 2},		// 2  Open single quotes
+	{9, 8, 8, 8, 1, 2, 11},		// 3  Pipe open
+	{9, 8, 5, 8, 1, 2, 11},		// 4  Less open
+	{9, 8, 8, 8, 1, 2, 11},		// 5  Heredoc open
+	{9, 8, 8, 7, 1, 2, 11},		// 6  Greater open
+	{9, 8, 8, 8, 1, 2, 11},		// 7  Append open
+	{8, 8, 8, 8, 8, 8, 8},		// 8  Invalid input
+	{9, 1, 1, 1, 1, 2, 11},		// 9  Spaces without words
+	{10, 3, 4, 6, 1, 2, 11},	// 10 Spaces between words
+	{10, 3, 4, 6, 1, 2, 11},	// 11 Not operators
 	};
 
 	return (status[i][j]);
@@ -68,80 +62,29 @@ int	get_symbol(char c)
 	return (INPUT_ELSE);
 }
 
-int	quotes_counter(char *str, char c, int *i)
-{
-	int	quotes;
-
-	quotes = 1;
-	(*i)++;
-	while (str[*i] && str[*i] != c)
-		(*i)++;
-	if (str[*i] == c)
-		quotes++;
-	if (quotes % 2 != 0)
-		return (0);
-	return (1);
-}
-
-/*
- * Iterates through a string to count and validate matching quotes (' or "). 
- * Returns 0 if any quotes are unmatched, 1 if all are properly closed.
- */
-int	count_quotes(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-		{
-			if (!quotes_counter(str, '\'', &i))
-				return (0);
-		}
-		else if (str[i] == '"')
-		{
-			if (!quotes_counter(str, '"', &i))
-				return (0);
-		}
-		i++;
-	}
-	return (1);
-}
-
 /* 
  *	Checks whether the input is valid or not, based on the status returned
  *	by the DFA transition table.
  */
 int	input_checker(t_automata *automata, char *input)
 {
-	//t_token	*aux;
 	int		i;
 
-	//aux = automata->tokens;
 	i = 0;
-	/* while (aux)
-	{
-		if (count_quotes(aux->value) == 0)
-		{
-			printf("syntax error\n");
-			return (1);
-		}
-		aux = aux->next;
-	} */
 	while (input[i] != '\0')
 	{
 		automata->status = \
-		transition_table(automata->previous_status, get_symbol(input[i]));
-		automata->previous_status = automata->status;
+		transition_table(automata->status, get_symbol(input[i]));
 		i++;
-		if (input[i] == '\0' && automata->status < 9)
+		if ((input[i] == '\0' && automata->status < 9) || \
+			(get_symbol(ft_lstlastchar(automata->tokens)) > 0 && \
+			get_symbol(ft_lstlastchar(automata->tokens)) < 4))
 		{
 			printf("syntax error\n");
-			return (1);
+			return (0);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 /*
@@ -151,7 +94,6 @@ void	automata_init(t_automata *automata)
 {
 	automata->tokens = NULL;
 	automata->status = 0;
-	automata->previous_status = 0;
 	ft_memset(automata->buf, 0, sizeof(automata->buf));
 }
 
@@ -177,8 +119,8 @@ t_token	*lexer(char *input)
 			break ;
 		tokenizer(&automata, input, &i);
 	}
-	if (input_checker(&automata, input) == 1)
-			return (NULL);
+	if (!input_checker(&automata, input))
+		return (NULL);
 	printf("\n");
 	return (automata.tokens);
 }
