@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/01 17:52:16 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 13:39:09 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,23 @@ void	tokenize_strings(t_automata *automata, char *input, int *i)
 	int		start;
 	char	quote;
 
-	if (input[*i] == '"' || input[*i] == '\'')
+	
+	start = *i;
+	while (input[*i] && input[*i] != ' ' && input[*i] != '|' \
+		&& input[*i] != '>' && input[*i] != '<')
 	{
-		quote = input[*i];
-		start = (*i)++;
-		while (input[*i] && input[*i] != quote)
+		if (input[*i] == '"' || input[*i] == '\'')
+		{
+			quote = input[*i];
 			(*i)++;
-		if (input[*i] == quote)
-			(*i)++;
-		strncpy(automata->buf, input + start, *i - start);
-		automata->buf[*i - start] = '\0';
-		add_token(&automata->tokens, create_token(TOKEN_QUOTED_STRING, automata->buf));
+			while (input[*i] && input[*i] != quote)
+				(*i)++;
+		}
+		(*i)++;
 	}
-	else
-	{
-		start = *i;
-		while (input[*i] && input[*i] != ' ' && input[*i] != '|' \
-			&& input[*i] != '>' && input[*i] != '<')
-			(*i)++;
-		strncpy(automata->buf, input + start, *i - start);
-		automata->buf[*i - start] = '\0';
-		add_token(&automata->tokens, create_token(TOKEN_STRING, automata->buf));
-	}
+	strncpy(automata->buf, input + start, *i - start);
+	automata->buf[*i - start] = '\0';
+	add_token(&automata->tokens, create_token(TOKEN_STRING, automata->buf));
 }
 
 /*

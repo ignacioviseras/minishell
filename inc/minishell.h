@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/01 18:18:58 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 14:25:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef enum
 /*
  *	Automaton's alphabet, each symbol represents one column in
  *	the DFA's transition table. 
-*/
+ */
 typedef enum
 {
 	INPUT_SPACE,
