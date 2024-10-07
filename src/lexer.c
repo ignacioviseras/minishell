@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/01 17:54:50 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:05:23 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@
  *		- Each column represents the symbol from the alphabet
  *		- Each cell contains the next status to which the DFA transitions
  *	
- *	In this case, the transition table is ONLY used to determine the
+ *	In this case, the transition table is used to determine the
  *	validity of the input.
 */
 int	transition_table(int i, int j)
 {
 	const int status[][8] = {
 //   \S,  |,  <,  >,  ",  ',  ^
-	{ 0,  8,  8,  8,  1,  2, 11},   // 0  Empty input
+	{ 0,  8,  4,  6,  1,  2, 11},   // 0  Empty input
 	{ 1,  1,  1,  1,  10, 1,  1},   // 1  Open double quotes
 	{ 2,  2,  2,  2,  2, 10,  2},   // 2  Open single quotes
 	{ 9,  8,  8,  8,  1,  2, 11},   // 3  Pipe open
@@ -68,35 +68,84 @@ int	get_symbol(char c)
 	return (INPUT_ELSE);
 }
 
+int	quotes_counter(char *str, char c, int *i)
+{
+	int	quotes;
+
+	quotes = 1;
+	(*i)++;
+	while (str[*i] && str[*i] != c)
+		(*i)++;
+	if (str[*i] == c)
+		quotes++;
+	if (quotes % 2 != 0)
+		return (0);
+	return (1);
+}
+
+/*
+ * Iterates through a string to count and validate matching quotes (' or "). 
+ * Returns 0 if any quotes are unmatched, 1 if all are properly closed.
+ */
+int	count_quotes(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			if (!quotes_counter(str, '\'', &i))
+				return (0);
+		}
+		else if (str[i] == '"')
+		{
+			if (!quotes_counter(str, '"', &i))
+				return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 /* 
  *	Checks whether the input is valid or not, based on the status returned
  *	by the DFA transition table.
  */
-int	input_checker(t_automata *automata, char *input, int i)
+int	input_checker(t_automata *automata, char *input)
 {
-	if (input[i] == '\0')
+	//t_token	*aux;
+	int		i;
+
+	//aux = automata->tokens;
+	i = 0;
+	/* while (aux)
+	{
+		if (count_quotes(aux->value) == 0)
+		{
+			printf("syntax error\n");
+			return (1);
+		}
+		aux = aux->next;
+	} */
+	while (input[i] != '\0')
 	{
 		automata->status = \
-		transition_table(automata->previous_status, get_symbol(input[i - 1]));
-		if (automata->status > 0 && automata->status < 6)
+		transition_table(automata->previous_status, get_symbol(input[i]));
+		automata->previous_status = automata->status;
+		i++;
+		if (input[i] == '\0' && automata->status < 9)
 		{
 			printf("syntax error\n");
 			return (1);
 		}
 	}
-	automata->status = \
-	transition_table(automata->previous_status, get_symbol(input[i]));
-	automata->previous_status = automata->status;
-	if (automata->status == INVALID_INPUT)
-	{
-		printf("syntax error\n");
-		return (1);
-	}
 	return (0);
 }
 
 /*
- * Initialize each value of the referenced automata 
+ * Initialize each value of the referenced automata.
  */
 void	automata_init(t_automata *automata)
 {
@@ -126,11 +175,9 @@ t_token	*lexer(char *input)
 		skip_spaces(input, &i);
 		if (input[i] == '\0')
 			break ;
-		if (input_checker(&automata, input, i) == 1)
-			return (NULL);
 		tokenizer(&automata, input, &i);
 	}
-	if (input_checker(&automata, input, i) == 1)
+	if (input_checker(&automata, input) == 1)
 			return (NULL);
 	printf("\n");
 	return (automata.tokens);
