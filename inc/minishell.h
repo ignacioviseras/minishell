@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/07 17:09:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/08 16:27:06 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef enum token_type
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_STRING,
+	TOKEN_EOF = -1,
 }			token_type;
 
 /*
@@ -45,12 +46,13 @@ typedef enum input
 
 //TODO:	This structure will be used to create the 
 //TODO:	Abstract Syntax Tree (AST).
-typedef struct s_tree
+typedef struct s_ast
 {
 	void			*data;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}				t_tree;
+	struct s_ast	*left;
+	struct s_ast	*right;
+	token_type		type;
+}				t_ast;
 
 /*
  * Structure representing a token
@@ -103,5 +105,5 @@ void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(token_type type, char *value);
 
 // PARSER		
-void				parsing(t_token *tokens);
+t_ast				parsing(t_token *tokens);
 

@@ -6,11 +6,16 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/07 17:58:49 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/08 11:36:02 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	leaks(void)
+{
+	system("leaks -q minishell");
+}
 
 void	handle_input(char *input, char **envp)
 {
@@ -29,6 +34,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 
+	atexit(leaks);
 	(void)argv;
 	if (argc == 1)
 	{
