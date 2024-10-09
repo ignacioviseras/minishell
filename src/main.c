@@ -6,26 +6,27 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/08 17:22:15 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/09 20:37:34 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	handle_input(char *input, char **envp)
+void	handle_input(char *input, char **env)
 {
 	t_token	*tokens;
 
 	tokens = lexer(input);
 	parsing(tokens);
-	if (ft_strcmp(input, "env") == 0)
-	{
-		while (*envp)
-			printf("%s\n", *envp++);
-	}
+	if (env && env[0])
+		built_switch(env, input);
+	// if (env && env[0])
+	// 	have_env(env, input);
+	// else if (ft_strchr(input, '/') && ft_strchr(input, '/'))
+	// 	tramited("", input, env);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 
@@ -37,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 			input = readline("$megashell> ");
 			add_history(input);
 			if (input != NULL)
-				handle_input(input, envp);
+				handle_input(input, env);
 			else
 				return (0);
 			rl_on_new_line();

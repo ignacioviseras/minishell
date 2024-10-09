@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/08 16:47:56 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/09 19:11:01 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	*ft_memset(void *b, int c, size_t len)
 	return (b);
 }
 
-int	ft_strlen(char *str)
+size_t	ft_strlen(const char *str)
 {
 	int	i;
 
