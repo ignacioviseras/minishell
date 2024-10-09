@@ -6,7 +6,7 @@
 #    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/09 18:26:55 by drestrep          #+#    #+#              #
-#    Updated: 2024/10/08 18:47:37 by igvisera         ###   ########.fr        #
+#    Updated: 2024/10/09 20:29:36 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,16 +85,18 @@
 NAME 			= 	minishell
 
 CC 				= 	gcc
-CFLAGS 			= 	-g3 -Wall -Wextra -Werror #-fsanitize=address #-O3
+CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address -O3
 LDFLAGS			=	-lreadline
 INCLUDES		= 	-I ./inc/
 
 PATH_BASE 		=	./src/
 PATH_UTILS 		=	./src/utils/
 PATH_AFD 		=	./src/automaton/
+PATH_BUILT 		=	./src/built_ins/
 BASE	   		=	$(addprefix $(PATH_BASE), $(BASE_SRC))
-AFD   	  		=	$(addprefix $(PATH_AFD), $(AFD_SRC))
 UTILS	   		=	$(addprefix $(PATH_UTILS), $(UTILS_SRC))
+AFD   	  		=	$(addprefix $(PATH_AFD), $(AFD_SRC))
+BUILT  	  		=	$(addprefix $(PATH_BUILT), $(BUILT_SRC))
 
 BASE_SRC		=	main.c
 
@@ -102,12 +104,26 @@ AFD_SRC			=	lexer.c \
 					parsing.c \
 					tokenizer.c
 
+BUILT_SRC		=	built_ins1.c \
+					built_ins2.c \
+
 UTILS_SRC		=	utils.c \
-					utils2.c
+					utils2.c \
+					ft_calloc.c \
+					ft_str_toupper.c \
+					ft_strchr.c \
+					ft_strjoin.c \
+					ft_strlcpy.c \
+					ft_substr.c \
+					split_formated.c \
+					ft_strlcat.c \
+					ft_strncmp.c \
+					frees.c \
 
 OBJS			=	${AFD:.c=.o} \
 					${UTILS:.c=.o} \
-					${BASE:.c=.o}
+					${BASE:.c=.o} \
+					${BUILT:.c=.o} \
 
 all: $(NAME)
 
