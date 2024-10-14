@@ -3,34 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/14 14:00:32 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/14 19:59:32 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
 
-char *env_finder(char **env, char *find)
+// char *env_finder(char **env, char *find)
+// {
+// 	int	x;
+// 	char *env_path;
+// 	char *found;
+
+// 	x = 0;
+// 	env_path = ft_strjoin(ft_str_toupper(find), "=");
+// 	while (env[x])
+// 	{
+// 		if (ft_strncmp(find, env[x], ft_strlen(find)) == 0)
+// 		{
+// 			found = env[x] + ft_strlen(env_path) - 1;
+// 			free(env_path); 
+// 			return(found);
+// 		}
+// 		x++;
+// 	}
+// 	return (free(env_path), NULL);
+// }
+
+char		*get_home(char *pwd)
 {
-	int	x;
-	char *env_path;
-	char *found;
+	int x;
+	int slash;
+	char *home;
 
 	x = 0;
-	env_path = ft_strjoin(ft_str_toupper(find), "=");
-	while (env[x])
+	slash = 3;
+	while (pwd[x] != '\0')
 	{
-		if (ft_strncmp(find, env[x], ft_strlen(find)) == 0)
-		{
-			found = env[x] + ft_strlen(env_path) - 1;
-			free(env_path); 
-			return(found);
-		}
+		if (slash == 3)
+			break;
+		if (pwd[x] == '/')
+			slash++;
 		x++;
 	}
-	return (free(env_path), NULL);
+	home = ft_substr(pwd, 0, x);
+	return (home);
 }
 
 void command_pwd()
@@ -46,6 +66,16 @@ void command_cd(t_token *tokens)
 {
 	if (tokens == NULL)
 		return;
+	static char *home;
+	printf("1. '%s'\n", home);
+
+	if (home == NULL)
+	{
+		home = getenv("HOME");
+		if (home == NULL)
+			home = get_home(getenv("PWD"));
+		printf("'%s'\n", home);
+	}
 	if (ft_strcmp(tokens->value, "cd") == 0 && tokens->next == NULL)
 	{
 		if (chdir("~") != 0) //mirar como hacer esto bn

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/14 20:00:24 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ char				*env_finder(char **env, char *find);
 void				command_pwd();
 void				command_env(char **env);
 void				command_cd(t_token *token);
+char				*get_home(char *pwd);
 
 
 // TOKENIZER		

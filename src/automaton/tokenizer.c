@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/08 16:47:56 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:39:38 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	tokenize_strings(t_automata *automata, char *input, int *i)
 	char	quote;
 
 	start = *i;
+	//si borro esto el comando estaria todo junto -> input[*i] != ' ' &&
 	while (input[*i] && input[*i] != ' ' && input[*i] != '|' \
 		&& input[*i] != '>' && input[*i] != '<')
 	{
