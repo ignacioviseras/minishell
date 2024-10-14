@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/08 11:36:02 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:11:46 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,22 @@ void	leaks(void)
 	system("leaks -q minishell");
 }
 
-void	handle_input(char *input, char **envp)
+void built_switch(t_ast *ast, char **env)
+{
+	(void)ast;
+	(void)env;
+}
+
+void	handle_input(char *input, char **env)
 {
 	t_token	*tokens;
+	t_ast	*ast;
 
 	tokens = lexer(input);
-	parsing(tokens);
-	if (ft_strcmp(input, "env") == 0)
-	{
-		while (*envp)
-			printf("%s\n", *envp++);
-	}
+	ast = parsing(&tokens);
+	 return ;
+	if (env && env[0])
+		built_switch(ast, env);
 }
 
 int	main(int argc, char **argv, char **envp)

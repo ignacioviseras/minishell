@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/08 17:32:13 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:01:09 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,7 @@ t_token	*lexer(char *input)
 
 	i = 0;
 	automata_init(&automata);
-	if (!input_checker(&automata, input))
-		return (NULL);
+	
 	while (input[i] != '\0')
 	{
 		skip_spaces(input, &i);
@@ -121,7 +120,8 @@ t_token	*lexer(char *input)
 			break ;
 		tokenizer(&automata, input, &i);
 	}
+	if (!input_checker(&automata, input))
+		return (NULL);
 	add_token(&automata.tokens, create_token(TOKEN_EOF, "EOF"));
-	printf("\n");
 	return (automata.tokens);
 }
