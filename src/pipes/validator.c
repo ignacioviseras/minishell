@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/08 19:54:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*access_validate(char **path, char *comand)
 void validate_comand (char **comand_splited)
 {
 	ft_printf("\t--- Error ---\nComand empty\n");
-	free_all(comand_splited);
+	free_matrix(comand_splited);
 	exit(1);
 }
 
@@ -75,7 +75,7 @@ char	*load_param(char **path, char *comand)
 		{
 			comand_splited = ft_split(comand, ' ');
 			result = access_absolute(comand_splited[0]);
-			free_all(comand_splited);
+			free_matrix(comand_splited);
 		}
 		else
 			result = access_absolute(comand);
@@ -86,7 +86,7 @@ char	*load_param(char **path, char *comand)
 		if (comand_splited[0] == NULL)
 			validate_comand(comand_splited);
 		result = access_validate(path, comand_splited[0]);
-		free_all(comand_splited);
+		free_matrix(comand_splited);
 	}
 	else
 		result = access_validate(path, comand);

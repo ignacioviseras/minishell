@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/09 19:18:04 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@
 // 	p.comand_path2 = load_param(dir, arguments[3]);
 // 	p.comand1 = split_formated(arguments[2], ' ');
 // 	p.comand2 = split_formated(arguments[3], ' ');
-// 	free_all(dir);
+// 	free_matrix(dir);
 // 	if ((p.comand_path1 != NULL) && (p.comand_path2 != NULL))
 // 		initpipe(&p, env);
 // 	else
 // 	{
 // 		free(p.comand_path1);
 // 		free(p.comand_path2);
-// 		free_all(p.comand1);
-// 		free_all(p.comand2);
+// 		free_matrix(p.comand1);
+// 		free_matrix(p.comand2);
 // 		exit(1);
 // 	}
 // 	return (0);

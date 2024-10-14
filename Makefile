@@ -6,7 +6,7 @@
 #    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/09 18:26:55 by drestrep          #+#    #+#              #
-#    Updated: 2024/10/09 20:29:36 by igvisera         ###   ########.fr        #
+#    Updated: 2024/10/12 16:07:56 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -119,6 +119,7 @@ UTILS_SRC		=	utils.c \
 					ft_strlcat.c \
 					ft_strncmp.c \
 					frees.c \
+					ft_split.c \
 
 OBJS			=	${AFD:.c=.o} \
 					${UTILS:.c=.o} \

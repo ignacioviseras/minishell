@@ -1,11 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_formated.c                                   :+:      :+:    :+:   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/29 19:49:15 by igvisera          #+#    #+#             */
+/*   Created: 2024/04/21 17:22:24 by igvisera          #+#    #+#             */
 /*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -40,7 +40,7 @@ static int	n_words(char const *s, char c)
 	return (words);
 }
 
-char	**split_formated(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	size_t	i;
 	size_t	len_word;
@@ -55,7 +55,7 @@ char	**split_formated(char const *s, char c)
 		while (*s && *s == c)
 			s++;
 		if (!*s)
-			break ;
+			return (str[i] = NULL, str);
 		if (!ft_strchr(s, c))
 			len_word = ft_strlen(s);
 		else
@@ -65,6 +65,5 @@ char	**split_formated(char const *s, char c)
 			return (free_matrix(str), NULL);
 		s += len_word;
 	}
-	str[i] = NULL;
-	return (str);
+	return (str[i] = NULL, str);
 }

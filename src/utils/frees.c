@@ -6,13 +6,13 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/09 19:13:31 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
 
-void	**free_all(char **str)
+void	**free_matrix(char **str)
 {
 	int	i;
 

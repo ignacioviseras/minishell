@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/09 20:26:27 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,16 +126,17 @@ char				*ft_strjoin(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
-void				**free_all(char **str);
+void				**free_matrix(char **str);
 char				*ft_str_toupper(char *str);
+char				**ft_split(char const *s, char c);
 
 
 //BUILT_INS
-void				built_switch(char **env, char *find);
+void				built_switch(char **env, char *find, t_token *tokens);
 char				*env_finder(char **env, char *find);
-void				pwd(char **env);
-void				cd();
-void				env();
+void				command_pwd();
+void				command_env(char **env);
+void				command_cd(t_token *token);
 
 
 // TOKENIZER		
