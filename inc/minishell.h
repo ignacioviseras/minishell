@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/14 20:00:24 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:53:16 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 void				**free_matrix(char **str);
 char				*ft_str_toupper(char *str);
 char				**ft_split(char const *s, char c);
+char				*ft_strdup(const char *s);
+
 
 
 //BUILT_INS

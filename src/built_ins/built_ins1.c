@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/14 19:59:32 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/16 20:23:53 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,51 @@
 // 	return (free(env_path), NULL);
 // }
 
+// int flags_validator(char *flags, char *command_flags)
+// {
+// 	int x;
+// 	char **flags_splited;
+// 	char **cmd_flags_splited;
+	
+// 	// cd -asddpi
+// 	// 0. 'asddpi'
+// 	// 1. '(null)'
+
+// 	// flags_splited = ft_split(flags+1, ' ');
+// 	// flags+1;
+// 	x = 1;
+// 	flags_splited = ft_calloc(ft_strlen(flags+1), sizeof(char *));
+// 	cmd_flags_splited = ft_split(command_flags, ' ');
+// 	while (flags[x] != '\0')
+// 	{
+// 		flags_splited[x][0] = ft_strdup((char *)flags[x]);
+// 		x++;
+// 	}
+	
+// 	// if ()
+// 	// {
+
+// 	// }
+	
+// 	printf("0. '%s'\n", flags_splited[1]);
+// 	printf("1. '%s'\n", flags_splited[2]);
+// 	printf("2. '%s'\n", flags_splited[3]);
+// 	printf("3. '%s'\n", flags_splited[4]);
+// 	// while (flags_splited[x])
+// 	// {
+// 		// while (cmd_flags_splited[i])
+// 		// {
+// 		// 	i++;
+// 		//
+// 		// }		
+// 	// 	x++
+// 	// }
+	
+// 	free(flags_splited);
+// 	free(cmd_flags_splited);
+// 	return (0);//existen las flags
+// }
+
 char		*get_home(char *pwd)
 {
 	int x;
@@ -40,7 +85,7 @@ char		*get_home(char *pwd)
 	char *home;
 
 	x = 0;
-	slash = 3;
+	slash = 0;
 	while (pwd[x] != '\0')
 	{
 		if (slash == 3)
@@ -49,6 +94,8 @@ char		*get_home(char *pwd)
 			slash++;
 		x++;
 	}
+	if (slash == 3)
+		x = x-1;	
 	home = ft_substr(pwd, 0, x);
 	return (home);
 }
@@ -62,23 +109,23 @@ void command_pwd()
 	//necestio un perror?? por si no funicona?
 }
 
+/*
+	creo q no necesito los ft_strcmp(tokens->value, "cd") == 0
+ */
 void command_cd(t_token *tokens)
 {
 	if (tokens == NULL)
 		return;
 	static char *home;
-	printf("1. '%s'\n", home);
-
 	if (home == NULL)
 	{
 		home = getenv("HOME");
 		if (home == NULL)
 			home = get_home(getenv("PWD"));
-		printf("'%s'\n", home);
 	}
-	if (ft_strcmp(tokens->value, "cd") == 0 && tokens->next == NULL)
+	if (ft_strcmp(tokens->value, "cd") == 0 && (tokens->next == NULL || ft_strcmp(tokens->next->value, "~") == 0) )
 	{
-		if (chdir("~") != 0) //mirar como hacer esto bn
+		if (chdir(home) != 0)
 			perror("chdir");
 	}
 	else if (tokens->next != NULL && tokens->next->next != NULL)
@@ -87,8 +134,19 @@ void command_cd(t_token *tokens)
 			printf("bash: cd: too many arguments\n");
 	}
 	else if (ft_strcmp(tokens->value, "cd") == 0 && tokens->next->value)
+	{
+		// if (flags_validator(tokens->next->value, "L P") == 0)
+		// 	printf("son correctas las flags\n");
+/*
+	en caso de pasar una flag erronea tengo q poner esto
+	cd -z src 
+	cd: string not in pwd: -z
+
+	si la flag existe dar un mensaje de que no esta implementado L P
+*/
 		if (chdir(tokens->next->value) != 0)
 			printf("bash: cd: %s: No such file or directory\n", tokens->next->value);
+	}
 }
 
 void command_env(char **env)
@@ -105,9 +163,7 @@ void command_env(char **env)
 
 void built_switch(char **env, char *find, t_token *tokens)
 {
-	// printf("1 '%s'\n", tokens->next->value);
 	printf("find '%s'\n", find);
-	printf("accde\n");
 	char **command;
 	command = ft_split(find, ' ');
 	if (ft_strcmp(command[0], "pwd") == 0)
