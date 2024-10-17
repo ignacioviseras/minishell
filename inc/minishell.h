@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/14 15:28:43 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/17 18:01:32 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
 {
+	TOKEN_STRING,
 	TOKEN_PIPE,
 	TOKEN_OUTPUT,
 	TOKEN_INPUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_STRING,
-	TOKEN_EOF = -1,
+	TOKEN_EOF = -1
 }			token_type;
 
 /*
@@ -81,8 +81,21 @@ typedef struct s_automata
 	int				status;
 }				t_automata;
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}				t_env;
 
-void				handle_input(char *line, char **envp);
+typedef enum env_node_type
+{
+	KEY,
+	VALUE
+}				env_node_type;
+
+void	create_env(t_env *env, char **envp);
+void	handle_input(t_env *env, char *input);
 
 t_token				*lexer(char *line);
 void				automata_init(t_automata *automata);
@@ -97,6 +110,8 @@ char				ft_lstlastchar(t_token *lst);
 char				*ft_strdup(const char *s1);
 int					ft_strlen(char *str);
 int					ft_strcmp(const char *str1, const char *str2);
+char				*ft_substr(char *s, unsigned int start, size_t len);
+int					ft_strchr(const char *s, int c);
 
 // TOKENIZER		
 void				tokenize_strings(t_automata *automata, char *input, int *i);
@@ -105,5 +120,4 @@ void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(token_type type, char *value);
 
 // PARSER		
-t_ast				*parsing(t_token **tokens);
-
+t_ast				*parsing(t_token **tokens, t_env *env);
