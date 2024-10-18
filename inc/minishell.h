@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/16 19:53:16 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/19 01:33:16 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int					get_symbol(char c);
 // UTILS		
 void				*ft_memset(void *b, int c, size_t len);
 void				skip_spaces(const char *input, int *i);
+int					ft_charcmp(char c1, char c2);
 void				ft_bzero(void *s, size_t n);
 char				ft_lstlastchar(t_token *lst);
 char				*ft_strdup(const char *s1);
@@ -137,7 +138,8 @@ char				*ft_strdup(const char *s);
 void				built_switch(char **env, char *find, t_token *tokens);
 char				*env_finder(char **env, char *find);
 void				command_pwd();
-void				command_env(char **env);
+void				command_env(char **env, t_token *tokens);
+void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
 char				*get_home(char *pwd);
 

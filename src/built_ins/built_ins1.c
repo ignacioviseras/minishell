@@ -3,80 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/16 20:23:53 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/19 01:35:26 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
 
-// char *env_finder(char **env, char *find)
-// {
-// 	int	x;
-// 	char *env_path;
-// 	char *found;
+int flags_validator(char *flags, char *command_flags)
+{
+    int i;
+	int j;
+    int valid_flag;
+    char **cmd_flags_splited;
 
-// 	x = 0;
-// 	env_path = ft_strjoin(ft_str_toupper(find), "=");
-// 	while (env[x])
-// 	{
-// 		if (ft_strncmp(find, env[x], ft_strlen(find)) == 0)
-// 		{
-// 			found = env[x] + ft_strlen(env_path) - 1;
-// 			free(env_path); 
-// 			return(found);
-// 		}
-// 		x++;
-// 	}
-// 	return (free(env_path), NULL);
-// }
-
-// int flags_validator(char *flags, char *command_flags)
-// {
-// 	int x;
-// 	char **flags_splited;
-// 	char **cmd_flags_splited;
-	
-// 	// cd -asddpi
-// 	// 0. 'asddpi'
-// 	// 1. '(null)'
-
-// 	// flags_splited = ft_split(flags+1, ' ');
-// 	// flags+1;
-// 	x = 1;
-// 	flags_splited = ft_calloc(ft_strlen(flags+1), sizeof(char *));
-// 	cmd_flags_splited = ft_split(command_flags, ' ');
-// 	while (flags[x] != '\0')
-// 	{
-// 		flags_splited[x][0] = ft_strdup((char *)flags[x]);
-// 		x++;
-// 	}
-	
-// 	// if ()
-// 	// {
-
-// 	// }
-	
-// 	printf("0. '%s'\n", flags_splited[1]);
-// 	printf("1. '%s'\n", flags_splited[2]);
-// 	printf("2. '%s'\n", flags_splited[3]);
-// 	printf("3. '%s'\n", flags_splited[4]);
-// 	// while (flags_splited[x])
-// 	// {
-// 		// while (cmd_flags_splited[i])
-// 		// {
-// 		// 	i++;
-// 		//
-// 		// }		
-// 	// 	x++
-// 	// }
-	
-// 	free(flags_splited);
-// 	free(cmd_flags_splited);
-// 	return (0);//existen las flags
-// }
+    i = 0;
+    cmd_flags_splited = ft_split(command_flags, ' ');
+    while (flags[++i] != '\0')
+    {
+        j = -1;
+        valid_flag = 0;
+        while (cmd_flags_splited[++j])
+        {
+            if (ft_charcmp(flags[i], cmd_flags_splited[j][0]) == 0)
+            {
+                valid_flag = 1;
+                break;
+            }
+        }
+        if (!valid_flag)
+            return (free(cmd_flags_splited), i);
+    }
+    return (free(cmd_flags_splited), 0);
+}
 
 char		*get_home(char *pwd)
 {
@@ -100,13 +61,46 @@ char		*get_home(char *pwd)
 	return (home);
 }
 
-void command_pwd()
+void command_pwd(t_token *tokens)
 {
-	// uso 4096 como estandar de tamaño pq no el limits no me pilla PATH_MAX
-	char cwd[4096];
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-        printf("%s\n", cwd);
-	//necestio un perror?? por si no funicona?
+	int x;
+
+	if (tokens->next == NULL)
+	{
+		char cwd[4096];
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
+			printf("%s\n", cwd);
+		return;
+	}
+	if (ft_charcmp(tokens->next->value[0], '-') == 0)
+	{
+		x = flags_validator(tokens->next->value, "L P");
+		if (x == 0)
+			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
+		else
+			printf("bash: pwd: -%c: invalid option\npwd: usage: pwd [-LP]\n", \
+				tokens->next->value[x]);
+	}
+}
+
+void cd_actions(t_token *tokens)
+{
+	int x;
+
+	if (ft_charcmp(tokens->next->value[0], '-') == 0)
+	{
+		x = flags_validator(tokens->next->value, "L P");
+		if (x == 0)
+			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
+		else
+		{
+			printf("bash: cd: -%c: invalid option\ncd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n", \
+			tokens->next->value[x]);
+		}
+		x++;
+	}
+	else if (chdir(tokens->next->value) != 0)
+		printf("bash: cd: %s: No such file or directory\n", tokens->next->value);
 }
 
 /*
@@ -114,9 +108,10 @@ void command_pwd()
  */
 void command_cd(t_token *tokens)
 {
+	static char *home;
+
 	if (tokens == NULL)
 		return;
-	static char *home;
 	if (home == NULL)
 	{
 		home = getenv("HOME");
@@ -128,50 +123,53 @@ void command_cd(t_token *tokens)
 		if (chdir(home) != 0)
 			perror("chdir");
 	}
+	else if (ft_strcmp(tokens->value, "cd") == 0 && tokens->next->value)
+		cd_actions(tokens);
 	else if (tokens->next != NULL && tokens->next->next != NULL)
 	{
 		if (ft_strcmp(tokens->value, "cd") == 0 && tokens->next->next->value)
 			printf("bash: cd: too many arguments\n");
 	}
-	else if (ft_strcmp(tokens->value, "cd") == 0 && tokens->next->value)
-	{
-		// if (flags_validator(tokens->next->value, "L P") == 0)
-		// 	printf("son correctas las flags\n");
-/*
-	en caso de pasar una flag erronea tengo q poner esto
-	cd -z src 
-	cd: string not in pwd: -z
-
-	si la flag existe dar un mensaje de que no esta implementado L P
-*/
-		if (chdir(tokens->next->value) != 0)
-			printf("bash: cd: %s: No such file or directory\n", tokens->next->value);
-	}
 }
 
-void command_env(char **env)
+void command_env(char **env, t_token *tokens)
 {
 	int	x;
 
 	x = 0;
-	while (env[x])
+	if (tokens->next == NULL)
 	{
-		printf("%s\n", env[x]);
-		x++;
+		while (env[x])
+		{
+			printf("%s\n", env[x]);
+			x++;
+		}
+		return;
+	}
+	if (ft_charcmp(tokens->next->value[0], '-') == 0)
+	{
+		x = flags_validator(tokens->next->value, "i 0 u C S v");
+		if (x == 0)
+			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
+		else
+			printf("env: invalid option -- '%c'\nTry 'env --help' for more information.\n", \
+				tokens->next->value[x]);
 	}
 }
 
 void built_switch(char **env, char *find, t_token *tokens)
 {
-	printf("find '%s'\n", find);
 	char **command;
+
 	command = ft_split(find, ' ');
 	if (ft_strcmp(command[0], "pwd") == 0)
-		command_pwd();
+		command_pwd(tokens);
 	else if (ft_strcmp(command[0], "env") == 0)
-		command_env(env);
+		command_env(env, tokens);
 	else if (ft_strcmp(command[0], "cd") == 0)
 		command_cd(tokens);
+	// else if (ft_strcmp(find, "echo") == 0)
+	// 	command_echo(tokens);
 	else if (ft_strcmp(find, "clear") == 0)
 		printf("\033[2J\033[H");
 	free_matrix(command);

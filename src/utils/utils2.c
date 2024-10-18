@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:48:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/08 16:47:56 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/18 14:17:37 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,9 @@ void	skip_spaces(const char *input, int *i)
 {
 	while (input[*i] && input[*i] == ' ')
 		(*i)++;
+}
+
+int ft_charcmp(char c1, char c2)
+{
+    return (c1 - c2);
 }
