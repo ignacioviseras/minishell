@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/19 01:35:26 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/19 01:53:00 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,5 +172,8 @@ void built_switch(char **env, char *find, t_token *tokens)
 	// 	command_echo(tokens);
 	else if (ft_strcmp(find, "clear") == 0)
 		printf("\033[2J\033[H");
+	else if (ft_strcmp(find, "exit") == 0)
+		exit(1);// creo q esto puede dar problemas cuando se ejecuten minis dentro de minis
+	
 	free_matrix(command);
 }
