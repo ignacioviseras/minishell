@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:48:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/17 17:03:55 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/22 04:24:32 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ char	ft_lstlastchar(t_token *lst)
 	i = 0;
 	while (aux->next != NULL)
 		aux = aux->next;
-	while (aux->value[i + 1] != '\0')
+	while (aux->cmd_args[i + 1] != '\0')
 		i++;
-	return (aux->value[i]);
+	return (aux->cmd_args[i]);
 }
 
 void	skip_spaces(const char *input, int *i)

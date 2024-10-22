@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/14 18:18:00 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/22 06:11:09 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,24 @@
 t_token	*create_token(token_type type, char *value)
 {
 	t_token	*token;
+	int		space;
 
-	token = malloc(sizeof(t_token));
+	token = ft_malloc(sizeof(t_token));
+	token->cmd_args = ft_strdup(value);
+	space = ft_strchr(value, ' ');
+	if (space)
+	{
+		token->cmd = ft_substr(value, 0, space);
+		token->args = ft_strdup(value + space + 1);
+		if (!ft_strcmp(token->args, ""))
+			token->args = NULL;
+	}
+	else
+	{
+		token->cmd = ft_strdup(value);
+		token->args = NULL;
+	}
 	token->type = type;
-	token->value = ft_strdup(value);
 	token->next = NULL;
 	return (token);
 }

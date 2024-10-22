@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/09 18:26:55 by drestrep          #+#    #+#              #
-#    Updated: 2024/09/17 13:27:26 by drestrep         ###   ########.fr        #
+#    Updated: 2024/10/22 04:30:47 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 NAME 			= 		minishell
 
 CC 				= 		gcc
-CFLAGS 			= 		-g3 -Wall -Wextra -Werror #-fsanitize=address #-O3
+CFLAGS 			= 		-g3 -Wall -Wextra -Werror -fsanitize=address #-O3
 LDFLAGS			=		-lreadline
 
 SRC_DIR			=		src
