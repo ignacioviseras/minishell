@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/19 01:33:16 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/22 14:29:19 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,12 @@ typedef struct s_params
 
 }			t_params;
 
+typedef struct s_envi
+{
+	char 			*content;
+	struct s_envi	*next;
+}		t_envi;
+
 
 void				handle_input(char *line, char **envp);
 
@@ -131,17 +137,21 @@ void				**free_matrix(char **str);
 char				*ft_str_toupper(char *str);
 char				**ft_split(char const *s, char c);
 char				*ft_strdup(const char *s);
+t_envi				*create_node(char *content);
+void				add_bottom(t_envi **envi, t_envi *new_envi);
 
 
 
 //BUILT_INS
-void				built_switch(char **env, char *find, t_token *tokens);
-char				*env_finder(char **env, char *find);
+void				built_switch(t_envi *envi, char *find, t_token *tokens);
+char				*env_finder(t_envi **envi, char *find);
 void				command_pwd();
-void				command_env(char **env, t_token *tokens);
+void				command_env(t_token *tokens, t_envi *envi);
 void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
 char				*get_home(char *pwd);
+void				init_env(char **env, t_envi **envi);
+void				print_envi(t_envi *envi);
 
 
 // TOKENIZER		

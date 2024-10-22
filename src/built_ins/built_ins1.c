@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/19 01:53:00 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/22 14:28:11 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,18 +132,14 @@ void command_cd(t_token *tokens)
 	}
 }
 
-void command_env(char **env, t_token *tokens)
+void command_env(t_token *tokens, t_envi *envi)
 {
 	int	x;
 
 	x = 0;
 	if (tokens->next == NULL)
 	{
-		while (env[x])
-		{
-			printf("%s\n", env[x]);
-			x++;
-		}
+		print_envi(envi);
 		return;
 	}
 	if (ft_charcmp(tokens->next->value[0], '-') == 0)
@@ -157,15 +153,15 @@ void command_env(char **env, t_token *tokens)
 	}
 }
 
-void built_switch(char **env, char *find, t_token *tokens)
+void built_switch(t_envi *envi, char *find, t_token *tokens)
 {
 	char **command;
-
+	
 	command = ft_split(find, ' ');
 	if (ft_strcmp(command[0], "pwd") == 0)
 		command_pwd(tokens);
 	else if (ft_strcmp(command[0], "env") == 0)
-		command_env(env, tokens);
+		command_env(tokens, envi);
 	else if (ft_strcmp(command[0], "cd") == 0)
 		command_cd(tokens);
 	// else if (ft_strcmp(find, "echo") == 0)
