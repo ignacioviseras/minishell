@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/22 14:28:11 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:29:14 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void command_env(t_token *tokens, t_envi *envi)
 	}
 	if (ft_charcmp(tokens->next->value[0], '-') == 0)
 	{
-		x = flags_validator(tokens->next->value, "i 0 u C S v");
+		x = flags_validator(tokens->next->value, "i 0 u C S v -help");
 		if (x == 0)
 			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
 		else
@@ -153,23 +153,23 @@ void command_env(t_token *tokens, t_envi *envi)
 	}
 }
 
-void built_switch(t_envi *envi, char *find, t_token *tokens)
+void built_switch(t_envi *envi, t_token *tokens)
 {
-	char **command;
 	
-	command = ft_split(find, ' ');
-	if (ft_strcmp(command[0], "pwd") == 0)
+	if (ft_strcmp(tokens->value, "pwd") == 0)
 		command_pwd(tokens);
-	else if (ft_strcmp(command[0], "env") == 0)
+	else if (ft_strcmp(tokens->value, "env") == 0)
 		command_env(tokens, envi);
-	else if (ft_strcmp(command[0], "cd") == 0)
+	else if (ft_strcmp(tokens->value, "cd") == 0)
 		command_cd(tokens);
 	// else if (ft_strcmp(find, "echo") == 0)
 	// 	command_echo(tokens);
-	else if (ft_strcmp(find, "clear") == 0)
+	else if (ft_strcmp(tokens->value, "clear") == 0)
 		printf("\033[2J\033[H");
-	else if (ft_strcmp(find, "exit") == 0)
+	else if (ft_strcmp(tokens->value, "exit") == 0)
+	{
+		free_env(envi);
+		free_token(tokens);
 		exit(1);// creo q esto puede dar problemas cuando se ejecuten minis dentro de minis
-	
-	free_matrix(command);
+	}
 }

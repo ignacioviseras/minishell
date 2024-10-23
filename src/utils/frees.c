@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:39:23 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,3 +25,24 @@ void	**free_matrix(char **str)
 	return (free(str), NULL);
 }
 
+void	free_env(t_envi *envi)
+{
+	t_envi *temp;
+
+	while (envi)
+	{
+		temp = envi;
+		envi = envi->next;
+		free(temp->content);
+		free(temp);
+	}
+}
+
+void free_token(t_token *token) {
+    while (token) {
+        t_token *temp = token;
+        token = token->next;
+        free(temp->value);
+        free(temp);
+    }
+}

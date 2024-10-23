@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_actions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 02:14:36 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/22 11:26:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:41:13 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ t_envi	*create_node(char *content)
 		free(envi);
 		return (NULL);
 	}
-	envi->content = content;
+	envi->content = ft_strdup(content);
+	if (!envi->content)
+    {
+        free(envi);
+        return (NULL);
+    }
 	envi->next = NULL;
 	return (envi);
 }

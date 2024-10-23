@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/22 14:29:19 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:46:12 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ typedef struct s_envi
 }		t_envi;
 
 
-void				handle_input(char *line, char **envp);
+void				handle_input(char *input, t_envi *envi);
 
 t_token				*lexer(char *line);
 void				automata_init(t_automata *automata);
@@ -134,6 +134,8 @@ size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 void				**free_matrix(char **str);
+void				free_env(t_envi *envi);
+void				free_token(t_token *token);
 char				*ft_str_toupper(char *str);
 char				**ft_split(char const *s, char c);
 char				*ft_strdup(const char *s);
@@ -143,7 +145,7 @@ void				add_bottom(t_envi **envi, t_envi *new_envi);
 
 
 //BUILT_INS
-void				built_switch(t_envi *envi, char *find, t_token *tokens);
+void				built_switch(t_envi *envi, t_token *tokens);
 char				*env_finder(t_envi **envi, char *find);
 void				command_pwd();
 void				command_env(t_token *tokens, t_envi *envi);
