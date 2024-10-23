@@ -6,13 +6,13 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:48:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/22 04:24:32 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:37:50 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-int	ft_strchr(const char *s, int c)
+int	ft_charseach(const char *s, int c)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ int	ft_strchr(const char *s, int c)
 	return (0);
 }
 
-static int	ft_min(int a, int b)
+/* static int	ft_min(int a, int b)
 {
 	if (a < b)
 		return (a);
@@ -61,7 +61,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	}
 	sub[i] = '\0';
 	return (sub);
-}
+} */
 
 char	ft_lstlastchar(t_token *lst)
 {

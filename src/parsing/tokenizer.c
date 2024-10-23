@@ -6,11 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/22 06:11:09 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:27:25 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 /*
  * Creates a new token with the specified type and value, 
@@ -23,7 +23,7 @@ t_token	*create_token(token_type type, char *value)
 
 	token = ft_malloc(sizeof(t_token));
 	token->cmd_args = ft_strdup(value);
-	space = ft_strchr(value, ' ');
+	space = ft_charseach(value, ' ');
 	if (space)
 	{
 		token->cmd = ft_substr(value, 0, space);

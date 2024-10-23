@@ -6,11 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/22 06:10:55 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:15:29 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 /*
  * A transition table that returns the next state based on the current state (i)
@@ -76,7 +76,7 @@ int	input_checker(t_automata *automata, char *input)
 		automata->status = \
 		transition_table(automata->status, get_symbol(input[i]));
 		i++;
-		if ((input[i] == '\0' && automata->status <= 9) || \
+		if ((input[i] == '\0' && automata->status < 9) || \
 			(get_symbol(ft_lstlastchar(automata->tokens)) > 0 && \
 			get_symbol(ft_lstlastchar(automata->tokens)) < 4))
 		{
@@ -121,5 +121,6 @@ t_token	*lexer(char *input)
 	}
 	if (!input_checker(&automata, input))
 		return (NULL);
+	printf("\n");
 	return (automata.tokens);
 }

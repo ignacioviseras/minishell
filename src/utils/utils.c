@@ -6,11 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/22 05:08:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:35:28 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	*ft_memset(void *b, int c, size_t len)
 {
@@ -25,7 +25,7 @@ void	*ft_memset(void *b, int c, size_t len)
 	return (b);
 }
 
-int	ft_strlen(char *str)
+size_t	ft_strlen(const char *str)
 {
 	int	i;
 

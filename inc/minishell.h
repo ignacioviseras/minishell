@@ -6,16 +6,27 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/22 06:36:20 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/24 00:02:25 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <limits.h>
+#include <stdint.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
 #define USAGE_ERROR "Correct use: ./minishell\n"
+
+# ifndef READ_END
+#  define READ_END 0
+# endif
+
+# ifndef WRITE_END
+#  define WRITE_END 1
+# endif
 
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
@@ -84,6 +95,17 @@ typedef struct s_automata
 	int				status;
 }				t_automata;
 
+typedef struct s_params
+{
+	char		*file1;
+	char		*file2;
+	char		*comand_path1;
+	char		*comand_path2;
+	char		**comand1;
+	char		**comand2;
+
+}			t_params;
+
 
 /* 
  * The environment translated into a linked list.
@@ -111,12 +133,32 @@ int					get_symbol(char c);
 void				*ft_memset(void *b, int c, size_t len);
 void				skip_spaces(const char *input, int *i);
 void				ft_bzero(void *s, size_t n);
-char				*ft_substr(char *s, unsigned int start, size_t len);
 char				ft_lstlastchar(t_token *lst);
 char				*ft_strdup(const char *s1);
+size_t				ft_strlen(const char *str);
 int					ft_strcmp(const char *str1, const char *str2);
-int					ft_strchr(const char *s, int c);
-int					ft_strlen(char *str);
+void				*ft_calloc(size_t nmemb, size_t size);
+char				*ft_strchr(const char *s, int c);
+int					ft_charseach(const char *s, int c);
+char				*ft_substr(char const *s, unsigned int start, size_t len);
+// static int			n_words(char const *s, char c);
+char				**split_formated(char const *s, char c);
+char				*ft_strjoin(char *s1, char *s2);
+size_t				ft_strlcpy(char *dst, char *src, size_t size);
+size_t				ft_strlcat(char *dst, const char *src, size_t size);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+void				**free_all(char **str);
+void				free_tokens(t_ast *node);
+void				free_env(t_env *env);
+void				free_ast(t_ast *node);
+char				*ft_str_toupper(char *str);
+
+//BUILT_INS
+void				build_switch(t_env *env, char *find);
+char				*env_finder(t_env *env, char *find);
+void				pwd(t_env *env);
+void				cd();
+void				env();
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);
@@ -128,6 +170,10 @@ void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(token_type type, char *value);
 
 // PARSER
-void				build_tree(t_token **tokens, t_ast **current_node);
+void				build_tree(t_token *tokens, t_ast **current_node);
 t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
+
+// PIPES
+void	have_env(char **env, char **argv);
+int		tramited(char *path, char **env);
