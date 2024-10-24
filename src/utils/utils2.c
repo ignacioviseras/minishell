@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:48:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/23 11:37:50 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/24 01:09:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,41 +28,6 @@ int	ft_charseach(const char *s, int c)
 	return (0);
 }
 
-/* static int	ft_min(int a, int b)
-{
-	if (a < b)
-		return (a);
-	return (b);
-}
-
-char	*ft_substr(char *s, unsigned int start, size_t len)
-{
-	size_t	i;
-	char	*sub;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	if (start >= (unsigned int)ft_strlen((char *)s))
-	{
-		sub = malloc (1 * sizeof(char));
-		if (!(sub))
-			return (NULL);
-		sub[i] = '\0';
-		return (sub);
-	}
-	sub = (char *)malloc(ft_min(ft_strlen(s) - start, len) + 1);
-	if (sub == NULL)
-		return (NULL);
-	while (i < len && s[start + i])
-	{
-		sub[i] = s[start + i];
-		i++;
-	}
-	sub[i] = '\0';
-	return (sub);
-} */
-
 char	ft_lstlastchar(t_token *lst)
 {
 	t_token	*aux;
@@ -81,4 +46,9 @@ void	skip_spaces(const char *input, int *i)
 {
 	while (input[*i] && input[*i] == ' ')
 		(*i)++;
+}
+
+int ft_charcmp(char c1, char c2)
+{
+    return (c1 - c2);
 }

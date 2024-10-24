@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 00:19:41 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/24 02:00:42 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ void	create_env(t_env *env, char **envp)
 		envp++;
 	}
 	env = aux;
-	/* while (env)
-	{
-		printf("%s=%s\n", env->key, env->value);
-		env = env->next;
-	} */
 }
 
 // Printea el árbol de forma recursiva, cada tab es un nivel más profundo.
@@ -71,14 +66,22 @@ void	handle_input(t_env *env, char *input)
 	print_ast(ast, 0);
 	if (tokens && ft_strcmp(tokens->cmd, "exit") == 0)
 	{
-		free_tokens(ast);
+		free_tokens(tokens);
 		free_ast(ast);
 		//free_env(env);
 		exit(1);
 	}
-	if (env)
-		build_switch(env, input);
-	free_tokens(ast);
+	//mirar control de errores por si no hay env
+	// if (env && env[0])
+	// {
+		build_switch(env, tokens);
+    	// print_envi(envi);
+	// }
+	// if (env && env[0])
+	// 	have_env(env, input);
+	// else if (ft_strchr(input, '/') && ft_strchr(input, '/'))
+	// 	tramited("", input, env);
+	free_tokens(tokens);
 	free_ast(ast);
 }
 

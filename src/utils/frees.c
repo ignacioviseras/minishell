@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/24 00:11:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/24 02:19:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	free_ast(t_ast *node)
 		free_ast(node->right);
 	free(node);
 }
-
 
 void	free_env(t_env *env)
 {
@@ -40,22 +39,22 @@ void	free_env(t_env *env)
 	}
 }
 
-void	free_tokens(t_ast *node)
+void	free_tokens(t_token *token)
 {
-	t_token	*data;
+	t_token	*temp;
 
-	if (!node)
-		return ;
-	data = node->data;
-	free(data->args);
-	free(data->cmd);
-	free(data->cmd_args);
-	free(data);
-	free_tokens(node->left);
-	free_tokens(node->right);
+	while (token)
+	{
+		temp = token;
+		token = token->next;
+		free(temp->args);
+		free(temp->cmd);
+		free(temp->cmd_args);
+		free(temp);
+	}
 }
 
-void	**free_all(char **str)
+void	**free_matrix(char **str)
 {
 	int	i;
 

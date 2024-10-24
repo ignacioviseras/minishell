@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 00:02:25 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/24 01:59:48 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef enum token_type
 	TOKEN_INPUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_EOF = -1
 }			token_type;
 
 /*
@@ -132,6 +131,7 @@ int					get_symbol(char c);
 // UTILS		
 void				*ft_memset(void *b, int c, size_t len);
 void				skip_spaces(const char *input, int *i);
+int					ft_charcmp(char c1, char c2);
 void				ft_bzero(void *s, size_t n);
 char				ft_lstlastchar(t_token *lst);
 char				*ft_strdup(const char *s1);
@@ -148,17 +148,25 @@ size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 void				**free_all(char **str);
-void				free_tokens(t_ast *node);
+void				**free_matrix(char **str);
+void				free_tokens(t_token *token);
 void				free_env(t_env *env);
 void				free_ast(t_ast *node);
 char				*ft_str_toupper(char *str);
+char				**ft_split(char const *s, char c);
+char				*ft_strdup(const char *s);
+
+
 
 //BUILT_INS
-void				build_switch(t_env *env, char *find);
-char				*env_finder(t_env *env, char *find);
-void				pwd(t_env *env);
-void				cd();
-void				env();
+void				build_switch(t_env *env, t_token *tokens);
+char				*env_finder(t_env **env, char *find);
+void				command_pwd();
+void				command_env(t_token *tokens, t_env *env);
+void				cd_actions(t_token *tokens);
+void				command_cd(t_token *token);
+char				*get_home(char *pwd);
+void				print_env(t_env *env);
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);
