@@ -6,16 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 02:00:42 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/25 14:06:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-/* void	leaks(void)
-{
-	system("leaks -q minishell");
-} */
 
 /*
  *  Transforms the environment into a linked list.
@@ -51,7 +46,8 @@ void	print_ast(t_ast *node, int depth)
 	for (int i = 0; i < depth; i++)
 		printf("	");
 	printf("Node cmd: '%s', ", data->cmd);
-	printf("node args: '%s'\n", data->args);
+	printf("node args: '%s', ", data->args);
+	printf("node flags: '%s'\n", data->flags);
 	print_ast(node->left, depth + 1);
 	print_ast(node->right, depth + 1);
 }
@@ -64,17 +60,10 @@ void	handle_input(t_env *env, char *input)
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
-	if (tokens && ft_strcmp(tokens->cmd, "exit") == 0)
-	{
-		free_tokens(tokens);
-		free_ast(ast);
-		//free_env(env);
-		exit(1);
-	}
 	//mirar control de errores por si no hay env
 	// if (env && env[0])
 	// {
-		build_switch(env, tokens);
+		build_switch(env, ast, tokens);
     	// print_envi(envi);
 	// }
 	// if (env && env[0])
@@ -84,6 +73,11 @@ void	handle_input(t_env *env, char *input)
 	free_tokens(tokens);
 	free_ast(ast);
 }
+
+/* void	leaks(void)
+{
+	system("leaks -q minishell");
+} */
 
 int	main(int argc, char **argv, char **envp)
 {

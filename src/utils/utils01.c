@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils01.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/23 11:35:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/24 14:09:07 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,24 +59,18 @@ int	ft_strcmp(const char *str1, const char *str2)
 	return (*(unsigned char *)str1 - *(unsigned char *)str2);
 }
 
-char	*ft_strdup(const char *s1)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t	i;	
-	size_t	j;
-	char	*s2;
+	size_t	i;
 
 	i = 0;
-	j = 0;
-	while (s1[j])
-		j++;
-	s2 = (char *)malloc((j + 1) * sizeof (const char));
-	if (s2 == NULL)
-		return (NULL);
-	while (i < j)
+	while ((*s1 != '\0' || *s2 != '\0') && (i < n))
 	{
-		s2[i] = s1[i];
+		if (*s1 != *s2)
+			return ((unsigned char)*s1 - (unsigned char)*s2);
+		s1++;
+		s2++;
 		i++;
 	}
-	s2[i] = '\0';
-	return (s2);
+	return (0);
 }

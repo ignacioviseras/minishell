@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/10/24 02:17:01 by drestrep         ###   ########.fr        #
+#    Updated: 2024/10/25 13:33:17 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,20 +35,12 @@ PARSING_SRC		=	lexer.c \
 BUILT_SRC		=	built_ins1.c \
 					built_ins2.c \
 
-UTILS_SRC		=	utils.c \
-					utils2.c \
-					ft_calloc.c \
-					ft_str_toupper.c \
-					ft_strchr.c \
-					ft_strjoin.c \
-					ft_strlcpy.c \
-					ft_substr.c \
-					split_formated.c \
-					ft_strlcat.c \
-					ft_strncmp.c \
+UTILS_SRC		=	utils01.c \
+					utils02.c \
+					utils03.c \
+					utils04.c \
+					mem_alloc.c \
 					frees.c \
-					ft_split.c \
-					ft_malloc.c \
 
 OBJS			=	${PARSING:.c=.o} \
 					${UTILS:.c=.o} \

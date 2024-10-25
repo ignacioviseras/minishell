@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/23 11:15:29 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:07:47 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,18 @@ void	automata_init(t_automata *automata)
 t_token	*lexer(char *input)
 {
 	t_automata	automata;
-	int			i;
+	char		*aux;
 
-	i = 0;
 	automata_init(&automata);
-	while (input[i] != '\0')
+	aux = input;
+	while (*input != '\0')
 	{
-		skip_spaces(input, &i);
-		if (input[i] == '\0')
+		skip_spaces(&input);
+		if (*input == '\0')
 			break ;
-		tokenizer(&automata, input, &i);
+		tokenizer(&automata, &input);
 	}
-	if (!input_checker(&automata, input))
+	if (!input_checker(&automata, aux))
 		return (NULL);
 	printf("\n");
 	return (automata.tokens);

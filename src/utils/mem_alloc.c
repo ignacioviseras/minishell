@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/21 19:11:22 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/23 11:31:50 by drestrep         ###   ########.fr       */
+/*   Created: 2024/04/21 17:36:11 by igvisera          #+#    #+#             */
+/*   Updated: 2024/10/24 14:13:54 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+void	*ft_malloc(size_t size)
 {
-	size_t	index;
-	size_t	dst_lenght;
-	size_t	src_lenght;
+	void	*data;
 
-	index = 0;
-	dst_lenght = ft_strlen(dst);
-	src_lenght = ft_strlen(src);
-	while (size <= dst_lenght)
-		return (size + src_lenght);
-	while (*dst)
-		dst++;
-	while (src[index] != '\0' && index < size - dst_lenght - 1)
+	data = malloc(size);
+	if (!data)
 	{
-		dst[index] = src[index];
-		index++;
+		perror("Malloc failed");
+		exit(1);
 	}
-	dst[index] = '\0';
-	return (dst_lenght + src_lenght);
+	return (data);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*mem;
+	size_t	total_mem;
+
+	if (nmemb == SIZE_MAX || size == SIZE_MAX)
+		return (NULL);
+	total_mem = nmemb * size;
+	mem = malloc(total_mem);
+	if (!mem)
+		return (NULL);
+	ft_bzero(mem, total_mem);
+	return (mem);
 }

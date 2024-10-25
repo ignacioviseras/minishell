@@ -6,11 +6,30 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 01:03:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/25 14:25:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	create_args(t_token *token, char *value, int space_pos)
+{
+	token->cmd = ft_substr(value, 0, space_pos);
+	token->args = ft_strdup(value + space_pos + 1);
+	if (!ft_strcmp(token->args, ""))
+		token->args = NULL;
+	skip_spaces(&token->args);
+	token->flags = NULL;
+	if (token->args&& *token->args == '-')
+	{
+		space_pos = ft_charseach(token->args, ' ');
+		if (space_pos != 0)
+			token->flags = ft_substr(token->args, 0, space_pos);
+		else
+			token->flags = ft_strdup(token->args);
+	}
+	
+}
 
 /*
  * Creates a new token with the specified type and value, 
@@ -19,22 +38,18 @@
 t_token	*create_token(token_type type, char *value)
 {
 	t_token	*token;
-	int		space;
+	int		space_pos;
 
 	token = ft_malloc(sizeof(t_token));
 	token->cmd_args = ft_strdup(value);
-	space = ft_charseach(value, ' ');
-	if (space)
-	{
-		token->cmd = ft_substr(value, 0, space);
-		token->args = ft_strdup(value + space + 1);
-		if (!ft_strcmp(token->args, ""))
-			token->args = NULL;
-	}
+	space_pos = ft_charseach(value, ' ');
+	if (space_pos > 0)
+		create_args(token, value, space_pos);
 	else
 	{
 		token->cmd = ft_strdup(value);
 		token->args = NULL;
+		token->flags = NULL;
 	}
 	token->type = type;
 	token->next = NULL;
@@ -65,26 +80,26 @@ void	add_token(t_token **head, t_token *new_token)
  * If the input starts with a quote (' or "), it extracts the quoted string. 
  * Otherwise, it tokenizes until encountering a space or operator (|, >, <). 
  */
-void	tokenize_strings(t_automata *automata, char *input, int *i)
+void	tokenize_strings(t_automata *automata, char **input)
 {
-	int		start;
 	char	quote;
+	char	*start;
 
-	start = *i;
-	while (input[*i] && input[*i] != '|' \
-		&& input[*i] != '>' && input[*i] != '<')
+	start = *input;
+	while (**input && **input != '|' \
+		&& **input != '>' && **input != '<')
 	{
-		if (input[*i] == '"' || input[*i] == '\'')
+		if (**input == '"' || **input == '\'')
 		{
-			quote = input[*i];
-			(*i)++;
-			while (input[*i] && input[*i] != quote)
-				(*i)++;
+			quote = **input;
+			(*input)++;
+			while (**input && **input != quote)
+				(*input)++;
 		}
-		(*i)++;
+		(*input)++;
 	}
-	strncpy(automata->buf, input + start, *i - start);
-	automata->buf[*i - start] = '\0';
+    strncpy(automata->buf, start, *input - start);
+    automata->buf[*input - start] = '\0';
 	add_token(&automata->tokens, create_token(TOKEN_STRING, automata->buf));
 }
 
@@ -92,30 +107,29 @@ void	tokenize_strings(t_automata *automata, char *input, int *i)
  *	The tokenizer is in charge of separating everything into tokens,
  *	differentiating between operators, redirections and strings.
  */
-void	tokenizer(t_automata *automata, char *input, int *i)
+void	tokenizer(t_automata *automata, char **input)
 {
-	if (input[*i] == '|')
+	if (**input == '|')
 	{
 		add_token(&automata->tokens, create_token(TOKEN_PIPE, "|"));
-		(*i)++;
+		(*input)++;
 	}
-	else if ((input[*i] == '>' && input[*i + 1] != '>') \
-		|| (input[*i] == '<' && input[*i + 1] != '<'))
+	else if ((**input == '>' && *(*input + 1) != '>') || (**input == '<' && *(*input + 1) != '<'))
 	{
-		if (input[(*i)++] == '>')
+		if (**input == '>')
 			add_token(&automata->tokens, create_token(TOKEN_OUTPUT, ">"));
 		else
 			add_token(&automata->tokens, create_token(TOKEN_INPUT, "<"));
+		(*input)++;
 	}
-	else if ((input[*i] == '>' && input[*i + 1] == '>') \
-		|| (input[*i] == '<' && input[*i + 1] == '<'))
+	else if ((**input == '>' && *(*input + 1) == '>') || (**input == '<' && *(*input + 1) == '<'))
 	{
-		if (input[*i] == '>')
+		if (**input == '>')
 			add_token(&automata->tokens, create_token(TOKEN_APPEND, ">>"));
 		else
 			add_token(&automata->tokens, create_token(TOKEN_HEREDOC, "<<"));
-		(*i) += 2;
+		*input += 2;
 	}
 	else
-		tokenize_strings(automata, input, i);
+		tokenize_strings(automata, input);
 }

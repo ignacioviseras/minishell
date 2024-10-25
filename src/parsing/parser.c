@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 16:54:20 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 00:08:25 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:03:55 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_ast	*parsing(t_token *tokens, t_env *env)
 		return (NULL);
 	tree = NULL;
 	build_tree(tokens, &tree);
+	//expander();
 	(void)env;
 	return (tree);
 }

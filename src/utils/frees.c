@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/24 02:19:35 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:49:14 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,13 @@ void	free_tokens(t_token *token)
 {
 	t_token	*temp;
 
+	if (!token)
+		return ;
 	while (token)
 	{
 		temp = token;
 		token = token->next;
+		free(temp->flags);
 		free(temp->args);
 		free(temp->cmd);
 		free(temp->cmd_args);

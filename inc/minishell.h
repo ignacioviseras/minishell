@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 01:59:48 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:47:18 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_ast
 typedef struct s_token
 {
 	char			*cmd_args;
+	char			*flags;
 	char			*cmd;
 	char			*args;
 	token_type		type;
@@ -130,11 +131,10 @@ int					get_symbol(char c);
 
 // UTILS		
 void				*ft_memset(void *b, int c, size_t len);
-void				skip_spaces(const char *input, int *i);
+void				skip_spaces(char **input);
 int					ft_charcmp(char c1, char c2);
 void				ft_bzero(void *s, size_t n);
 char				ft_lstlastchar(t_token *lst);
-char				*ft_strdup(const char *s1);
 size_t				ft_strlen(const char *str);
 int					ft_strcmp(const char *str1, const char *str2);
 void				*ft_calloc(size_t nmemb, size_t size);
@@ -159,7 +159,7 @@ char				*ft_strdup(const char *s);
 
 
 //BUILT_INS
-void				build_switch(t_env *env, t_token *tokens);
+void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
 char				*env_finder(t_env **env, char *find);
 void				command_pwd();
 void				command_env(t_token *tokens, t_env *env);
@@ -172,8 +172,8 @@ void				print_env(t_env *env);
 void				*ft_malloc(size_t size);
 
 // TOKENIZER		
-void				tokenize_strings(t_automata *automata, char *input, int *i);
-void				tokenizer(t_automata *automata, char *input, int *i);
+void				tokenize_strings(t_automata *automata, char **input);
+void				tokenizer(t_automata *automata, char **input);
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(token_type type, char *value);
 

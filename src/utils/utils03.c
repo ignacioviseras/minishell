@@ -1,16 +1,69 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   utils03.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/21 18:56:38 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/23 11:31:55 by drestrep         ###   ########.fr       */
+/*   Created: 2024/10/24 14:05:12 by drestrep          #+#    #+#             */
+/*   Updated: 2024/10/24 14:08:22 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	index;
+	size_t	dst_lenght;
+	size_t	src_lenght;
+
+	index = 0;
+	dst_lenght = ft_strlen(dst);
+	src_lenght = ft_strlen(src);
+	while (size <= dst_lenght)
+		return (size + src_lenght);
+	while (*dst)
+		dst++;
+	while (src[index] != '\0' && index < size - dst_lenght - 1)
+	{
+		dst[index] = src[index];
+		index++;
+	}
+	dst[index] = '\0';
+	return (dst_lenght + src_lenght);
+}
+
+size_t	ft_strlcpy(char *dst, char *src, size_t size)
+{
+	size_t	index;
+	size_t	src_lenght;
+
+	index = 0;
+	src_lenght = ft_strlen(src);
+	if (size == 0)
+		return (src_lenght);
+	while (src[index] != '\0' && index < size - 1)
+	{
+		dst[index] = src[index];
+		index++;
+	}
+	dst[index] = '\0';
+	return (src_lenght);
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*ptr;
+	size_t	len;
+
+	len = ft_strlen((char *)s);
+	ptr = (char *)malloc(sizeof(char) * len + 1);
+	if (!ptr)
+		return (NULL);
+	ft_strlcpy(ptr, (char *)s, len + 1);
+	return (ptr);
+}
 
 static size_t	ft_newstrlcpy(char *dst, char *src, size_t size)
 {

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/24 02:14:55 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:47:06 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void command_env(t_token *tokens, t_env *envi)
 	}
 }
 
-void build_switch(t_env *env, t_token *tokens)
+void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 {
 	if (!tokens)
 		return ;
@@ -170,6 +170,7 @@ void build_switch(t_env *env, t_token *tokens)
 	else if (ft_strcmp(tokens->cmd_args, "exit") == 0)
 	{
 		free_env(env);
+		free_ast(ast);
 		free_tokens(tokens);
 		exit(1);// creo q esto puede dar problemas cuando se ejecuten minis dentro de minis
 	}
