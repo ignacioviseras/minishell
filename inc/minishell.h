@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 13:47:18 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/25 17:40:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,10 @@ t_token				*create_token(token_type type, char *value);
 void				build_tree(t_token *tokens, t_ast **current_node);
 t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
+
+
+// EXPANDER
+void				expander(t_token **tokens, t_env *env);
 
 // PIPES
 void	have_env(char **env, char **argv);

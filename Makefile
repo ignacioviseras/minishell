@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/10/25 13:33:17 by drestrep         ###   ########.fr        #
+#    Updated: 2024/10/25 17:41:16 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ BASE_SRC		=	main.c
 
 PARSING_SRC		=	lexer.c \
 					parser.c \
-					tokenizer.c
+					tokenizer.c \
+					expander.c
 
 BUILT_SRC		=	built_ins1.c \
 					built_ins2.c \
