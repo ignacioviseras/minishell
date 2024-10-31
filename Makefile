@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
+#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/10/25 13:33:17 by drestrep         ###   ########.fr        #
+#    Updated: 2024/10/28 17:36:40 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ UTILS_SRC		=	utils01.c \
 					utils02.c \
 					utils03.c \
 					utils04.c \
+					utils05.c \
 					mem_alloc.c \
 					frees.c \
 
