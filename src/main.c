@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 14:06:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:02:38 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	create_env(t_env *env, char **envp)
 		env->key = ft_substr(*envp, 0, ft_charseach(*envp, '='));
 		env->value = ft_substr (*envp, ft_charseach(*envp, '=') \
 		+ 1, ft_charseach(*envp, '\0'));
+		env->hide = 0;
 		if (*(envp + 1))
 			env->next = ft_malloc(sizeof(t_env));
 		else

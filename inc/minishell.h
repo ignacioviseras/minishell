@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 13:47:18 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:28:14 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	int				hide;
 	struct s_env	*next;
 }				t_env;
 
@@ -141,7 +142,7 @@ void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strchr(const char *s, int c);
 int					ft_charseach(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
-// static int			n_words(char const *s, char c);
+int					n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
 char				*ft_strjoin(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
@@ -152,21 +153,34 @@ void				**free_matrix(char **str);
 void				free_tokens(t_token *token);
 void				free_env(t_env *env);
 void				free_ast(t_ast *node);
+void				free_variable(t_env *node);
 char				*ft_str_toupper(char *str);
 char				**ft_split(char const *s, char c);
 char				*ft_strdup(const char *s);
-
+t_env				*new_node(char *key, char *value, int hide);
+void				add_bottom(t_env **env, t_env *new_envi);
+void				remove_node(t_env **env, char *key);
 
 
 //BUILT_INS
+int					flags_validator(char *flags, char *command_flags);
 void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
 char				*env_finder(t_env **env, char *find);
 void				command_pwd();
 void				command_env(t_token *tokens, t_env *env);
 void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
+char				*get_content_var(char *str);
+char				*get_value(t_env **envi, char *find);
+char				*get_var(char *str);
+void				command_export(t_token *tokens, t_env *envi);
 char				*get_home(char *pwd);
-void				print_env(t_env *env);
+void				print_env(t_env *envi, int flag);
+void				command_unset(t_token *tokens, t_env *env);
+void				command_echo(t_token *tokens);
+void				command_clear(t_token *tokens);
+void				print_echo(char *input);
+
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);
@@ -183,5 +197,5 @@ t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
 
 // PIPES
-void	have_env(char **env, char **argv);
-int		tramited(char *path, char **env);
+void				have_env(char **env, char **argv);
+int					tramited(char *path, char **env);

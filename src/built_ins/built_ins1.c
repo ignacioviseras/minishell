@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/25 13:47:06 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/30 09:23:21 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int flags_validator(char *flags, char *command_flags)
     int valid_flag;
     char **cmd_flags_splited;
 
+	if (ft_strcmp(flags, "--help") == 0)
+		return (0);
     i = 0;
     cmd_flags_splited = ft_split(command_flags, ' ');
     while (flags[++i] != '\0')
@@ -72,14 +74,14 @@ void command_pwd(t_token *tokens)
 			printf("%s\n", cwd);
 		return;
 	}
-	if (ft_charcmp(tokens->next->cmd_args[0], '-') == 0)
+	if (ft_charcmp(tokens->flags[0], '-') == 0)
 	{
-		x = flags_validator(tokens->next->cmd_args, "L P");
+		x = flags_validator(tokens->flags, "L P");
 		if (x == 0)
 			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
 		else
 			printf("bash: pwd: -%c: invalid option\npwd: usage: pwd [-LP]\n", \
-				tokens->next->cmd_args[x]);
+				tokens->flags[x]);
 	}
 }
 
@@ -87,20 +89,25 @@ void cd_actions(t_token *tokens)
 {
 	int x;
 
-	if (ft_charcmp(tokens->next->cmd_args[0], '-') == 0)
+	if (tokens->flags)
 	{
-		x = flags_validator(tokens->next->cmd_args, "L P");
-		if (x == 0)
-			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
-		else
+		if (ft_charcmp(tokens->flags[0], '-') == 0)
 		{
-			printf("bash: cd: -%c: invalid option\ncd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n", \
-			tokens->next->cmd_args[x]);
+			x = flags_validator(tokens->flags, "L P");
+			if (x == 0)
+				printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
+			else
+			{
+				printf("bash: cd: -%c: invalid option\ncd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n", \
+				tokens->flags[x]);
+			}
+			return;
 		}
-		x++;
 	}
-	else if (chdir(tokens->next->cmd_args) != 0)
-		printf("bash: cd: %s: No such file or directory\n", tokens->next->cmd_args);
+	if (ft_strcmp(tokens->cmd, "cd") == 0 && n_words(tokens->args, ' ') > 1)
+		printf("bash: cd: too many arguments\n");
+	else if (chdir(tokens->args) != 0)
+		printf("bash: cd: %s: No such file or directory\n", tokens->args);
 }
 
 /*
@@ -118,18 +125,13 @@ void command_cd(t_token *tokens)
 		if (home == NULL)
 			home = get_home(getenv("PWD"));
 	}
-	if (ft_strcmp(tokens->cmd_args, "cd") == 0 && (tokens->next == NULL || ft_strcmp(tokens->next->cmd_args, "~") == 0) )
+	if (ft_strcmp(tokens->cmd, "cd") == 0 && (tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0) )
 	{
 		if (chdir(home) != 0)
 			perror("chdir");
 	}
-	else if (ft_strcmp(tokens->cmd_args, "cd") == 0 && tokens->next->cmd_args)
+	else if (ft_strcmp(tokens->cmd, "cd") == 0 && tokens->args)
 		cd_actions(tokens);
-	else if (tokens->next != NULL && tokens->next->next != NULL)
-	{
-		if (ft_strcmp(tokens->cmd_args, "cd") == 0 && tokens->next->next->cmd_args)
-			printf("bash: cd: too many arguments\n");
-	}
 }
 
 void command_env(t_token *tokens, t_env *envi)
@@ -137,37 +139,46 @@ void command_env(t_token *tokens, t_env *envi)
 	int	x;
 
 	x = 0;
-	if (tokens->next == NULL)
+	if (tokens->flags == NULL)
 	{
-		print_env(envi);
+		print_env(envi, 0);
 		return;
 	}
-	if (ft_charcmp(tokens->next->cmd_args[0], '-') == 0)
+	if (ft_charcmp(tokens->flags[0], '-') == 0)
 	{
-		x = flags_validator(tokens->next->cmd_args, "i 0 u C S v -help");
+		x = flags_validator(tokens->flags, "i 0 u C S v");
 		if (x == 0)
 			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
 		else
 			printf("env: invalid option -- '%c'\nTry 'env --help' for more information.\n", \
-				tokens->next->cmd_args[x]);
+				tokens->flags[x]);
 	}
 }
 
 void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 {
+	printf("cmd_args '%s'\n", tokens->cmd_args);
+	printf("flags '%s'\n", tokens->flags);
+	printf("cmd '%s'\n", tokens->cmd);
+	printf("args '%s'\n", tokens->args);
+	printf("type '%d'\n", tokens->type);
 	if (!tokens)
 		return ;
-	if (ft_strcmp(tokens->cmd_args, "pwd") == 0)
+	if (ft_strcmp(tokens->cmd, "pwd") == 0)
 		command_pwd(tokens);
-	else if (ft_strcmp(tokens->cmd_args, "env") == 0)
+	else if (ft_strcmp(tokens->cmd, "env") == 0)
 		command_env(tokens, env);
-	else if (ft_strcmp(tokens->cmd_args, "cd") == 0)
+	else if (ft_strcmp(tokens->cmd, "cd") == 0)
 		command_cd(tokens);
-	// else if (ft_strcmp(find, "echo") == 0)
-	// 	command_echo(tokens);
-	else if (ft_strcmp(tokens->cmd_args, "clear") == 0)
-		printf("\033[2J\033[H");
-	else if (ft_strcmp(tokens->cmd_args, "exit") == 0)
+	else if (ft_strcmp(tokens->cmd, "echo") == 0)
+		command_echo(tokens);
+	else if (ft_strcmp(tokens->cmd, "export") == 0)
+		command_export(tokens, env);
+	else if (ft_strcmp(tokens->cmd, "unset") == 0)
+		command_unset(tokens, env);
+	else if (ft_strcmp(tokens->cmd, "clear") == 0)
+		command_clear(tokens);
+	else if (ft_strcmp(tokens->cmd, "exit") == 0)
 	{
 		free_env(env);
 		free_ast(ast);

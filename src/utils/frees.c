@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/25 13:49:14 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:55:42 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	free_env(t_env *env)
 	{
 		aux = env;
 		free(env->key);
-		free(env->value);
+		if (env->value)
+			free(env->value);
 		env = env->next;
 		free(aux);
 	}
@@ -68,4 +69,12 @@ void	**free_matrix(char **str)
 		i++;
 	}
 	return (free(str), NULL);
+}
+
+void	free_variable(t_env *node)
+{
+	free(node->key);
+	if (node->value)
+		free(node->value);
+	free(node);
 }

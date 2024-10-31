@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils04.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:10:36 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 14:13:01 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/10/27 16:33:40 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*ft_str_toupper(char *str)
 	return (str);
 }
 
-static int	n_words(char const *s, char c)
+int	n_words(char const *s, char c)
 {
 	int	words;
 	int	index;
