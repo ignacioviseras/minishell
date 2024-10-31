@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 18:26:04 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/29 01:09:21 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:46:38 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,25 +64,20 @@ void	add_bottom(t_env **env, t_env *new_envi)
 	{
 		if (ft_strcmp(iter->key, new_envi->key) == 0)
 		{
-			printf("la cadena'%s'\n", iter->value);
-
-			// Si iter->value es NULL y new_envi->value tiene un valor, actualizamos
 			if ((iter->value == NULL && new_envi->value != NULL) || \
 			(iter->value != NULL && new_envi->value != NULL))
 			{
-				free(iter->value);  // Liberamos iter->value si existe, aunque en este caso debería ser NULL
+				free(iter->value);
 				iter->value = ft_strdup(new_envi->value);
 				iter->hide = new_envi->hide;
-				printf("Valor actualizado: '%s' = '%s'\n", iter->key, iter->value);
 			}
-			free_variable(new_envi);  // Liberamos new_envi porque no lo agregaremos a la lista
+			free_variable(new_envi);
 			return;
 		}
 		if (iter->next == NULL)
 			break;
 		iter = iter->next;
 	}
-	// Si la clave no existe en la lista, añadimos el nuevo nodo al final
 	iter->next = new_envi;
 }
 
