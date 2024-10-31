@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/30 13:28:14 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:39:10 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void				remove_node(t_env **env, char *key);
 int					flags_validator(char *flags, char *command_flags);
 void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
 char				*env_finder(t_env **env, char *find);
-void				command_pwd();
+void				command_pwd(t_token *tokens);
 void				command_env(t_token *tokens, t_env *env);
 void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
