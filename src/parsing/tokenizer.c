@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 02:38:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:32:20 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	create_args(t_token *token, char *value, int space_pos)
 	token->flags = NULL;
 	if (token->args&& *token->args == '-')
 	{
-		space_pos = ft_charseach(token->args, ' ');
+		space_pos = ft_findchar(token->args, ' ');
 		if (space_pos != 0)
 			token->flags = ft_substr(token->args, 0, space_pos);
 		else
@@ -42,7 +42,7 @@ t_token	*create_token(token_type type, char *value)
 
 	token = ft_malloc(sizeof(t_token));
 	token->cmd_args = ft_strdup(value);
-	space_pos = ft_charseach(value, ' ');
+	space_pos = ft_findchar(value, ' ');
 	if (space_pos > 0)
 		create_args(token, value, space_pos);
 	else

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 03:45:03 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 17:21:09 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,31 +50,9 @@ int	copy_len(char *s)
 	int	i;
 
 	i = 0;
-	while (s[i++])
-	{
-		if (s[i] == '$' || s[i] == '"')
-			return (i - 1);
-	}
-	return (0);
-}
-
-void	replace_var(t_token **token, t_env *env, char **key)
-{
-	char	*value;
-
-	value = NULL;
-	(void)token;
-	while (env)
-	{
-		if (ft_strcmp(*key, env->key) == 0)
-			value = env->value;
-		env = env->next;
-	}
-	if (value)
-		printf("Key: %s, value: %s\n", *key, value);
-	free(key);
-	free(value);
-	exit(0);
+	while (s[i] && s[i] != '$' && s[i] != ' ' && s[i] != '"')
+		i++;
+	return (i);
 }
 
 int	nbr_of_keys(char *str)
@@ -106,28 +84,66 @@ char	**get_key(char *str)
 		{
 			if (between_quotes(str) > 0)
 			{
-				keys[j] = ft_substr(str, i + 1, copy_len(str + i));
+				keys[j] = ft_substr(str, i + 1, copy_len(str + i + 1));
 				j++;
+				i += copy_len(str + i + 1);
 			}
 		}
-		i++;
+		else
+			i++;
 	}
 	keys[j] = NULL;
 	return (keys);
 }
 
+void	replace_var(t_token *token, t_env *env)
+{
+	t_env	*aux;
+	char	**keys;
+	char	**values;
+	int		i;
+
+	aux = env;
+	keys = get_key(token->cmd_args);
+	values = ft_malloc((nbr_of_keys(token->cmd_args) + 1) * sizeof(char *));
+	i = 0;
+	(void)token;
+	while (keys[i])
+	{
+		values[i] = NULL;
+		while (env)
+		{
+			if (ft_strcmp(keys[i], env->key) == 0)
+			{
+				values[i] = ft_strdup(env->value);
+				break ;
+			}
+			env = env->next;
+		}
+		env = aux;
+		i++;
+	}
+	values[i] = NULL;
+	i = 0;
+	for (i = 0; values[i]; i++)
+        printf("Key: %s, value: %s\n", keys[i], values[i]);
+	for (i = 0; keys[i]; i++)
+		free(keys[i]);
+	for (i = 0; values[i]; i++)
+		free(values[i]);
+	free(keys);
+	free(values);
+}
+
 void	expander(t_token **tokens, t_env *env)
 {
 	t_token	*aux;
-	char	**var;
 
 	aux = *tokens;
 	while(tokens && *tokens)
 	{
-		var = get_key((*tokens)->cmd_args);
-		if (*var)
-			replace_var(tokens, env, var);
-		free(var);
+		if (ft_findchar((*tokens)->cmd_args, '$') >= 0)
+			replace_var(*tokens, env);
 		*tokens = (*tokens)->next;
 	}
 	*tokens = aux;
