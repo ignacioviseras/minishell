@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/25 13:47:06 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 20:09:42 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ void command_pwd(t_token *tokens)
 			printf("%s\n", cwd);
 		return;
 	}
-	if (ft_charcmp(tokens->next->cmd_args[0], '-') == 0)
+	if (ft_charcmp(tokens->next->full_cmd[0], '-') == 0)
 	{
-		x = flags_validator(tokens->next->cmd_args, "L P");
+		x = flags_validator(tokens->next->full_cmd, "L P");
 		if (x == 0)
 			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
 		else
 			printf("bash: pwd: -%c: invalid option\npwd: usage: pwd [-LP]\n", \
-				tokens->next->cmd_args[x]);
+				tokens->next->full_cmd[x]);
 	}
 }
 
@@ -87,24 +87,24 @@ void cd_actions(t_token *tokens)
 {
 	int x;
 
-	if (ft_charcmp(tokens->next->cmd_args[0], '-') == 0)
+	if (ft_charcmp(tokens->next->full_cmd[0], '-') == 0)
 	{
-		x = flags_validator(tokens->next->cmd_args, "L P");
+		x = flags_validator(tokens->next->full_cmd, "L P");
 		if (x == 0)
 			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
 		else
 		{
 			printf("bash: cd: -%c: invalid option\ncd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n", \
-			tokens->next->cmd_args[x]);
+			tokens->next->full_cmd[x]);
 		}
 		x++;
 	}
-	else if (chdir(tokens->next->cmd_args) != 0)
-		printf("bash: cd: %s: No such file or directory\n", tokens->next->cmd_args);
+	else if (chdir(tokens->next->full_cmd) != 0)
+		printf("bash: cd: %s: No such file or directory\n", tokens->next->full_cmd);
 }
 
 /*
-	creo q no necesito los ft_strcmp(tokens->cmd_args, "cd") == 0
+	creo q no necesito los ft_strcmp(tokens->full_cmd, "cd") == 0
  */
 void command_cd(t_token *tokens)
 {
@@ -118,16 +118,16 @@ void command_cd(t_token *tokens)
 		if (home == NULL)
 			home = get_home(getenv("PWD"));
 	}
-	if (ft_strcmp(tokens->cmd_args, "cd") == 0 && (tokens->next == NULL || ft_strcmp(tokens->next->cmd_args, "~") == 0) )
+	if (ft_strcmp(tokens->full_cmd, "cd") == 0 && (tokens->next == NULL || ft_strcmp(tokens->next->full_cmd, "~") == 0) )
 	{
 		if (chdir(home) != 0)
 			perror("chdir");
 	}
-	else if (ft_strcmp(tokens->cmd_args, "cd") == 0 && tokens->next->cmd_args)
+	else if (ft_strcmp(tokens->full_cmd, "cd") == 0 && tokens->next->full_cmd)
 		cd_actions(tokens);
 	else if (tokens->next != NULL && tokens->next->next != NULL)
 	{
-		if (ft_strcmp(tokens->cmd_args, "cd") == 0 && tokens->next->next->cmd_args)
+		if (ft_strcmp(tokens->full_cmd, "cd") == 0 && tokens->next->next->full_cmd)
 			printf("bash: cd: too many arguments\n");
 	}
 }
@@ -142,14 +142,14 @@ void command_env(t_token *tokens, t_env *envi)
 		print_env(envi);
 		return;
 	}
-	if (ft_charcmp(tokens->next->cmd_args[0], '-') == 0)
+	if (ft_charcmp(tokens->next->full_cmd[0], '-') == 0)
 	{
-		x = flags_validator(tokens->next->cmd_args, "i 0 u C S v -help");
+		x = flags_validator(tokens->next->full_cmd, "i 0 u C S v -help");
 		if (x == 0)
 			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
 		else
 			printf("env: invalid option -- '%c'\nTry 'env --help' for more information.\n", \
-				tokens->next->cmd_args[x]);
+				tokens->next->full_cmd[x]);
 	}
 }
 
@@ -157,21 +157,21 @@ void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 {
 	if (!tokens)
 		return ;
-	if (ft_strcmp(tokens->cmd_args, "pwd") == 0)
+	if (ft_strcmp(tokens->full_cmd, "pwd") == 0)
 		command_pwd(tokens);
-	else if (ft_strcmp(tokens->cmd_args, "env") == 0)
+	else if (ft_strcmp(tokens->full_cmd, "env") == 0)
 		command_env(tokens, env);
-	else if (ft_strcmp(tokens->cmd_args, "cd") == 0)
+	else if (ft_strcmp(tokens->full_cmd, "cd") == 0)
 		command_cd(tokens);
 	// else if (ft_strcmp(find, "echo") == 0)
 	// 	command_echo(tokens);
-	else if (ft_strcmp(tokens->cmd_args, "clear") == 0)
+	else if (ft_strcmp(tokens->full_cmd, "clear") == 0)
 		printf("\033[2J\033[H");
-	else if (ft_strcmp(tokens->cmd_args, "exit") == 0)
+	else if (ft_strcmp(tokens->full_cmd, "exit") == 0)
 	{
+		free_tokens(tokens);
 		free_env(env);
 		free_ast(ast);
-		free_tokens(tokens);
 		exit(1);// creo q esto puede dar problemas cuando se ejecuten minis dentro de minis
 	}
 }

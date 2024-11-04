@@ -6,11 +6,24 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 14:32:20 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 22:03:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+char	*skip_args_spaces(char *input)
+{
+	char	*aux;
+	int		i;
+
+	i = 0;
+	while (input && input[i] == ' ')
+		i++;
+	aux = ft_strdup(input + i);
+	free(input);
+	return (aux);
+}
 
 void	create_args(t_token *token, char *value, int space_pos)
 {
@@ -18,9 +31,9 @@ void	create_args(t_token *token, char *value, int space_pos)
 	token->args = ft_strdup(value + space_pos + 1);
 	if (!ft_strcmp(token->args, ""))
 		token->args = NULL;
-	skip_spaces(&token->args);
+	token->args = skip_args_spaces(token->args);
 	token->flags = NULL;
-	if (token->args&& *token->args == '-')
+	if (token->args && *token->args == '-')
 	{
 		space_pos = ft_findchar(token->args, ' ');
 		if (space_pos != 0)
@@ -28,11 +41,10 @@ void	create_args(t_token *token, char *value, int space_pos)
 		else
 			token->flags = ft_strdup(token->args);
 	}
-	
 }
 
 /*
- * Creates a new token with the specified type and value, 
+ * Creates a new token with the specified type and value,
  * allocating memory and duplicating the token's value string.
  */
 t_token	*create_token(token_type type, char *value)
@@ -41,7 +53,7 @@ t_token	*create_token(token_type type, char *value)
 	int		space_pos;
 
 	token = ft_malloc(sizeof(t_token));
-	token->cmd_args = ft_strdup(value);
+	token->full_cmd = ft_strdup(value);
 	space_pos = ft_findchar(value, ' ');
 	if (space_pos > 0)
 		create_args(token, value, space_pos);
@@ -57,7 +69,7 @@ t_token	*create_token(token_type type, char *value)
 }
 
 /*
- * Adds a new token to the end of the token list. 
+ * Adds a new token to the end of the token list.
  * If the list is empty, the new token becomes the head.
  */
 void	add_token(t_token **head, t_token *new_token)
@@ -76,9 +88,9 @@ void	add_token(t_token **head, t_token *new_token)
 }
 
 /*
- * Tokenizes strings based on quotes or delimiters. 
- * If the input starts with a quote (' or "), it extracts the quoted string. 
- * Otherwise, it tokenizes until encountering a space or operator (|, >, <). 
+ * Tokenizes strings based on quotes or delimiters.
+ * If the input starts with a quote (' or "), it extracts the quoted string.
+ * Otherwise, it tokenizes until encountering a space or operator (|, >, <).
  */
 void	tokenize_strings(t_lexer *lexer, char **input)
 {
@@ -86,8 +98,7 @@ void	tokenize_strings(t_lexer *lexer, char **input)
 	char	*start;
 
 	start = *input;
-	while (**input && **input != '|' \
-		&& **input != '>' && **input != '<')
+	while (**input && **input != '|' && **input != '>' && **input != '<')
 	{
 		if (**input == '"' || **input == '\'')
 		{
@@ -114,7 +125,8 @@ void	tokenizer(t_lexer *lexer, char **input)
 		add_token(&lexer->tokens, create_token(TOKEN_PIPE, "|"));
 		(*input)++;
 	}
-	else if ((**input == '>' && *(*input + 1) != '>') || (**input == '<' && *(*input + 1) != '<'))
+	else if ((**input == '>' && *(*input + 1) != '>') \
+			|| (**input == '<' && *(*input + 1) != '<'))
 	{
 		if (**input == '>')
 			add_token(&lexer->tokens, create_token(TOKEN_OUTPUT, ">"));
@@ -122,7 +134,8 @@ void	tokenizer(t_lexer *lexer, char **input)
 			add_token(&lexer->tokens, create_token(TOKEN_INPUT, "<"));
 		(*input)++;
 	}
-	else if ((**input == '>' && *(*input + 1) == '>') || (**input == '<' && *(*input + 1) == '<'))
+	else if ((**input == '>' && *(*input + 1) == '>') \
+			|| (**input == '<' && *(*input + 1) == '<'))
 	{
 		if (**input == '>')
 			add_token(&lexer->tokens, create_token(TOKEN_APPEND, ">>"));

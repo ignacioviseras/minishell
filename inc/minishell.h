@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 16:59:09 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 22:03:50 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_ast
  */
 typedef struct s_token
 {
-	char			*cmd_args;
+	char			*full_cmd;
 	char			*flags;
 	char			*cmd;
 	char			*args;
@@ -131,7 +131,8 @@ int					get_symbol(char c);
 
 // UTILS		
 void				*ft_memset(void *b, int c, size_t len);
-void				skip_spaces(char **input);
+void				skip_input_spaces(char **input);
+char				*skip_args_spaces(char *input);
 int					ft_charcmp(char c1, char c2);
 void				ft_bzero(void *s, size_t n);
 char				ft_lstlastchar(t_token *lst);

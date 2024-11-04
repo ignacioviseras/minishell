@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 02:39:05 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 22:05:11 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,23 @@ int	get_symbol(char c)
  *	Checks whether the input is valid or not, based on the status returned
  *	by the DFA transition table.
  */
-int	input_checker(t_lexer *lexer, char *input, int end)
+int	input_checker(t_lexer lexer, char *input, int end)
 {
 	int		i;
 
 	i = 0;
-	if (end == 1 && get_symbol(ft_lstlastchar(lexer->tokens)) > 0 && \
-		get_symbol(ft_lstlastchar(lexer->tokens)) < 4)
+	if (end == 1 && get_symbol(ft_lstlastchar(lexer.tokens)) > 0 && \
+		get_symbol(ft_lstlastchar(lexer.tokens)) < 4)
 	{
 			printf("syntax error\n");
 			return (0);
 	}
 	while (input[i] != '\0')
 	{
-		lexer->automaton_status = \
-		transition_table(lexer->automaton_status, get_symbol(input[i]));
+		lexer.automaton_status = \
+		transition_table(lexer.automaton_status, get_symbol(input[i]));
 		i++;
-		if (input[i] == '\0' && lexer->automaton_status < 9)
+		if (input[i] == '\0' && lexer.automaton_status < 9)
 		{
 			printf("syntax error\n");
 			return (0);
@@ -97,7 +97,7 @@ void	lexer_init(t_lexer *lexer)
 }
 
 /*
- *	Lexer-Driven Lexer
+ *	Automaton-Driven Lexer
  *
  *	This lexer will use a Deterministic Finite Automaton (DFA) to 
  *	process the input string, handle state transitions, and produce tokens.
@@ -111,16 +111,16 @@ t_token	*lexer(char *input)
 
 	lexer_init(&lexer);
 	aux = input;
-	if (!input_checker(&lexer, aux, 0))
+	if (!input_checker(lexer, aux, 0))
 		return (NULL);
 	while (*input != '\0')
 	{
-		skip_spaces(&input);
+		skip_input_spaces(&input);
 		if (*input == '\0')
 			break ;
 		tokenizer(&lexer, &input);
 	}
-	if (!input_checker(&lexer, aux, 1))
+	if (!input_checker(lexer, aux, 1))
 		return (NULL);
 	printf("\n");
 	return (lexer.tokens);

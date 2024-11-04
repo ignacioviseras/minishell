@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 17:21:09 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:09:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ void	replace_var(t_token *token, t_env *env)
 	int		i;
 
 	aux = env;
-	keys = get_key(token->cmd_args);
-	values = ft_malloc((nbr_of_keys(token->cmd_args) + 1) * sizeof(char *));
+	keys = get_key(token->full_cmd);
+	values = ft_malloc((nbr_of_keys(token->full_cmd) + 1) * sizeof(char *));
 	i = 0;
 	(void)token;
 	while (keys[i])
@@ -142,7 +142,7 @@ void	expander(t_token **tokens, t_env *env)
 	aux = *tokens;
 	while(tokens && *tokens)
 	{
-		if (ft_findchar((*tokens)->cmd_args, '$') >= 0)
+		if (ft_findchar((*tokens)->full_cmd, '$') >= 0)
 			replace_var(*tokens, env);
 		*tokens = (*tokens)->next;
 	}
