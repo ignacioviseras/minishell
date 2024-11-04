@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 13:07:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 02:39:05 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ int	transition_table(int i, int j)
 	return (status[i][j]);
 }
 
-/*
- *	Returns the value assigned to each character of the input string
- *	to use it on the transition table.
-*/
+// Returns the value assigned to each character.
 int	get_symbol(char c)
 {
 	if (c == ' ')
@@ -66,19 +63,23 @@ int	get_symbol(char c)
  *	Checks whether the input is valid or not, based on the status returned
  *	by the DFA transition table.
  */
-int	input_checker(t_automata *automata, char *input)
+int	input_checker(t_lexer *lexer, char *input, int end)
 {
 	int		i;
 
 	i = 0;
+	if (end == 1 && get_symbol(ft_lstlastchar(lexer->tokens)) > 0 && \
+		get_symbol(ft_lstlastchar(lexer->tokens)) < 4)
+	{
+			printf("syntax error\n");
+			return (0);
+	}
 	while (input[i] != '\0')
 	{
-		automata->status = \
-		transition_table(automata->status, get_symbol(input[i]));
+		lexer->automaton_status = \
+		transition_table(lexer->automaton_status, get_symbol(input[i]));
 		i++;
-		if ((input[i] == '\0' && automata->status < 9) || \
-			(get_symbol(ft_lstlastchar(automata->tokens)) > 0 && \
-			get_symbol(ft_lstlastchar(automata->tokens)) < 4))
+		if (input[i] == '\0' && lexer->automaton_status < 9)
 		{
 			printf("syntax error\n");
 			return (0);
@@ -87,18 +88,16 @@ int	input_checker(t_automata *automata, char *input)
 	return (1);
 }
 
-/*
- * Initialize each value of the referenced automata.
- */
-void	automata_init(t_automata *automata)
+// Initialize each value of the referenced lexer.
+void	lexer_init(t_lexer *lexer)
 {
-	automata->tokens = NULL;
-	automata->status = 0;
-	ft_memset(automata->buf, 0, sizeof(automata->buf));
+	lexer->tokens = NULL;
+	lexer->automaton_status = 0;
+	ft_memset(lexer->buf, 0, sizeof(lexer->buf));
 }
 
 /*
- *	Automata-Driven Lexer
+ *	Lexer-Driven Lexer
  *
  *	This lexer will use a Deterministic Finite Automaton (DFA) to 
  *	process the input string, handle state transitions, and produce tokens.
@@ -107,20 +106,22 @@ void	automata_init(t_automata *automata)
  */
 t_token	*lexer(char *input)
 {
-	t_automata	automata;
-	char		*aux;
+	t_lexer	lexer;
+	char	*aux;
 
-	automata_init(&automata);
+	lexer_init(&lexer);
 	aux = input;
+	if (!input_checker(&lexer, aux, 0))
+		return (NULL);
 	while (*input != '\0')
 	{
 		skip_spaces(&input);
 		if (*input == '\0')
 			break ;
-		tokenizer(&automata, &input);
+		tokenizer(&lexer, &input);
 	}
-	if (!input_checker(&automata, aux))
+	if (!input_checker(&lexer, aux, 1))
 		return (NULL);
 	printf("\n");
-	return (automata.tokens);
+	return (lexer.tokens);
 }

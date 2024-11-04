@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 17:40:35 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 04:04:11 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,19 +81,19 @@ typedef struct s_token
 }				t_token;
 
 /* 
- *	Each of the automaton's variables:
- 
+ *	Each of the lexer's variables:
+ *
  *	 - Tokens: Array of tokens returned to create the Abstract Syntax Tree.
  *	 - Buffer: Used for each of the tokens. It's limited to 256 due to the
  * 	   filename length limits of most Unix file systems.
- *	 - Status: Stores the value returned by the transition table.
+ *	 - Automaton status: Stores the value returned by the transition table.
  */
-typedef struct s_automata
+typedef struct s_lexer
 {
 	t_token			*tokens;
 	char			buf[256];
-	int				status;
-}				t_automata;
+	int				automaton_status;
+}				t_lexer;
 
 typedef struct s_params
 {
@@ -125,7 +125,7 @@ void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
 
 t_token				*lexer(char *line);
-void				automata_init(t_automata *automata);
+void				lexer_init(t_lexer *lexer);
 int					transition_table(int i, int j);
 int					get_symbol(char c);
 
@@ -172,8 +172,8 @@ void				print_env(t_env *env);
 void				*ft_malloc(size_t size);
 
 // TOKENIZER		
-void				tokenize_strings(t_automata *automata, char **input);
-void				tokenizer(t_automata *automata, char **input);
+void				tokenize_strings(t_lexer *lexer, char **input);
+void				tokenizer(t_lexer *lexer, char **input);
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(token_type type, char *value);
 

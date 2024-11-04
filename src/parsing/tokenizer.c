@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 14:25:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 02:38:47 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	add_token(t_token **head, t_token *new_token)
  * If the input starts with a quote (' or "), it extracts the quoted string. 
  * Otherwise, it tokenizes until encountering a space or operator (|, >, <). 
  */
-void	tokenize_strings(t_automata *automata, char **input)
+void	tokenize_strings(t_lexer *lexer, char **input)
 {
 	char	quote;
 	char	*start;
@@ -98,38 +98,38 @@ void	tokenize_strings(t_automata *automata, char **input)
 		}
 		(*input)++;
 	}
-    strncpy(automata->buf, start, *input - start);
-    automata->buf[*input - start] = '\0';
-	add_token(&automata->tokens, create_token(TOKEN_STRING, automata->buf));
+    strncpy(lexer->buf, start, *input - start);
+    lexer->buf[*input - start] = '\0';
+	add_token(&lexer->tokens, create_token(TOKEN_STRING, lexer->buf));
 }
 
 /*
  *	The tokenizer is in charge of separating everything into tokens,
  *	differentiating between operators, redirections and strings.
  */
-void	tokenizer(t_automata *automata, char **input)
+void	tokenizer(t_lexer *lexer, char **input)
 {
 	if (**input == '|')
 	{
-		add_token(&automata->tokens, create_token(TOKEN_PIPE, "|"));
+		add_token(&lexer->tokens, create_token(TOKEN_PIPE, "|"));
 		(*input)++;
 	}
 	else if ((**input == '>' && *(*input + 1) != '>') || (**input == '<' && *(*input + 1) != '<'))
 	{
 		if (**input == '>')
-			add_token(&automata->tokens, create_token(TOKEN_OUTPUT, ">"));
+			add_token(&lexer->tokens, create_token(TOKEN_OUTPUT, ">"));
 		else
-			add_token(&automata->tokens, create_token(TOKEN_INPUT, "<"));
+			add_token(&lexer->tokens, create_token(TOKEN_INPUT, "<"));
 		(*input)++;
 	}
 	else if ((**input == '>' && *(*input + 1) == '>') || (**input == '<' && *(*input + 1) == '<'))
 	{
 		if (**input == '>')
-			add_token(&automata->tokens, create_token(TOKEN_APPEND, ">>"));
+			add_token(&lexer->tokens, create_token(TOKEN_APPEND, ">>"));
 		else
-			add_token(&automata->tokens, create_token(TOKEN_HEREDOC, "<<"));
+			add_token(&lexer->tokens, create_token(TOKEN_HEREDOC, "<<"));
 		*input += 2;
 	}
 	else
-		tokenize_strings(automata, input);
+		tokenize_strings(lexer, input);
 }
