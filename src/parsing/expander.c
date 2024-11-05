@@ -6,41 +6,61 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 18:09:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/05 03:31:26 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	between_quotes(char *str)
+int	len_to_take_off(char *str, int i)
+{
+	char	quote;
+	int		aux;
+
+	aux = i;
+	while (i >= 0 && str[i])
+	{
+		if (str[i] == '"' || str[i] == '\'')
+		{
+			quote = str[i];
+			i++;
+			while (str[i] && str[i] != quote)
+			{
+				i++;
+				if (!str[i])
+					return (aux);
+			}
+			return (aux - 1);
+		}
+		i--;
+		if (str[i] == '$')
+			return (i);
+	}
+	return (i);
+}
+
+int	between_quotes(char *str, int i)
 {
 	char	quote;
 
-	while (*str)
+	if (i > 0)
 	{
-		if (*str == '\'')
+		i = len_to_take_off(str, i);
+		if (i < 0)
+			return (2);
+		str += i;
+	}
+	if (*str == '\'' || *str == '"')
+	{
+		quote = *str++;
+		while (*str && *str != quote)
 		{
-			quote = *str;
+			if (*str == '$' && quote == '\'')
+				return (0);
+			else if (*str == '$' && quote == '"')
+				return (1);
 			str++;
-			while (str && *str != quote)
-			{
-				if (*str == '$')
-					return (0);
-				str++;
-			}
 		}
-		else if (*str == '"')
-		{
-			quote = *str;
-			str++;
-			while (str && *str != quote)
-			{
-				if (*str == '$')
-					return (1);
-				str++;
-			}
-		}
-		str++;
 	}
 	return (2);
 }
@@ -50,7 +70,7 @@ int	copy_len(char *s)
 	int	i;
 
 	i = 0;
-	while (s[i] && s[i] != '$' && s[i] != ' ' && s[i] != '"')
+	while (s[i] && s[i] != '$' && s[i] != ' ' && s[i] != '\'' && s[i] != '"')
 		i++;
 	return (i);
 }
@@ -82,21 +102,19 @@ char	**get_key(char *str)
 	{
 		if (str[i] == '$')
 		{
-			if (between_quotes(str) > 0)
+			if (between_quotes(str, i) > 0)
 			{
 				keys[j] = ft_substr(str, i + 1, copy_len(str + i + 1));
 				j++;
-				i += copy_len(str + i + 1);
 			}
 		}
-		else
-			i++;
+		i++;
 	}
 	keys[j] = NULL;
 	return (keys);
 }
 
-void	replace_var(t_token *token, t_env *env)
+void	replace_var(t_token **token, t_env *env)
 {
 	t_env	*aux;
 	char	**keys;
@@ -104,8 +122,8 @@ void	replace_var(t_token *token, t_env *env)
 	int		i;
 
 	aux = env;
-	keys = get_key(token->full_cmd);
-	values = ft_malloc((nbr_of_keys(token->full_cmd) + 1) * sizeof(char *));
+	keys = get_key((*token)->full_cmd);
+	values = ft_malloc((nbr_of_keys((*token)->full_cmd) + 1) * sizeof(char *));
 	i = 0;
 	(void)token;
 	while (keys[i])
@@ -143,7 +161,7 @@ void	expander(t_token **tokens, t_env *env)
 	while(tokens && *tokens)
 	{
 		if (ft_findchar((*tokens)->full_cmd, '$') >= 0)
-			replace_var(*tokens, env);
+			replace_var(tokens, env);
 		*tokens = (*tokens)->next;
 	}
 	*tokens = aux;
