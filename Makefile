@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/10/25 17:41:16 by drestrep         ###   ########.fr        #
+#    Updated: 2024/11/07 20:50:10 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ UTILS_SRC		=	utils01.c \
 					utils02.c \
 					utils03.c \
 					utils04.c \
+					utils05.c \
 					mem_alloc.c \
 					frees.c \
 

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/06 11:31:24 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/07 22:26:49 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ char				**split_formated(char const *s, char c);
 char				*ft_strjoin(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
+void				ft_strcpy(char *dest, const char *src);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 void				**free_all(char **str);
 void				**free_matrix(char **str);
@@ -156,6 +157,8 @@ void				free_ast(t_ast *node);
 char				*ft_str_toupper(char *str);
 char				**ft_split(char const *s, char c);
 char				*ft_strdup(const char *s);
+int					ft_isalnum(char	c);
+int					ft_count_words(char **strs);
 
 //BUILT_INS
 void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
