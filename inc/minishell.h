@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 22:03:50 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:31:24 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ size_t				ft_strlen(const char *str);
 int					ft_strcmp(const char *str1, const char *str2);
 void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strchr(const char *s, int c);
-int					ft_findchar(const char *s, int c);
+int					findchar(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 // static int			n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
