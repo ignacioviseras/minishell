@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/11 17:21:05 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:03:26 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int validate_export(char *key, char *value)
 		{
 			printf("bash: export: `%s=%s': not a valid identifier\n", key, value);
 			return (1);
-			
 		}
 	}
 	return (0);
@@ -94,20 +93,21 @@ void export_actions(t_token *tokens, t_env *env)
 	while (splt_vars[++x])
 	{
 		if (!ft_strchr(splt_vars[x], '='))
+		{
 			if (validate_export(splt_vars[x], NULL) == 0)
 				add_bottom(&env, new_node(splt_vars[x], NULL, 1));
+		}
 		else
+		{
 			if (validate_export(get_var(splt_vars[x]), get_content_var(splt_vars[x])) == 0)
-			add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
+				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
+		}
 	}
 	free(splt_vars);
 }
 
 void	command_export(t_token *tokens, t_env *env)
 {
-	char **splt_vars;
-	int x;
-
 	if (tokens->args == NULL)
 		print_env(env, 1);
 	else
@@ -155,12 +155,29 @@ void	print_env(t_env *env, int flag)
 	}
 }
 
-
-void	command_unset(t_token *tokens, t_env *env)
+void	unset_actions(t_token *tokens, t_env *env)
 {
 	char **splt_vars;
 	int x;
 
+	splt_vars = ft_split(tokens->args, ' ');
+	if (!splt_vars)
+		return;//TODO mirar esto dara errores el control del malloc
+	x = -1;
+	while (splt_vars[++x])
+	{
+		if (!ft_strchr(splt_vars[x], '='))
+			remove_node(&env, splt_vars[x]);
+		else
+			printf("bash: unset: `%s': not a valid identifier\n", splt_vars[x]);
+	}
+	free(splt_vars);
+}
+
+void	command_unset(t_token *tokens, t_env *env)
+{
+	int x;
+	
 	if (tokens->flags)
 	{
 		if (ft_charcmp(tokens->flags[0], '-') == 0)
@@ -176,20 +193,7 @@ void	command_unset(t_token *tokens, t_env *env)
 		}
 	}
 	else
-	{
-		splt_vars = ft_split(tokens->args, ' ');
-		if (!splt_vars)
-			return;//TODO mirar esto dara errores el control del malloc
-		x = -1;
-		while (splt_vars[++x])
-		{
-			if (!ft_strchr(splt_vars[x], '='))
-				remove_node(&env, splt_vars[x]);
-			else
-				printf("bash: unset: `%s': not a valid identifier\n", splt_vars[x]);
-		}
-		free(splt_vars);
-	}
+		unset_actions(tokens, env);
 }
 
 void command_clear(t_token *tokens)

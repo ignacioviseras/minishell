@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/08 22:28:23 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:02:58 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,11 @@ char				*ft_strdup(const char *s);
 t_env				*new_node(char *key, char *value, int hide);
 void				add_bottom(t_env **env, t_env *new_envi);
 void				remove_node(t_env **env, char *key);
+int					is_alpha(char c);
+int					is_number(char c);
+int					is_alnum(char c);
+int					is_valid(char *str);
+
 
 
 //BUILT_INS
@@ -179,6 +184,10 @@ void				command_unset(t_token *tokens, t_env *env);
 void				command_echo(t_token *tokens);
 void				command_clear(t_token *tokens);
 void				print_echo(char *input);
+void				export_actions(t_token *tokens, t_env *env);
+int					validate_export(char *key, char *value);
+void				unset_actions(t_token *tokens, t_env *env);
+int					is_option_n(char *str);
 
 
 // FT_MALLOC

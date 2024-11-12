@@ -3,24 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   utils05.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 18:26:04 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/11 17:13:30 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/12 12:59:42 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
 
-int is_alpha(char c) {
+int is_alpha(char c)
+{
     return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }
 
-int is_number(char c) {
+int is_number(char c)
+{
     return (c >= '0' && c <= '9');
 }
 
-int is_alnum(char c) {
+int is_alnum(char c)
+{
     return (is_alpha(c) || is_number(c));
 }
 
@@ -79,13 +82,8 @@ void	add_bottom(t_env **env, t_env *new_envi)
 			(iter->value != NULL && new_envi->value != NULL))
 			{
 				free(iter->value);
-				if (is_valid(new_envi->value) == 1)
-				{
-					iter->value = ft_strdup(new_envi->value);
-					iter->hide = new_envi->hide;
-				}
-				else
-					printf("bash: export: `%s': not a valid identifier\n", );
+				iter->value = ft_strdup(new_envi->value);
+				iter->hide = new_envi->hide;
 			}
 			return (free_variable(new_envi));
 		}

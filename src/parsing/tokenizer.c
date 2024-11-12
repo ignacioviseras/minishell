@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 14:25:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:01:49 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	tokenize_strings(t_automata *automata, char **input)
 		}
 		(*input)++;
 	}
-    strncpy(automata->buf, start, *input - start);
+    strncpy(automata->buf, start, *input - start);//TO-DO hacer un ft_strncpy
     automata->buf[*input - start] = '\0';
 	add_token(&automata->tokens, create_token(TOKEN_STRING, automata->buf));
 }
