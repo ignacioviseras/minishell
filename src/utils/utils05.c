@@ -6,11 +6,39 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 18:26:04 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/31 13:46:38 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:13:30 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
+
+int is_alpha(char c) {
+    return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
+}
+
+int is_number(char c) {
+    return (c >= '0' && c <= '9');
+}
+
+int is_alnum(char c) {
+    return (is_alpha(c) || is_number(c));
+}
+
+int is_valid(char *str)
+{
+    int i;
+
+	i = 1;
+	if (!str || (!is_alpha(str[0]) && str[0] != '_'))
+        return (1);
+    while (str[i] != '\0')
+	{
+        if (!is_alnum(str[i]) && str[i] != '_')
+            return (1);
+        i++;
+    }
+    return (0);
+}
 
 t_env	*new_node(char *key, char *value, int hide)
 {
@@ -39,23 +67,6 @@ t_env	*new_node(char *key, char *value, int hide)
 	return (env);
 }
 
-/*
-	esto genera un error pq tiene q ser puntero doble
-*/
-// void	add_bottom(t_env **env, t_env *new_envi)
-// {
-// 	t_env	*iter;
-
-// 	if (!*env)
-// 		*env = new_envi;
-// 	else
-// 	{
-// 		iter = *env;
-// 		while (iter->next != NULL)
-// 			iter = iter->next;
-// 		iter->next = new_envi;
-// 	}
-// }
 void	add_bottom(t_env **env, t_env *new_envi)
 {
 	t_env	*iter = *env;
@@ -68,11 +79,15 @@ void	add_bottom(t_env **env, t_env *new_envi)
 			(iter->value != NULL && new_envi->value != NULL))
 			{
 				free(iter->value);
-				iter->value = ft_strdup(new_envi->value);
-				iter->hide = new_envi->hide;
+				if (is_valid(new_envi->value) == 1)
+				{
+					iter->value = ft_strdup(new_envi->value);
+					iter->hide = new_envi->hide;
+				}
+				else
+					printf("bash: export: `%s': not a valid identifier\n", );
 			}
-			free_variable(new_envi);
-			return;
+			return (free_variable(new_envi));
 		}
 		if (iter->next == NULL)
 			break;

@@ -6,31 +6,30 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/30 14:31:22 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:21:05 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
 
-// void command_echo(t_token *tokens)
-// {
-// 	int x;
-
-// 	if (ft_charcmp(tokens->next->value[0], '-') == 0)
-// 	{
-// 		x = flags_validator(tokens->next->value, "n e E");
-// 		//tendria q meter algo por si es la n
-// 		if (x == 0)
-// 			printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
-// 		else
-// 			//Aqui tendria q pintar todo 
-// 			/*
-// 				echo -neEa hola
-// 				->	-neEa hola
+int validate_export(char *key, char *value)
+{
+	if (is_valid(key) == 1)
+	{
+		if (value == NULL)
+		{
+			printf("bash: export: `%s': not a valid identifier\n", key);
+			return (1);
+		}
+		else
+		{
+			printf("bash: export: `%s=%s': not a valid identifier\n", key, value);
+			return (1);
 			
-// 			*/
-// 	}
-// }
+		}
+	}
+	return (0);
+}
 
 char *get_value(t_env **envi, char *find)
 {
@@ -83,6 +82,27 @@ char	*get_content_var(char *str)
     return (variable);
 }
 
+void export_actions(t_token *tokens, t_env *env)
+{
+	char **splt_vars;
+	int x;
+
+	splt_vars = ft_split(tokens->args, ' ');
+	if (!splt_vars)
+		return;//TODO mirar esto dara errores el control del malloc
+	x = -1;
+	while (splt_vars[++x])
+	{
+		if (!ft_strchr(splt_vars[x], '='))
+			if (validate_export(splt_vars[x], NULL) == 0)
+				add_bottom(&env, new_node(splt_vars[x], NULL, 1));
+		else
+			if (validate_export(get_var(splt_vars[x]), get_content_var(splt_vars[x])) == 0)
+			add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
+	}
+	free(splt_vars);
+}
+
 void	command_export(t_token *tokens, t_env *env)
 {
 	char **splt_vars;
@@ -104,20 +124,7 @@ void	command_export(t_token *tokens, t_env *env)
 			}
 		}
 		else
-		{
-			splt_vars = ft_split(tokens->args, ' ');
-			if (!splt_vars)
-				return;//TODO mirar esto dara errores el control del malloc
-			x = -1;
-			while (splt_vars[++x])
-			{
-				if (!ft_strchr(splt_vars[x], '='))
-					add_bottom(&env, new_node(splt_vars[x], NULL, 1));
-				else
-					add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
-			}
-			free(splt_vars);
-		}
+			export_actions(tokens, env);
 	}
 }
 
@@ -130,7 +137,7 @@ void	print_env(t_env *env, int flag)
 
 	i = 1;
 	if (!env)
-		printf("Sin contenido\n");
+		printf("Empty\n");
 	while (env)
 	{
 		if (flag == 1)
@@ -212,59 +219,51 @@ void command_clear(t_token *tokens)
 	}
 }
 
+int	is_option_n(char *str)
+{
+	int i;
+	int result;
+
+	i = 1;
+	result = 1;
+	if (str[0] != '-')
+		result = 0;
+	else
+	{
+		while (str[i] == 'n')
+			i++;
+		if (str[i] != '\0')
+			result = 0;
+	}
+	return (result);
+}
+
 void print_echo(char *input)
 {
-	// int no_newline;
-	// int i;
-	
-	// no_newline = 0;
-    // i = 0;
-    // while (input[i] == '-')
-	// {
-    //     int j = i + 1;
-    //     if (input[j] == 'n')
-	// 	{
-    //         no_newline = 1;
-    //         while (input[j] == 'n')
-    //             j++;
-    //         i = j;
-    //         while (input[i] == ' ')
-    //             i++;
-    //     }
-	// 	else
-    //         break;
-    // }
-    // printf("%s", &input[i]);
-    // if (!no_newline)
-    //     printf("\n");
-	int no_newline = 1; // Comenzamos con la suposición de que no se imprimirá un salto de línea
-    int i = 0;
+	char **str_splited;
+	int no_newline;
+	int i;
 
-    // Verifica si hay prefijos de -n
-    while (input[i] == '-') {
-        int j = i + 1;
-
-        // Comprobar si el siguiente carácter es 'n'
-        if (input[j] == 'n') {
-            while (input[j] == 'n') {
-                j++; // Continuamos mientras sean 'n'
-            }
-            // Avanzamos i al siguiente argumento
-            i = j;
-            while (input[i] == ' ') {
-                i++; // Omitir espacios
-            }
-        } else {
-            // Si encontramos un prefijo que no es 'n', dejamos de contar
-            break;
-        }
-    }
-
-    // Imprimimos el resto de la cadena
-    printf("%s", &input[i]);
-    if (no_newline) {
-        printf("\n"); // Solo imprimimos el salto de línea si no se encontró un argumento que comience con '-n'
-    }
+	i = -1;
+	no_newline = 1;
+	if (!input)
+	{
+		printf("\n");
+		return;
+	}
+	str_splited = ft_split(input, ' ');
+	while (str_splited[++i] && is_option_n(str_splited[i]))
+		no_newline = 0;
+	while (str_splited[i])
+	{
+		printf("%s", str_splited[i]);
+		if (str_splited[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (no_newline)
+		printf("\n");
+	free_matrix(str_splited);
 }
 
 void command_echo(t_token *tokens)
@@ -279,12 +278,9 @@ void command_echo(t_token *tokens)
 			if (x == 0)
 				printf("NO ESTAN INPLEMENTADAS LAS FLAGS\n");
 			else
-			{
 				print_echo(tokens->args);
-				printf("1. '%s'\n", tokens->args);
-			}
 		}
 	}
 	else
-		printf("%s\n", tokens->args);
+		print_echo(tokens->args);
 }

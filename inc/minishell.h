@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/31 13:39:10 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/08 22:28:23 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,6 @@ char				*ft_strjoin(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
-void				**free_all(char **str);
 void				**free_matrix(char **str);
 void				free_tokens(t_token *token);
 void				free_env(t_env *env);
