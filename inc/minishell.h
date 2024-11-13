@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/12 13:02:58 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:06:44 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_ast
  */
 typedef struct s_token
 {
-	char			*cmd_args;
+	char			*full_cmd;
 	char			*flags;
 	char			*cmd;
 	char			*args;
@@ -81,19 +81,19 @@ typedef struct s_token
 }				t_token;
 
 /* 
- *	Each of the automaton's variables:
- 
+ *	Each of the lexer's variables:
+ *
  *	 - Tokens: Array of tokens returned to create the Abstract Syntax Tree.
  *	 - Buffer: Used for each of the tokens. It's limited to 256 due to the
  * 	   filename length limits of most Unix file systems.
- *	 - Status: Stores the value returned by the transition table.
+ *	 - Automaton status: Stores the value returned by the transition table.
  */
-typedef struct s_automata
+typedef struct s_lexer
 {
 	t_token			*tokens;
 	char			buf[256];
-	int				status;
-}				t_automata;
+	int				automaton_status;
+}				t_lexer;
 
 typedef struct s_params
 {
@@ -126,13 +126,14 @@ void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
 
 t_token				*lexer(char *line);
-void				automata_init(t_automata *automata);
+void				lexer_init(t_lexer *lexer);
 int					transition_table(int i, int j);
 int					get_symbol(char c);
 
 // UTILS		
 void				*ft_memset(void *b, int c, size_t len);
-void				skip_spaces(char **input);
+void				skip_input_spaces(char **input);
+char				*skip_args_spaces(char *input);
 int					ft_charcmp(char c1, char c2);
 void				ft_bzero(void *s, size_t n);
 char				ft_lstlastchar(t_token *lst);
@@ -140,13 +141,14 @@ size_t				ft_strlen(const char *str);
 int					ft_strcmp(const char *str1, const char *str2);
 void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strchr(const char *s, int c);
-int					ft_charseach(const char *s, int c);
+int					findchar(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
 char				*ft_strjoin(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
+void				ft_strcpy(char *dest, const char *src);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 void				**free_matrix(char **str);
 void				free_tokens(t_token *token);
@@ -163,8 +165,8 @@ int					is_alpha(char c);
 int					is_number(char c);
 int					is_alnum(char c);
 int					is_valid(char *str);
-
-
+int					ft_isalnum(char	c);
+int					ft_count_words(char **strs);
 
 //BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -194,8 +196,8 @@ int					is_option_n(char *str);
 void				*ft_malloc(size_t size);
 
 // TOKENIZER		
-void				tokenize_strings(t_automata *automata, char **input);
-void				tokenizer(t_automata *automata, char **input);
+void				tokenize_strings(t_lexer *lexer, char **input);
+void				tokenizer(t_lexer *lexer, char **input);
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(token_type type, char *value);
 
@@ -203,6 +205,10 @@ t_token				*create_token(token_type type, char *value);
 void				build_tree(t_token *tokens, t_ast **current_node);
 t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
+
+
+// EXPANDER
+void				expander(t_token **tokens, t_env *env);
 
 // PIPES
 void				have_env(char **env, char **argv);

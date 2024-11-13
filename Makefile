@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
+#    By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/10/28 17:36:40 by igvisera         ###   ########.fr        #
+#    Updated: 2024/11/13 16:05:50 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ BASE_SRC		=	main.c
 
 PARSING_SRC		=	lexer.c \
 					parser.c \
-					tokenizer.c
+					tokenizer.c \
+					expander.c
 
 BUILT_SRC		=	built_ins1.c \
 					built_ins2.c \
@@ -40,6 +41,7 @@ UTILS_SRC		=	utils01.c \
 					utils03.c \
 					utils04.c \
 					utils05.c \
+					utils06.c \
 					mem_alloc.c \
 					frees.c \
 

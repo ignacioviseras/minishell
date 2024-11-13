@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:05:12 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 14:08:22 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/04 20:08:02 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*ft_strdup(const char *s)
 	size_t	len;
 
 	len = ft_strlen((char *)s);
-	ptr = (char *)malloc(sizeof(char) * len + 1);
+	ptr = (char *)malloc(sizeof(char) * (len + 1));
 	if (!ptr)
 		return (NULL);
 	ft_strlcpy(ptr, (char *)s, len + 1);

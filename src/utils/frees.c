@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/28 16:55:42 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:10:36 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	free_tokens(t_token *token)
 	while (token)
 	{
 		temp = token;
+		free(token->flags);
+		free(token->args);
+		free(token->cmd);
+		free(token->full_cmd);
 		token = token->next;
-		free(temp->flags);
-		free(temp->args);
-		free(temp->cmd);
-		free(temp->cmd_args);
 		free(temp);
 	}
 }

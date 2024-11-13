@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:48:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/25 14:03:43 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:31:15 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (NULL);
 }
 
-int	ft_charseach(const char *s, int c)
+int	findchar(const char *s, int c)
 {
 	int	i;
 
@@ -54,7 +54,7 @@ int	ft_charseach(const char *s, int c)
 	}
 	if ((char)c == s[i])
 		return (i);
-	return (0);
+	return (-1);
 }
 
 char	ft_lstlastchar(t_token *lst)
@@ -62,13 +62,15 @@ char	ft_lstlastchar(t_token *lst)
 	t_token	*aux;
 	int		i;
 
+	if (!lst)
+		return ('\0');
 	aux = lst;
 	i = 0;
 	while (aux->next != NULL)
 		aux = aux->next;
-	while (aux->cmd_args[i + 1] != '\0')
+	while (aux->full_cmd[i + 1] != '\0')
 		i++;
-	return (aux->cmd_args[i]);
+	return (aux->full_cmd[i]);
 }
 
 int ft_charcmp(char c1, char c2)
@@ -76,7 +78,7 @@ int ft_charcmp(char c1, char c2)
     return (c1 - c2);
 }
 
-void	skip_spaces(char **input)
+void	skip_input_spaces(char **input)
 {
 	while (*input && **input == ' ')
 		(*input)++;

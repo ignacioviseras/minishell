@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/30 09:23:21 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:14:34 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,6 @@ void cd_actions(t_token *tokens)
 		printf("bash: cd: %s: No such file or directory\n", tokens->args);
 }
 
-/*
-	creo q no necesito los ft_strcmp(tokens->cmd_args, "cd") == 0
- */
 void command_cd(t_token *tokens)
 {
 	static char *home;
@@ -157,7 +154,7 @@ void command_env(t_token *tokens, t_env *envi)
 
 void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 {
-	printf("cmd_args '%s'\n", tokens->cmd_args);
+	printf("cmd_args '%s'\n", tokens->full_cmd);
 	printf("flags '%s'\n", tokens->flags);
 	printf("cmd '%s'\n", tokens->cmd);
 	printf("args '%s'\n", tokens->args);

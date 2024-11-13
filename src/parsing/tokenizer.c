@@ -6,11 +6,24 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/06 15:01:49 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:11:19 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+char	*skip_args_spaces(char *input)
+{
+	char	*aux;
+	int		i;
+
+	i = 0;
+	while (input && input[i] == ' ')
+		i++;
+	aux = ft_strdup(input + i);
+	free(input);
+	return (aux);
+}
 
 void	create_args(t_token *token, char *value, int space_pos)
 {
@@ -18,21 +31,20 @@ void	create_args(t_token *token, char *value, int space_pos)
 	token->args = ft_strdup(value + space_pos + 1);
 	if (!ft_strcmp(token->args, ""))
 		token->args = NULL;
-	skip_spaces(&token->args);
+	token->args = skip_args_spaces(token->args);
 	token->flags = NULL;
-	if (token->args&& *token->args == '-')
+	if (token->args && *token->args == '-')
 	{
-		space_pos = ft_charseach(token->args, ' ');
+		space_pos = findchar(token->args, ' ');
 		if (space_pos != 0)
 			token->flags = ft_substr(token->args, 0, space_pos);
 		else
 			token->flags = ft_strdup(token->args);
 	}
-	
 }
 
 /*
- * Creates a new token with the specified type and value, 
+ * Creates a new token with the specified type and value,
  * allocating memory and duplicating the token's value string.
  */
 t_token	*create_token(token_type type, char *value)
@@ -41,8 +53,8 @@ t_token	*create_token(token_type type, char *value)
 	int		space_pos;
 
 	token = ft_malloc(sizeof(t_token));
-	token->cmd_args = ft_strdup(value);
-	space_pos = ft_charseach(value, ' ');
+	token->full_cmd = ft_strdup(value);
+	space_pos = findchar(value, ' ');
 	if (space_pos > 0)
 		create_args(token, value, space_pos);
 	else
@@ -57,7 +69,7 @@ t_token	*create_token(token_type type, char *value)
 }
 
 /*
- * Adds a new token to the end of the token list. 
+ * Adds a new token to the end of the token list.
  * If the list is empty, the new token becomes the head.
  */
 void	add_token(t_token **head, t_token *new_token)
@@ -76,18 +88,17 @@ void	add_token(t_token **head, t_token *new_token)
 }
 
 /*
- * Tokenizes strings based on quotes or delimiters. 
- * If the input starts with a quote (' or "), it extracts the quoted string. 
- * Otherwise, it tokenizes until encountering a space or operator (|, >, <). 
+ * Tokenizes strings based on quotes or delimiters.
+ * If the input starts with a quote (' or "), it extracts the quoted string.
+ * Otherwise, it tokenizes until encountering a space or operator (|, >, <).
  */
-void	tokenize_strings(t_automata *automata, char **input)
+void	tokenize_strings(t_lexer *lexer, char **input)
 {
 	char	quote;
 	char	*start;
 
 	start = *input;
-	while (**input && **input != '|' \
-		&& **input != '>' && **input != '<')
+	while (**input && **input != '|' && **input != '>' && **input != '<')
 	{
 		if (**input == '"' || **input == '\'')
 		{
@@ -98,38 +109,40 @@ void	tokenize_strings(t_automata *automata, char **input)
 		}
 		(*input)++;
 	}
-    strncpy(automata->buf, start, *input - start);//TO-DO hacer un ft_strncpy
-    automata->buf[*input - start] = '\0';
-	add_token(&automata->tokens, create_token(TOKEN_STRING, automata->buf));
+    strncpy(lexer->buf, start, *input - start);
+    lexer->buf[*input - start] = '\0';
+	add_token(&lexer->tokens, create_token(TOKEN_STRING, lexer->buf));
 }
 
 /*
  *	The tokenizer is in charge of separating everything into tokens,
  *	differentiating between operators, redirections and strings.
  */
-void	tokenizer(t_automata *automata, char **input)
+void	tokenizer(t_lexer *lexer, char **input)
 {
 	if (**input == '|')
 	{
-		add_token(&automata->tokens, create_token(TOKEN_PIPE, "|"));
+		add_token(&lexer->tokens, create_token(TOKEN_PIPE, "|"));
 		(*input)++;
 	}
-	else if ((**input == '>' && *(*input + 1) != '>') || (**input == '<' && *(*input + 1) != '<'))
+	else if ((**input == '>' && *(*input + 1) != '>') \
+			|| (**input == '<' && *(*input + 1) != '<'))
 	{
 		if (**input == '>')
-			add_token(&automata->tokens, create_token(TOKEN_OUTPUT, ">"));
+			add_token(&lexer->tokens, create_token(TOKEN_OUTPUT, ">"));
 		else
-			add_token(&automata->tokens, create_token(TOKEN_INPUT, "<"));
+			add_token(&lexer->tokens, create_token(TOKEN_INPUT, "<"));
 		(*input)++;
 	}
-	else if ((**input == '>' && *(*input + 1) == '>') || (**input == '<' && *(*input + 1) == '<'))
+	else if ((**input == '>' && *(*input + 1) == '>') \
+			|| (**input == '<' && *(*input + 1) == '<'))
 	{
 		if (**input == '>')
-			add_token(&automata->tokens, create_token(TOKEN_APPEND, ">>"));
+			add_token(&lexer->tokens, create_token(TOKEN_APPEND, ">>"));
 		else
-			add_token(&automata->tokens, create_token(TOKEN_HEREDOC, "<<"));
+			add_token(&lexer->tokens, create_token(TOKEN_HEREDOC, "<<"));
 		*input += 2;
 	}
 	else
-		tokenize_strings(automata, input);
+		tokenize_strings(lexer, input);
 }
