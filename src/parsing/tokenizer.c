@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/06 12:46:42 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:17:44 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_token	*create_token(token_type type, char *value)
 	token = ft_malloc(sizeof(t_token));
 	token->full_cmd = ft_strdup(value);
 	space_pos = findchar(value, ' ');
-	if (space_pos > 0)
+	if (space_pos > 0 && space_pos + 1 != (int)ft_strlen(value))
 		create_args(token, value, space_pos);
 	else
 	{

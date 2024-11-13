@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/07 21:42:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:42:19 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,23 @@ void	ft_strcpy(char *dest, const char *src)
 		i++;
 	}
 	dest[i] = '\0';
+}
+
+// The same as ft_strlen but with char **
+int	ft_strlen_v2(char **strs)
+{
+	int	i;
+	int	j;
+	int	total;
+
+	j = 0;
+	total = 0;
+	while (strs[j])
+	{
+		i = 0;
+		while (strs[j][i++] != '\0')
+			total++;
+		j++;
+	}
+	return (total);
 }

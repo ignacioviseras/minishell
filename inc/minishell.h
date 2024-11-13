@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/07 22:26:49 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:15:40 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ typedef struct s_params
 
 }			t_params;
 
-
 /* 
  * The environment translated into a linked list.
  * It has three variables:
@@ -120,6 +119,13 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }				t_env;
+
+typedef struct s_counters
+{
+	int	i;
+	int	j;
+	int	k;
+} 			t_counters;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
@@ -159,6 +165,7 @@ char				**ft_split(char const *s, char c);
 char				*ft_strdup(const char *s);
 int					ft_isalnum(char	c);
 int					ft_count_words(char **strs);
+int					ft_strlen_v2(char **strs);
 
 //BUILT_INS
 void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
@@ -187,7 +194,13 @@ t_ast				*create_node(void *data);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);
+char				**get_keys(char *str, int keys_nbr);
+char				**get_values(t_env *env, char **keys, int keys_nbr);
+char				*expand_token(t_token *token, char **values, int size);
+int					nbr_of_keys(char *str);
+int					copy_len(const char *s);
+
 
 // PIPES
-void	have_env(char **env, char **argv);
-int		tramited(char *path, char **env);
+void				have_env(char **env, char **argv);
+int					tramited(char *path, char **env);
