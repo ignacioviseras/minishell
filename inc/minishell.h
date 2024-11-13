@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 15:15:40 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:20:04 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_params
 
 }			t_params;
 
+
 /* 
  * The environment translated into a linked list.
  * It has three variables:
@@ -117,6 +118,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	int				hide;
 	struct s_env	*next;
 }				t_env;
 
@@ -125,7 +127,7 @@ typedef struct s_counters
 	int	i;
 	int	j;
 	int	k;
-} 			t_counters;
+}			t_counters;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
@@ -148,34 +150,54 @@ void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strchr(const char *s, int c);
 int					findchar(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
-// static int			n_words(char const *s, char c);
+int					n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
 char				*ft_strjoin(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 void				ft_strcpy(char *dest, const char *src);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
-void				**free_all(char **str);
 void				**free_matrix(char **str);
 void				free_tokens(t_token *token);
 void				free_env(t_env *env);
 void				free_ast(t_ast *node);
+void				free_variable(t_env *node);
 char				*ft_str_toupper(char *str);
 char				**ft_split(char const *s, char c);
 char				*ft_strdup(const char *s);
+t_env				*new_node(char *key, char *value, int hide);
+void				add_bottom(t_env **env, t_env *new_envi);
+void				remove_node(t_env **env, char *key);
+int					is_alpha(char c);
+int					is_number(char c);
+int					is_alnum(char c);
+int					is_valid(char *str);
 int					ft_isalnum(char	c);
 int					ft_count_words(char **strs);
-int					ft_strlen_v2(char **strs);
 
 //BUILT_INS
+int					flags_validator(char *flags, char *command_flags);
 void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
 char				*env_finder(t_env **env, char *find);
-void				command_pwd();
+void				command_pwd(t_token *tokens);
 void				command_env(t_token *tokens, t_env *env);
 void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
+char				*get_content_var(char *str);
+char				*get_value(t_env **envi, char *find);
+char				*get_var(char *str);
+void				command_export(t_token *tokens, t_env *envi);
 char				*get_home(char *pwd);
-void				print_env(t_env *env);
+void				print_env(t_env *envi, int flag);
+void				command_unset(t_token *tokens, t_env *env);
+void				command_echo(t_token *tokens);
+void				command_clear(t_token *tokens);
+void				print_echo(char *input);
+void				export_actions(t_token *tokens, t_env *env);
+int					validate_export(char *key, char *value);
+void				unset_actions(t_token *tokens, t_env *env);
+int					is_option_n(char *str);
+
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);
@@ -194,11 +216,12 @@ t_ast				*create_node(void *data);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);
-char				**get_keys(char *str, int keys_nbr);
-char				**get_values(t_env *env, char **keys, int keys_nbr);
 char				*expand_token(t_token *token, char **values, int size);
-int					nbr_of_keys(char *str);
-int					copy_len(const char *s);
+char	**get_keys(char *str, int keys_nbr);
+char	**get_values(t_env *env, char **keys, int keys_nbr);
+int	nbr_of_keys(char *str);
+int	ft_strlen_v2(char **strs);
+int	copy_len(const char *s);
 
 
 // PIPES

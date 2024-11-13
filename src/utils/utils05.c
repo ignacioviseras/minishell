@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 11:42:19 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:29:05 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_count_words(char **strs)
 	return (i);
 }
 
-int	ft_isalnum(char	c)
+int	is_alnum(char	c)
 {
 	if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'))
 		return (1);
@@ -59,4 +59,20 @@ int	ft_strlen_v2(char **strs)
 		j++;
 	}
 	return (total);
+}
+
+int is_valid(char *str)
+{
+    int i;
+
+	i = 1;
+	if (!str || (!is_alpha(str[0]) && str[0] != '_'))
+        return (1);
+    while (str[i] != '\0')
+	{
+        if (!is_alnum(str[i]) && str[i] != '_')
+            return (1);
+        i++;
+    }
+    return (0);
 }

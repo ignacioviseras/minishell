@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:10:36 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 14:13:01 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:21:06 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*ft_str_toupper(char *str)
 	return (str);
 }
 
-static int	n_words(char const *s, char c)
+int	n_words(char const *s, char c)
 {
 	int	words;
 	int	index;

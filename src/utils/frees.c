@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/04 22:28:59 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:24:25 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,12 @@ void	**free_matrix(char **str)
 		i++;
 	}
 	return (free(str), NULL);
+}
+
+void	free_variable(t_env *node)
+{
+	free(node->key);
+	if (node->value)
+		free(node->value);
+	free(node);
 }
