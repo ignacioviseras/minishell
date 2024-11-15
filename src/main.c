@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/06 12:46:42 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:02:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	create_env(t_env *env, char **envp)
 		env->key = ft_substr(*envp, 0, findchar(*envp, '='));
 		env->value = ft_substr (*envp, findchar(*envp, '=') \
 		+ 1, findchar(*envp, '\0'));
+		env->hide = 0;
 		if (*(envp + 1))
 			env->next = ft_malloc(sizeof(t_env));
 		else
@@ -59,7 +60,7 @@ void	handle_input(t_env *env, char *input)
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
-	print_ast(ast, 0);
+	//print_ast(ast, 0);
 	//mirar control de errores por si no hay env
 	// if (env && env[0])
 	// {

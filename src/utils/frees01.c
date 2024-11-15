@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   frees.c                                            :+:      :+:    :+:   */
+/*   frees01.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/13 17:24:25 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:36:03 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ void	free_tokens(t_token *token)
 	while (token)
 	{
 		temp = token;
-		free(token->flags);
-		free(token->args);
-		free(token->cmd);
-		free(token->full_cmd);
 		token = token->next;
+		free(temp->flags);
+		free(temp->args);
+		free(temp->cmd);
+		free(temp->full_cmd);
 		free(temp);
 	}
 }

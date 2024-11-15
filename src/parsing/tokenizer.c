@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 12:17:44 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:53:17 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ void	tokenize_strings(t_lexer *lexer, char **input)
 		}
 		(*input)++;
 	}
-    strncpy(lexer->buf, start, *input - start);
+	free(lexer->buf);
+	lexer->buf = ft_substr(start, 0, *input - start);
     lexer->buf[*input - start] = '\0';
 	add_token(&lexer->tokens, create_token(TOKEN_STRING, lexer->buf));
 }

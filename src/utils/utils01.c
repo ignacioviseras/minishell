@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/10/24 14:09:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:26:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,16 @@ void	ft_bzero(void *s, size_t n)
 
 int	ft_strcmp(const char *str1, const char *str2)
 {
-	while (*str1 && (*str1 == *str2))
+	if (!str1 || !str2)
+		return (-1);
+	while (*str1 && *str2 && (*str1 == *str2))
 	{
 		str1++;
 		str2++;
 	}
 	return (*(unsigned char *)str1 - *(unsigned char *)str2);
 }
+
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

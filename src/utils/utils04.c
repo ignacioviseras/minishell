@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:10:36 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 17:21:06 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:17:53 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	n_words(char const *s, char c)
 		else
 			index++;
 	}
-	if (s[index - 1] && s[index - 1] != c)
+	if (s[0] && s[index - 1] && s[index - 1] != c)
 		words++;
 	return (words);
 }

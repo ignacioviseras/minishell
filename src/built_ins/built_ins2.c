@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/13 17:02:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:57:16 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,6 @@ int validate_export(char *key, char *value)
 		}
 	}
 	return (0);
-}
-
-char *get_value(t_env **envi, char *find)
-{
-    t_env *current = *envi;
-    
-    while (current)
-    {
-        if (ft_strcmp(find, current->key) == 0)
-            return (current->value);
-        current = current->next;
-    }
-    return (NULL);
 }
 
 char	*get_var(char *str)

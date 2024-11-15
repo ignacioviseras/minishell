@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:41:52 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 15:21:56 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:35:43 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,29 +57,44 @@ int	nbr_of_keys(char *str)
 	return keys;
 }
 
-char	**get_values(t_env *env, char **keys, int keys_nbr)
+char	*get_value(t_env *env, char *key, int *keys_nbr)
 {
 	t_env	*aux;
-	char	**values;
-	int		i;
+	char	*value;
 
 	aux = env;
-	values = ft_malloc((keys_nbr + 1) * sizeof(char *));
-	i = 0;
-	while (keys[i] && i <= keys_nbr)
+	value = NULL;
+	while (env)
 	{
-		values[i] = NULL;
-		while (env)
+		if (ft_strcmp(key, env->key) == 0)
 		{
-			if (ft_strcmp(keys[i], env->key) == 0)
-			{
-				values[i] = ft_strdup(env->value);
-				break ;
-			}
-			env = env->next;
+			value = ft_strdup(env->value);
+			break ;
 		}
-		env = aux;
-		i++;
+		env = env->next;
+		if (!env)
+		{
+			value = "";
+			keys_nbr--;
+		}
+	}
+	env = aux;
+	return (value);
+}
+
+char	**get_values(t_env *env, char **keys, int *keys_nbr)
+{
+	char	**values;
+	char	*value;
+	int		i;
+
+	values = ft_malloc((*keys_nbr + 1) * sizeof(char *));
+	i = 0;
+	while (keys[i] && i <= *keys_nbr)
+	{
+		value = get_value(env, keys[i], keys_nbr);
+		if (value)
+			values[i++] = value;
 	}
 	values[i] = NULL;
 	return (values);

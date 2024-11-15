@@ -6,39 +6,48 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 15:44:19 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:56:40 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+int	compute_expand_size(char *cmd, char **keys, char **values, int keys_nbr)
+{
+	int original_len;
+	int values_len;
+	int keys_len;
+	
+	original_len = ft_strlen(cmd);
+	values_len = ft_strlen_v2(values);
+	keys_len = ft_strlen_v2(keys);
+	return (original_len - keys_len + values_len + keys_nbr + 1);
+}
+
 void	replace_var(t_token *token, t_env *env)
 {
-	int		i;
+	int		size;
 	int		keys_nbr;
 	char	**keys;
 	char	**values;
 
-	i = 0;
 	keys_nbr = nbr_of_keys(token->full_cmd);
 	keys = get_keys(token->full_cmd, keys_nbr);
-	values = get_values(env, keys, keys_nbr);
-	token->full_cmd = expand_token(token, values, \
-	ft_strlen(token->full_cmd) + ft_strlen_v2(values) - \
-	ft_strlen_v2(keys) - keys_nbr + 1);
-	printf("%s\n", token->full_cmd);
-	while (values[i])
+	values = get_values(env, keys, &keys_nbr);
+	size = compute_expand_size(token->full_cmd, keys, values, keys_nbr);
+	token->full_cmd = expand_token(token, values, size);
+	free(token->cmd);
+	token->cmd = ft_substr(token->full_cmd, 0, findchar(token->full_cmd, ' '));
+	if (token->args)
 	{
-		if (keys[i] && values[i])
-			printf("Key: %s, value: %s\n", keys[i], values[i]);
-		i++;
+		free(token->args);
+		token->args = ft_strdup(token->full_cmd + findchar(token->full_cmd, ' '));
+		token->args = skip_args_spaces(token->args);
 	}
-	for (i = 0; keys[i]; i++)
-		free(keys[i]);
-	for (i = 0; values[i]; i++)
-		free(values[i]);
-	free(keys);
-	free(values);
+	/* printf("%s\n", token->full_cmd);
+	printf("%s\n", token->cmd);
+	printf("%s\n", token->args); */
+	free_expander_vars(keys, values);
 }
 
 void	expander(t_token **tokens, t_env *env)

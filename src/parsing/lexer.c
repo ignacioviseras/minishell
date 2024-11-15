@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 22:05:11 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:13:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	lexer_init(t_lexer *lexer)
 {
 	lexer->tokens = NULL;
 	lexer->automaton_status = 0;
+	lexer->buf = ft_malloc(256 * sizeof(char));
 	ft_memset(lexer->buf, 0, sizeof(lexer->buf));
 }
 
@@ -112,7 +113,10 @@ t_token	*lexer(char *input)
 	lexer_init(&lexer);
 	aux = input;
 	if (!input_checker(lexer, aux, 0))
+	{
+		free(lexer.buf);
 		return (NULL);
+	}
 	while (*input != '\0')
 	{
 		skip_input_spaces(&input);
@@ -121,7 +125,10 @@ t_token	*lexer(char *input)
 		tokenizer(&lexer, &input);
 	}
 	if (!input_checker(lexer, aux, 1))
+	{
+		free(lexer.buf);
 		return (NULL);
-	printf("\n");
+	}
+	free(lexer.buf);
 	return (lexer.tokens);
 }

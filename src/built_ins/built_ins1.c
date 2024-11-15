@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/13 17:19:22 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:16:16 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,31 @@
 
 int flags_validator(char *flags, char *command_flags)
 {
-    int i;
+	int i;
 	int j;
-    int valid_flag;
-    char **cmd_flags_splited;
+	int valid_flag;
+	char **cmd_flags_splited;
 
 	if (ft_strcmp(flags, "--help") == 0)
 		return (0);
-    i = 0;
-    cmd_flags_splited = ft_split(command_flags, ' ');
-    while (flags[++i] != '\0')
-    {
-        j = -1;
-        valid_flag = 0;
-        while (cmd_flags_splited[++j])
-        {
-            if (ft_charcmp(flags[i], cmd_flags_splited[j][0]) == 0)
-            {
-                valid_flag = 1;
-                break;
-            }
-        }
-        if (!valid_flag)
-            return (free(cmd_flags_splited), i);
-    }
-    return (free(cmd_flags_splited), 0);
+	i = 0;
+	cmd_flags_splited = ft_split(command_flags, ' ');
+	while (flags[++i] != '\0')
+	{
+		j = -1;
+		valid_flag = 0;
+		while (cmd_flags_splited[++j])
+		{
+			if (ft_charcmp(flags[i], cmd_flags_splited[j][0]) == 0)
+			{
+				valid_flag = 1;
+				break;
+			}
+		}
+		if (!valid_flag)
+			return (free(cmd_flags_splited), i);
+	}
+	return (free(cmd_flags_splited), 0);
 }
 
 char		*get_home(char *pwd)
@@ -158,11 +158,11 @@ void command_env(t_token *tokens, t_env *envi)
 
 void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 {
-	printf("cmd_args '%s'\n", tokens->full_cmd);
+	/* printf("cmd_args '%s'\n", tokens->full_cmd);
 	printf("flags '%s'\n", tokens->flags);
 	printf("cmd '%s'\n", tokens->cmd);
 	printf("args '%s'\n", tokens->args);
-	printf("type '%d'\n", tokens->type);
+	printf("type '%d'\n", tokens->type); */
 	if (!tokens)
 		return ;
 	if (ft_strcmp(tokens->cmd, "pwd") == 0)
@@ -179,6 +179,13 @@ void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 		command_unset(tokens, env);
 	else if (ft_strcmp(tokens->cmd, "clear") == 0)
 		command_clear(tokens);
+	else if (ft_strcmp(tokens->cmd, "ls") == 0)
+	{
+		char *args[] = {"/usr/bin/ls", NULL};
+		if (execve("/usr/bin/ls", args, NULL) == -1) {
+			perror("execve");
+		}
+	}
 	else if (ft_strcmp(tokens->cmd, "exit") == 0)
 	{
 		free_env(env);

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 17:29:05 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:59:26 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	ft_strlen_v2(char **strs)
 
 	j = 0;
 	total = 0;
+	if (!strs)
+		return (0);
 	while (strs[j])
 	{
 		i = 0;
