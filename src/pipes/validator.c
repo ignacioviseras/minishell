@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:10:39 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*access_validate(char **path, char *comand)
 	return (NULL);
 }
 
-void validate_comand (char **comand_splited)
+void validate_comand(char **comand_splited)
 {
 	ft_printf("\t--- Error ---\nComand empty\n");
 	free_matrix(comand_splited);

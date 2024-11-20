@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/12 13:03:26 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:16:57 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int validate_export(char *key, char *value)
 {
+
 	if (is_valid(key) == 1)
 	{
 		if (value == NULL)
@@ -23,6 +24,7 @@ int validate_export(char *key, char *value)
 		}
 		else
 		{
+			printf("que llega ?? %s\n", value);
 			printf("bash: export: `%s=%s': not a valid identifier\n", key, value);
 			return (1);
 		}
@@ -78,6 +80,7 @@ char	*get_content_var(char *str)
     if (start > end)
         return (ft_strdup(""));
     variable = ft_substr(finder, start, end - start + 1);
+	printf("contenido de la var '%s'\n", variable);
     return (variable);
 }
 
@@ -99,8 +102,8 @@ void export_actions(t_token *tokens, t_env *env)
 		}
 		else
 		{
-			if (validate_export(get_var(splt_vars[x]), get_content_var(splt_vars[x])) == 0)
-				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
+			if (validate_export(get_var(splt_vars[x]), get_content_var(tokens->args)) == 0)
+				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(tokens->args), 1));
 		}
 	}
 	free(splt_vars);

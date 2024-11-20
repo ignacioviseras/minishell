@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 16:12:38 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/20 19:05:39 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,33 @@ void	print_ast(t_ast *node, int depth)
 	print_ast(node->right, depth + 1);
 }
 
-void	handle_input(t_env *env, char *input)
+int	count_ast_nodes(t_ast *node)
+{
+	t_token *data;
+
+	if (node == NULL)
+		return 0;
+	data = (t_token *)(node->data);
+	if (data != NULL && ft_strcmp(data->cmd, "|") == 0)
+		return (count_ast_nodes(node->left) + count_ast_nodes(node->right));
+
+	return (1 + count_ast_nodes(node->left) + count_ast_nodes(node->right));
+}
+
+void	handle_input(t_env *env, char *input, char **envp)
 {
 	t_token	*tokens;
 	t_ast	*ast;
+	t_params p;
+	int len_cmd;
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
-	//mirar control de errores por si no hay env
-	// if (env && env[0])
-	// {
-		build_switch(env, ast, tokens);
-    	// print_envi(envi);
-	// }
-	// if (env && env[0])
-	// 	have_env(env, input);
-	// else if (ft_strchr(input, '/') && ft_strchr(input, '/'))
-	// 	tramited("", input, env);
+	p.total_cmds = count_ast_nodes(ast);
+	printf("numero de comandos %d\n", len_cmd);
+	init_pipes(ast, &p, env);
+	build_switch(env, ast, tokens);
 	free_tokens(tokens);
 	free_ast(ast);
 }
@@ -96,7 +105,7 @@ int	main(int argc, char **argv, char **envp)
 			input = readline("$megashell> ");
 			add_history(input);
 			if (input != NULL)
-				handle_input(env, input);
+				handle_input(env, input, envp);
 			else
 			{
 				free_env(env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 16:06:44 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:13:55 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,12 @@ typedef struct s_lexer
 
 typedef struct s_params
 {
-	char		*file1;
-	char		*file2;
-	char		*comand_path1;
-	char		*comand_path2;
-	char		**comand1;
-	char		**comand2;
+	int			*fd;
+	int			fd_index;
+	int			total_cmds;
+	char		*cmd_path;
+	char		**cmd_exec;
+	char		**env;
 
 }			t_params;
 
@@ -206,6 +206,8 @@ void				build_tree(t_token *tokens, t_ast **current_node);
 t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
 
+int					count_ast_nodes(t_ast *node);
+
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);
@@ -213,3 +215,4 @@ void				expander(t_token **tokens, t_env *env);
 // PIPES
 void				have_env(char **env, char **argv);
 int					tramited(char *path, char **env);
+void				init_pipes(t_ast *ast, int len_cmd, t_env *env);
