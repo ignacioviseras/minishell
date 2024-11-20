@@ -1,31 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   frees02.c                                          :+:      :+:    :+:   */
+/*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 14:58:42 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/19 16:27:38 by drestrep         ###   ########.fr       */
+/*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
+/*   Updated: 2024/11/20 18:21:09 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	free_expander_vars(char **keys, char **values)
-{
-	int	i;
+int	signal_caught;
 
-	i = 0;
-	while (keys[i])
-		free(keys[i++]);
-	i = 0;
-	while (values[i])
+void handle_sigint(int sig)
+{
+	if (sig == SIGINT)
 	{
-		if (ft_strcmp(values[i], "") < 0)
-			free(values[i]);
-		i++;
+		printf("^C\n");
+		signal_caught = 1;
 	}
-	free(keys);
-	free(values);
+	if (sig == SIGQUIT)
+	{
+		printf("^\\Quit (core dumped)");
+		signal_caught = 2;
+	}
+}
+
+void	handle_signals(void)
+{
+	struct sigaction sa;
+
+	sa.sa_handler = handle_sigint;
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 }

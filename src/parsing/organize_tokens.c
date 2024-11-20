@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   frees02.c                                          :+:      :+:    :+:   */
+/*   organize_tokens.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 14:58:42 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/19 16:27:38 by drestrep         ###   ########.fr       */
+/*   Created: 2024/11/20 13:04:57 by drestrep          #+#    #+#             */
+/*   Updated: 2024/11/20 15:28:37 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	free_expander_vars(char **keys, char **values)
+void	organize_tokens(t_token *tokens)
 {
-	int	i;
+	t_token	*aux;
 
-	i = 0;
-	while (keys[i])
-		free(keys[i++]);
-	i = 0;
-	while (values[i])
+	aux = tokens;
+	/* while (tokens)
 	{
-		if (ft_strcmp(values[i], "") < 0)
-			free(values[i]);
-		i++;
-	}
-	free(keys);
-	free(values);
+		if (tokens->next->type == TOKEN_OUTPUT || \
+			tokens->next->type == TOKEN_APPEND)
+		{
+			tokens->flags = ft_strdup()
+		}
+		printf("%s\n\n", tokens->full_cmd);
+		tokens = tokens->next;
+	} */
+	tokens = aux;
+	//exit(0);
 }

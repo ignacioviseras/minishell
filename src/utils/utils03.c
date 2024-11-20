@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:05:12 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/04 20:08:02 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:59:17 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static size_t	ft_newstrlcpy(char *dst, char *src, size_t size)
 		dst[index] = src[index];
 		index++;
 	}
-	dst[index] = '/';
+	dst[index] = ' ';
 	dst[index + 1] = '\0';
 	return (src_lenght + 1);
 }
@@ -89,6 +89,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	char	*c1;
 	size_t	len_max;
 
+	if (!s1 || !s2)
+		return (NULL);
 	len_max = (ft_strlen(s1) + ft_strlen(s2)) + 2;
 	if (!s1 || !s2)
 		return (NULL);

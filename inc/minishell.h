@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/14 16:57:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:25:22 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <stdint.h>
+#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -129,6 +130,8 @@ typedef struct s_counters
 	int	k;
 }			t_counters;
 
+extern int			signal_caught;
+
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
 
@@ -140,7 +143,7 @@ int					get_symbol(char c);
 // UTILS		
 void				*ft_memset(void *b, int c, size_t len);
 void				skip_input_spaces(char **input);
-char				*skip_args_spaces(char *input);
+char				*skip_args_spaces(char *args);
 int					ft_charcmp(char c1, char c2);
 void				ft_bzero(void *s, size_t n);
 char				ft_lstlastchar(t_token *lst);
@@ -206,12 +209,15 @@ void				tokenize_strings(t_lexer *lexer, char **input);
 void				tokenizer(t_lexer *lexer, char **input);
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(token_type type, char *value);
+void				organize_tokens(t_token *tokens);
 
 // PARSER
 void				build_tree(t_token *tokens, t_ast **current_node);
 t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
 
+// SIGNALS
+void				handle_signals(void);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);
@@ -223,6 +229,9 @@ int					nbr_of_keys(char *str);
 int					ft_strlen_v2(char **strs);
 int					copy_len(const char *s);
 
+
+// REMOVE QUOTES
+char				*remove_quotes(char *str);
 
 // PIPES
 void				have_env(char **env, char **argv);

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:48:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/14 16:10:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:55:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,4 @@ char	ft_lstlastchar(t_token *lst)
 int ft_charcmp(char c1, char c2)
 {
     return (c1 - c2);
-}
-
-void	skip_input_spaces(char **input)
-{
-	while (*input && **input == ' ')
-		(*input)++;
 }

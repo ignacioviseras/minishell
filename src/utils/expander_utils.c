@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:41:52 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/15 15:35:43 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:01:47 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	nbr_of_keys(char *str)
 			}
 			str++;
 		}
-		else if (*str == '$')
+		else if (*str == '$' && (is_alpha(*str + 1) || *str + 1 == '_'))
 		{
 			str++;
 			keys++;
@@ -54,7 +54,7 @@ int	nbr_of_keys(char *str)
 		else
 			str++;
 	}
-	return keys;
+	return (keys);
 }
 
 char	*get_value(t_env *env, char *key, int *keys_nbr)
@@ -102,17 +102,35 @@ char	**get_values(t_env *env, char **keys, int *keys_nbr)
 
 char	*get_key(char *str, int *i)
 {
-	char	*key = NULL;
+	static int	quoted;
+	char		*key = NULL;
 
-	if (str[*i] == '\'')
+	if (str[*i] == '\'' && quoted == 0)
 		*i += findchar(str + *i + 1, '\'') + 2;
 	else if (str[*i] == '"')
 	{
 		(*i)++;
-		if (findchar(str + *i, '$') >= 0)
+		if (quoted == 0)
+			quoted = 1;
+		else if (quoted == 1)
+			quoted = 0;
+		if (findchar(str + *i, '"') < findchar(str + *i, '$') && \
+			findchar(str + *i, '$') >= 0)
+		{
+			*i += findchar(str + *i, '"') + 1;
+			/* key = ft_substr(str + *i, findchar(str + *i, '$') + 1, \
+			copy_len(str + *i + findchar(str + *i, '$')));
+			exit(0) */;
+		}
+		else if (findchar(str + *i, '$') != -1 && \
+			findchar(str + *i, '$') < findchar(str + *i, '"'))
+		{
 			key = ft_substr(str + *i, findchar(str + *i, '$') + 1, \
 			copy_len(str + *i + findchar(str + *i, '$')));
-		*i += findchar(str + *i, '"') + 1;
+			*i += findchar(str + *i, '$') + 1;
+		}
+		else
+			*i += findchar(str + *i, '"') + 1;
 	}
 	else if (str[*i] == '$')
 	{
@@ -138,9 +156,9 @@ char	**get_keys(char *str, int keys_nbr)
 	while (str[i])
 	{
 		key = get_key(str, &i);
-		if (key)
+		if (key != NULL)
 			keys[j++] = key;
 	}
-	keys[keys_nbr] = NULL;
+	keys[j] = NULL;
 	return (keys);
 }

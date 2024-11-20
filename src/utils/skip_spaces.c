@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   frees02.c                                          :+:      :+:    :+:   */
+/*   skip_spaces.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 14:58:42 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/19 16:27:38 by drestrep         ###   ########.fr       */
+/*   Created: 2024/11/20 12:54:59 by drestrep          #+#    #+#             */
+/*   Updated: 2024/11/20 12:55:29 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	free_expander_vars(char **keys, char **values)
+void	skip_input_spaces(char **input)
 {
-	int	i;
+	while (*input && **input == ' ')
+		(*input)++;
+}
+
+char	*skip_args_spaces(char *args)
+{
+	char	*aux;
+	int		i;
 
 	i = 0;
-	while (keys[i])
-		free(keys[i++]);
-	i = 0;
-	while (values[i])
-	{
-		if (ft_strcmp(values[i], "") < 0)
-			free(values[i]);
+	while (args && args[i] == ' ')
 		i++;
-	}
-	free(keys);
-	free(values);
+	aux = ft_strdup(args + i);
+	free(args);
+	return (aux);
 }

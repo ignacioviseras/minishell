@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/14 16:02:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:25:50 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,19 @@ void	handle_input(t_env *env, char *input)
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
-	//print_ast(ast, 0);
+	print_ast(ast, 0);
+	//if (handle_signals() == 1)
+	//	return ;
+	if (signal_caught == 1)
+	{
+		printf("Signal caught 1\n");
+		return ;
+	}
+	if (signal_caught == 2)
+	{
+		printf("Signal caught 2\n");
+		exit(1);
+	}
 	//mirar control de errores por si no hay env
 	// if (env && env[0])
 	// {
@@ -93,6 +105,7 @@ int	main(int argc, char **argv, char **envp)
 		create_env(env, envp);
 		while (1)
 		{
+			handle_signals();
 			input = readline("$megashell> ");
 			add_history(input);
 			if (input != NULL)

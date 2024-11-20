@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/15 15:26:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:10:51 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_strcmp(const char *str1, const char *str2)
 {
 	if (!str1 || !str2)
 		return (-1);
-	while (*str1 && *str2 && (*str1 == *str2))
+	while (*str1 && (*str1 == *str2))
 	{
 		str1++;
 		str2++;

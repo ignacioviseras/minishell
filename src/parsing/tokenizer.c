@@ -6,24 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/14 15:53:17 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:55:24 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-char	*skip_args_spaces(char *input)
-{
-	char	*aux;
-	int		i;
-
-	i = 0;
-	while (input && input[i] == ' ')
-		i++;
-	aux = ft_strdup(input + i);
-	free(input);
-	return (aux);
-}
 
 void	create_args(t_token *token, char *value, int space_pos)
 {
@@ -111,7 +98,7 @@ void	tokenize_strings(t_lexer *lexer, char **input)
 	}
 	free(lexer->buf);
 	lexer->buf = ft_substr(start, 0, *input - start);
-    lexer->buf[*input - start] = '\0';
+	lexer->buf[*input - start] = '\0';
 	add_token(&lexer->tokens, create_token(TOKEN_STRING, lexer->buf));
 }
 
