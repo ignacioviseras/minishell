@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/19 20:13:55 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:26:41 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <stdint.h>
+#include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -213,6 +214,20 @@ int					count_ast_nodes(t_ast *node);
 void				expander(t_token **tokens, t_env *env);
 
 // PIPES
-void				have_env(char **env, char **argv);
-int					tramited(char *path, char **env);
-void				init_pipes(t_ast *ast, int len_cmd, t_env *env);
+void				get_path(char **env, t_params *p, t_token *t, t_ast *ast);
+int					tramited(char *path, t_params *p, t_ast *ast, t_token *t);
+void				dup_read(t_params *p);
+void				dup_write(t_params *p);
+void				init_execute(t_token *data, t_params *p, t_ast *ast);
+void				handle_pipe(t_ast *node, t_params *p);
+void				execute_node(t_ast *node, t_params *p);
+void				execute_ast(t_ast *node, t_params *p);
+char				*create_char(t_env *env);
+int					count_env_nodes(t_env *env);
+char				**init_env(t_env *env);
+void				init_param(t_params *p, int *fd, int fd_index);
+void				init_pipes(t_ast *ast, t_params *p);
+char				*access_absolute(char *path);
+char				*access_validate(char **path, char *comand);
+void				validate_comand(char **comand_splited);
+char				*load_param(char **path, char *comand);

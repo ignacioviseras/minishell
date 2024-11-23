@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/20 19:05:39 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 16:44:26 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,19 @@ int	count_ast_nodes(t_ast *node)
 	return (1 + count_ast_nodes(node->left) + count_ast_nodes(node->right));
 }
 
-void	handle_input(t_env *env, char *input, char **envp)
+void	handle_input(t_env *env, char *input)
 {
 	t_token	*tokens;
 	t_ast	*ast;
 	t_params p;
-	int len_cmd;
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
 	p.total_cmds = count_ast_nodes(ast);
-	printf("numero de comandos %d\n", len_cmd);
-	init_pipes(ast, &p, env);
+	printf("numero de comandos %d\n", p.total_cmds);
+	p.env = init_env(env);
+	init_pipes(ast, &p);
 	build_switch(env, ast, tokens);
 	free_tokens(tokens);
 	free_ast(ast);
@@ -105,7 +105,7 @@ int	main(int argc, char **argv, char **envp)
 			input = readline("$megashell> ");
 			add_history(input);
 			if (input != NULL)
-				handle_input(env, input, envp);
+				handle_input(env, input);
 			else
 			{
 				free_env(env);

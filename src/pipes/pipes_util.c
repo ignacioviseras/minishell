@@ -6,13 +6,13 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/20 19:00:54 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:49:22 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
 
-void	get_path(char **env, t_params *p, t_token *t)
+void	get_path(char **env, t_params *p, t_token *t, t_ast *ast)
 {
 	int	x;
 
@@ -20,46 +20,34 @@ void	get_path(char **env, t_params *p, t_token *t)
 	while (env[x])
 	{
 		if (ft_strncmp("PATH=", env[x], 5) == 0)
-			tramited(env[x] + 5, p, env, t);
+			tramited(p->env[x] + 5, p, ast, t);
 		x++;
 	}
-	tramited("", p, env, t);
+	tramited("", p, ast, t);
 
 }
 
 
-int	tramited(char *path, t_params *p, char **env, t_token *t)
+
+int	tramited(char *path, t_params *p, t_ast *ast, t_token *t)
 {
 	char		**dir;
 
-	dir = ft_split(path + 5, ':');
+	dir = ft_split(path, ':');
 	p->cmd_path = load_param(dir, t->full_cmd);
 	p->cmd_exec = split_formated(t->full_cmd, ' ');
+	printf("path del comando %s\n", p->cmd_path);
 	free_matrix(dir);
 	if (p->cmd_path != NULL)
-		initpipe(&p, env);
+		init_pipes(ast, p);
 	else
 	{
 		free(p->cmd_path);
 		free_matrix(p->cmd_exec);
-		exit(1);
+		exit(1);//TODO aqui se tendria q liberar todos los daros
 	}
 	return (0);
 }
-
-
-// void	create_pipes(t_ast *ast, int resultpipe)
-// {
-// 	t_token	*tokens;
-
-// 	tokens = (t_token *)(ast->data);
-// 	if (tokens->type == INPUT_PIPE)
-// 	{
-		
-		
-// 	}
-	
-// }
 
 void dup_read(t_params *p)
 {
@@ -85,44 +73,27 @@ void dup_write(t_params *p)
 	}
 }
 
-// esto gestionara los builst
-// if (ft_strcmp(data->cmd, "cd") == 0) {
-//     *is_builtin = 1;
-//     handle_cd(data);
-//     return;
-// }
-// Ejecuta el comando
-//------------------------
-// execve(path, comand, env);
-// perror("execve");
-//------------------------
-// if (execve(data->args[0], data->args, environ) < 0)
-// {
-//     perror(data->args[0]);
-//     exit(EXIT_FAILURE);
-// }
-
-void init_execute(t_token *data, t_params *p)
+void init_execute(t_token *data, t_params *p, t_ast *ast)
 {
 	int reslt_exec;
 	if (p->env && p->env[0])
-		have_env(p->env, &p);
+		get_path(p->env, p, data, ast);
 	else if (ft_strchr(data->cmd, '/') && ft_strchr(data->cmd, '/'))
-		tramited("", &p, p->env, data);
+		tramited("", p, ast, data);
 	reslt_exec = execve(p->cmd_path, p->cmd_exec, p->env);
 	if (reslt_exec < 0)
 	{
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
-	return (0);
+	return;
 
 }
 
 void	handle_pipe(t_ast *node, t_params *p)
 {
 	execute_ast(node->left, p);//procesar el nodo recursivamente lado izq
-	p->fd_index + 2;//mover index para extemos de los dups
+	p->fd_index += 2;//mover index para extemos de los dups
 	execute_ast(node->right, p);//procesar el nodo recursivamente lado derch
 }
 
@@ -142,7 +113,7 @@ void	execute_node(t_ast *node, t_params *p)
 			dup_write(p);//duplica el extremo de escritura
 		while (++i < 2 * p->total_cmds)//cierra todos los extremos de los pipes
 			close(p->fd[i]);
-		init_execute(data, p);
+		init_execute(data, p, node);
 	}
 	//------------------------------
 	//creo q no hace falta estos close pq tengo un bucle de close
@@ -157,10 +128,6 @@ void	execute_node(t_ast *node, t_params *p)
 
 void execute_ast(t_ast *node, t_params *p)
 {
-	int pid;
-	int i;
-
-	i = -1;
     if (node == NULL)
         return;
     t_token *data = (t_token *)(node->data);
@@ -174,17 +141,22 @@ char *create_char(t_env *env)
     char *str;
     char *temp;
 
+    if (!env || !env->key)
+        return (NULL);
     str = ft_strdup(env->key);
     if (!str)
         return (NULL);
-    temp = ft_strjoin(str, "=");
-    free(str);
-    if (!temp)
-        return (NULL);
-    str = ft_strjoin(temp, env->value);
-    free(temp);
-    if (!str)
-        return (NULL);
+    if (env->value)
+    {
+        temp = ft_strjoin(str, "=");
+        free(str);
+        if (!temp)
+            return (NULL);
+        str = ft_strjoin(temp, env->value);
+        free(temp);
+        if (!str)
+            return (NULL);
+    }
     return (str);
 }
 
@@ -227,18 +199,15 @@ char **init_env(t_env *env)
     return (env_matrix);
 }
 
-void init_param(t_params *p, int *fd, int fd_index, t_env *env)
+void init_param(t_params *p, int *fd, int fd_index)
 {
 	p->fd = fd;
 	p->fd_index = fd_index;
-	p->env = init_env(env);
 	
 }
 
-
-void init_pipes(t_ast *ast, t_params *p, t_env *env)
+void init_pipes(t_ast *ast, t_params *p)
 {
-	int pid;
 	int i;
 	int resultpipe;
 	int fd[2 * p->total_cmds];
@@ -252,23 +221,9 @@ void init_pipes(t_ast *ast, t_params *p, t_env *env)
 			perror("pipe");
 			exit(1);
 		}
-		init_param(p, fd, 0, env);
+		init_param(p, fd, 0);
 		execute_ast(ast, p);
 		free_matrix(p->env);
-		// create_pipes(ast, resultpipe);
-		// resultpipe = pipe(fd_pipe);
-		// if (resultpipe == -1)
-		// {
-		// 	perror("pipe");
-		// 	exit(1);
-		// }
-		// pid = fork();
-		// dprintf(2, "Llegas??\n");
-		// if (pid == 0)
-		// 	child_pipe(fd_pipe, p->file1, p->comand_path1, p->comand1, env);
-		// else
-		// 	father_pipe(fd_pipe, p->file2, p->comand_path2, p->comand2, env);
-		// wait(&status);		
 		i++;
 	}
 	while (i > 2 * p->total_cmds)
@@ -276,6 +231,57 @@ void init_pipes(t_ast *ast, t_params *p, t_env *env)
     	close(fd[i]);
 		i--;
 	}
-	
 }
 
+
+// int	tramited(char *path, t_params *p, t_ast *ast, t_token *t)
+// {
+// 	char		**dir;
+
+// 	dir = ft_split(path + 5, ':');
+// 	p->cmd_path = load_param(dir, t->full_cmd);
+// 	p->cmd_exec = split_formated(t->full_cmd, ' ');
+// 	free_matrix(dir);
+// 	if (p->cmd_path != NULL)
+// 		init_pipes(ast, p, p->env);
+// 	else
+// 	{
+// 		free(p->cmd_path);
+// 		free_matrix(p->cmd_exec);
+// 		exit(1);
+// 	}
+// 	return (0);
+// }
+
+// create_pipes(ast, resultpipe);
+// resultpipe = pipe(fd_pipe);
+// if (resultpipe == -1)
+// {
+// 	perror("pipe");
+// 	exit(1);
+// }
+// pid = fork();
+// dprintf(2, "Llegas??\n");
+// if (pid == 0)
+// 	child_pipe(fd_pipe, p->file1, p->comand_path1, p->comand1, env);
+// else
+// 	father_pipe(fd_pipe, p->file2, p->comand_path2, p->comand2, env);
+// wait(&status);	
+
+
+// esto gestionara los builst
+// if (ft_strcmp(data->cmd, "cd") == 0) {
+//     *is_builtin = 1;
+//     handle_cd(data);
+//     return;
+// }
+// Ejecuta el comando
+//------------------------
+// execve(path, comand, env);
+// perror("execve");
+//------------------------
+// if (execve(data->args[0], data->args, environ) < 0)
+// {
+//     perror(data->args[0]);
+//     exit(EXIT_FAILURE);
+// }

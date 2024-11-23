@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/14 18:10:39 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:35:47 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*access_absolute(char *path)
 	fd_dir1 = access(path, X_OK);
 	if (fd_dir1 == -1)
 	{
-		ft_printf("\t--- Error ---\nThere is no access\n");
+		printf("\t--- Error ---\nThere is no access\n");
 		return (NULL);
 	}
 	comand_ok = ft_strdup(path);
@@ -47,7 +47,7 @@ char	*access_validate(char **path, char *comand)
 	}
 	if (fd_dir1 == -1)
 	{
-		ft_printf("\t--- Error ---\nThere is no access to any directory\n");
+		printf("\t--- Error ---\nThere is no access to any directory\n");
 		return (NULL);
 	}
 	return (NULL);
@@ -55,7 +55,7 @@ char	*access_validate(char **path, char *comand)
 
 void validate_comand(char **comand_splited)
 {
-	ft_printf("\t--- Error ---\nComand empty\n");
+	printf("\t--- Error ---\nComand empty\n");
 	free_matrix(comand_splited);
 	exit(1);
 }
