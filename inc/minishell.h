@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/23 17:26:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:08:34 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,9 @@ int					findchar(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
+size_t				ft_newstrlcpy(char *dst, char *src, size_t size);
 char				*ft_strjoin(char *s1, char *s2);
+char				*ft_strjoin_cmd(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 void				ft_strcpy(char *dest, const char *src);

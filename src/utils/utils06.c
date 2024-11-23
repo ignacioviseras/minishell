@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils06.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:20:14 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/13 16:20:38 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:07:21 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,20 @@ int is_valid(char *str)
         i++;
     }
     return (0);
+}
+
+char	*ft_strjoin_cmd(char *s1, char *s2)
+{
+	char	*c1;
+	size_t	len_max;
+
+	len_max = (ft_strlen(s1) + ft_strlen(s2)) + 2;
+	if (!s1 || !s2)
+		return (NULL);
+	c1 = (char *)ft_calloc(len_max, sizeof(char));
+	if (!c1)
+		return (NULL);
+	ft_newstrlcpy(c1, (char *)s1, ft_strlen((const char *)s1) + 1);
+	ft_strlcat(c1, s2, len_max);
+	return (c1);
 }

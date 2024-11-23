@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/23 17:49:22 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:10:48 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	tramited(char *path, t_params *p, t_ast *ast, t_token *t)
 {
 	char		**dir;
 
+	printf("path pasado '%s'\n", path);
 	dir = ft_split(path, ':');
 	p->cmd_path = load_param(dir, t->full_cmd);
 	p->cmd_exec = split_formated(t->full_cmd, ' ');
@@ -136,6 +137,7 @@ void execute_ast(t_ast *node, t_params *p)
 	else
 		execute_node(node, p);//funcionamiento del nodo
 }
+
 char *create_char(t_env *env)
 {
     char *str;

@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/23 17:35:47 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:09:11 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*access_validate(char **path, char *comand)
 	fd_dir1 = -1;
 	while (path[x] || fd_dir1 == 0)
 	{
-		dir1 = ft_strjoin(path[x], comand);
+		dir1 = ft_strjoin_cmd(path[x], comand);
 		fd_dir1 = access(dir1, X_OK);
 		if (fd_dir1 == 0)
 			return (dir1);
