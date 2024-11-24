@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/24 22:57:27 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/24 23:06:36 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	tramited(char *path, t_params *p, t_token *t)
 	free_matrix(dir);
 	if (p->cmd_path != NULL)
         execute_cmd(p);
-		// init_pipes(ast, p);
 	else
 	{
 		free(p->cmd_path);
@@ -85,20 +84,11 @@ void dup_write(t_params *p)
 
 void init_execute(t_token *data, t_params *p)
 {
-	int reslt_exec;
 	if (p->env && p->env[0])
 		get_path(p->env, p, data);
 	else if (ft_strchr(data->cmd, '/') && ft_strchr(data->cmd, '/'))
 		tramited("", p, data);
-	reslt_exec = execve(p->cmd_path, p->cmd_exec, p->env);
-	printf("llega??");
-	if (reslt_exec < 0)
-	{
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
 	return;
-
 }
 
 void	handle_pipe(t_ast *node, t_params *p)
@@ -109,35 +99,6 @@ void	handle_pipe(t_ast *node, t_params *p)
 	p->fd_index += 2;//mover index para extemos de los dups
 	execute_ast(node->right, p);//procesar el nodo recursivamente lado derch
 }
-
-// void	execute_node(t_ast *node, t_params *p)
-// {
-// 	int pid;
-// 	int i;
-
-// 	i = -1;
-//     t_token *data = (t_token *)(node->data);
-// 	pid = fork();
-// 	if (pid == 0)// pipe hijo
-// 	{
-// 		if (p->fd_index != 0)//si no es el primer comando
-// 			dup_read(p);//duplica el extremo de lectura
-// 		if (p->fd_index < 2 * (p->total_cmds - 1))//si no es el último comando
-// 			dup_write(p);//duplica el extremo de escritura
-// 		while (++i < 2 * p->total_cmds)//cierra todos los extremos de los pipes
-// 			close(p->fd[i]);
-// 		init_execute(data, p, node);
-// 	}
-// 	//------------------------------
-// 	//creo q no hace falta estos close pq tengo un bucle de close
-// 	//------------------------------
-// 	else if(pid > 0)//proceso padre
-// 	{
-// 		close(p->fd[p->fd_index]);//cerrar extremos usados
-// 		close(p->fd[p->fd_index + 1]);
-// 		waitpid(pid, NULL, 0);//CAMBIAR ESTE WAIT
-// 	}
-// }
 
 void execute_node(t_ast *node, t_params *p)
 {
@@ -243,13 +204,6 @@ char **init_env(t_env *env)
     env_matrix[x] = NULL;
     return (env_matrix);
 }
-
-// void init_param(t_params *p, int *fd, int fd_index)
-// {
-// 	p->fd = fd;
-// 	p->fd_index = fd_index;
-	
-// }
 
 void init_pipes(t_ast *ast, t_params *p)
 {

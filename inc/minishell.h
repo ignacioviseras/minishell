@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/24 22:58:06 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/25 00:03:52 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ void				expander(t_token **tokens, t_env *env);
 // PIPES
 void				get_path(char **env, t_params *p, t_token *t);
 int					tramited(char *path, t_params *p, t_token *t);
+void				execute_cmd(t_params *p);
 void				dup_read(t_params *p);
 void				dup_write(t_params *p);
 void				init_execute(t_token *data, t_params *p);
