@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/24 23:06:36 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/27 23:24:31 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void init_execute(t_token *data, t_params *p)
 {
 	if (p->env && p->env[0])
 		get_path(p->env, p, data);
-	else if (ft_strchr(data->cmd, '/') && ft_strchr(data->cmd, '/'))
+	else if (ft_strchr(data->cmd, '/'))
 		tramited("", p, data);
 	return;
 }
@@ -208,25 +208,24 @@ char **init_env(t_env *env)
 void init_pipes(t_ast *ast, t_params *p)
 {
     int i;
-    int fd[2 * p->total_cmds];
 
     i = 0;
-    while (i < p->total_cmds)
+    p->fd = malloc(2 * p->total_cmds * sizeof(int));
+    while (i < p->total_cmds - 1)
     {
-        if (pipe(fd + i * 2) < 0)
+        if (pipe(p->fd + i * 2) < 0)
         {
             perror("pipe");
             exit(EXIT_FAILURE);
         }
         i++;
     }
-    p->fd = fd;
     p->fd_index = 0;
     execute_ast(ast, p);
     i = 0;
     while (i < 2 * p->total_cmds)
     {
-        close(fd[i]);
+        close(p->fd[i]);
         i++;
     }
     free_matrix(p->env);
