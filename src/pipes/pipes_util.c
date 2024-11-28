@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/27 23:24:31 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/11/28 21:45:18 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void execute_node(t_ast *node, t_params *p)
     }
     else if (pid > 0)
     {
-        close(p->fd[p->fd_index]);
+        // close(p->fd[p->fd_index]);
         close(p->fd[p->fd_index + 1]);
         waitpid(pid, NULL, 0);
     }
@@ -228,6 +228,7 @@ void init_pipes(t_ast *ast, t_params *p)
         close(p->fd[i]);
         i++;
     }
+    free(p->fd);
     free_matrix(p->env);
 }
 
