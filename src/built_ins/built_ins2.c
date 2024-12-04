@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/14 16:57:16 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:42:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,29 @@ int validate_export(char *key, char *value)
 			return (1);
 		}
 	}
+	free(key);
+	free(value);
 	return (0);
 }
+
+/* char *get_value(t_env **envi, char *find)
+{
+    t_env *current = *envi;
+    
+    while (current)
+    {
+        if (ft_strcmp(find, current->key) == 0)
+            return (current->value);
+        current = current->next;
+    }
+    return (NULL);
+} */
 
 char	*get_var(char *str)
 {
 	char *variable;
 	int len_variable;
 	int len_all;
-
-	len_all = 0;
-	len_variable = 0;
 
 	len_all = ft_strlen(str);
 	len_variable = ft_strlen(ft_strchr(str, '='));
@@ -90,7 +102,8 @@ void export_actions(t_token *tokens, t_env *env)
 				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
 		}
 	}
-	free(splt_vars);
+	free_matrix(splt_vars);
+	exit(0);
 }
 
 void	command_export(t_token *tokens, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/20 18:25:50 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:01:21 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,18 @@ void	handle_input(t_env *env, char *input)
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
-	//if (handle_signals() == 1)
-	//	return ;
 	if (signal_caught == 1)
 	{
 		printf("Signal caught 1\n");
-		return ;
+		signal_caught = 0;
+		rl_on_new_line();
 	}
 	if (signal_caught == 2)
 	{
 		printf("Signal caught 2\n");
 		exit(1);
 	}
-	//mirar control de errores por si no hay env
-	// if (env && env[0])
-	// {
-		build_switch(env, ast, tokens);
-    	// print_envi(envi);
-	// }
-	// if (env && env[0])
-	// 	have_env(env, input);
-	// else if (ft_strchr(input, '/') && ft_strchr(input, '/'))
-	// 	tramited("", input, env);
+	build_switch(env, ast, tokens);
 	free_tokens(tokens);
 	free_ast(ast);
 }

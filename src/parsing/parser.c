@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 16:54:20 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/13 12:38:05 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:00:48 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	build_tree(t_token *tokens, t_ast **node)
 	{
 		if (!(*node))
 			*node = create_node(tokens);
-		else if (!(*node)->left)
+		else if (!(*node)->left && tokens->next)
 		{
 			(*node)->left = create_node((*node)->data);
 			(*node)->data = tokens;
@@ -52,6 +52,5 @@ t_ast	*parsing(t_token *tokens, t_env *env)
 	tree = NULL;
 	expander(&tokens, env);
 	build_tree(tokens, &tree);
-	(void)env;
 	return (tree);
 }

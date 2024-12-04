@@ -6,12 +6,15 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/20 12:55:24 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:12:57 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/*
+ * Parses a token's value into its components: command, arguments, and flags.
+ */
 void	create_args(t_token *token, char *value, int space_pos)
 {
 	token->cmd = ft_substr(value, 0, space_pos);
@@ -75,16 +78,20 @@ void	add_token(t_token **head, t_token *new_token)
 }
 
 /*
- * Tokenizes strings based on quotes or delimiters.
- * If the input starts with a quote (' or "), it extracts the quoted string.
- * Otherwise, it tokenizes until encountering a space or operator (|, >, <).
+ * Extracts and tokenizes a segment of the input based on its type,
+ * handling quotes and operators. The resulting token is created and
+ * added to the lexer.
  */
-void	tokenize_strings(t_lexer *lexer, char **input)
+void	tokenize_strings(t_lexer *lexer, token_type type, char **input)
 {
-	char	quote;
 	char	*start;
+	char	quote;
 
 	start = *input;
+	if (type == TOKEN_OUTPUT || type == TOKEN_INPUT)
+		(*input)++;
+	else if (type == TOKEN_APPEND || type == TOKEN_HEREDOC)
+		*input += 2;
 	while (**input && **input != '|' && **input != '>' && **input != '<')
 	{
 		if (**input == '"' || **input == '\'')
@@ -99,7 +106,7 @@ void	tokenize_strings(t_lexer *lexer, char **input)
 	free(lexer->buf);
 	lexer->buf = ft_substr(start, 0, *input - start);
 	lexer->buf[*input - start] = '\0';
-	add_token(&lexer->tokens, create_token(TOKEN_STRING, lexer->buf));
+	add_token(&lexer->tokens, create_token(type, lexer->buf));
 }
 
 /*
@@ -117,20 +124,18 @@ void	tokenizer(t_lexer *lexer, char **input)
 			|| (**input == '<' && *(*input + 1) != '<'))
 	{
 		if (**input == '>')
-			add_token(&lexer->tokens, create_token(TOKEN_OUTPUT, ">"));
+			tokenize_redirections(lexer, TOKEN_OUTPUT, input);
 		else
-			add_token(&lexer->tokens, create_token(TOKEN_INPUT, "<"));
-		(*input)++;
+			tokenize_redirections(lexer, TOKEN_INPUT, input);
 	}
 	else if ((**input == '>' && *(*input + 1) == '>') \
 			|| (**input == '<' && *(*input + 1) == '<'))
 	{
 		if (**input == '>')
-			add_token(&lexer->tokens, create_token(TOKEN_APPEND, ">>"));
+			tokenize_redirections(lexer, TOKEN_APPEND, input);
 		else
-			add_token(&lexer->tokens, create_token(TOKEN_HEREDOC, "<<"));
-		*input += 2;
+			tokenize_redirections(lexer, TOKEN_HEREDOC, input);
 	}
 	else
-		tokenize_strings(lexer, input);
+		tokenize_strings(lexer, TOKEN_STRING, input);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/27 18:26:04 by igvisera          #+#    #+#             */
-/*   Updated: 2024/11/13 17:28:50 by drestrep         ###   ########.fr       */
+/*   Created: 2024/11/13 16:20:14 by igvisera          #+#    #+#             */
+/*   Updated: 2024/12/04 11:53:37 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int is_alpha(char c)
 int is_number(char c)
 {
     return (c >= '0' && c <= '9');
+}
+
+int is_alnum(char c)
+{
+    return (is_alpha(c) || is_number(c));
 }
 
 t_env	*new_node(char *key, char *value, int hide)
@@ -72,7 +77,6 @@ void	add_bottom(t_env **env, t_env *new_envi)
 	}
 	iter->next = new_envi;
 }
-
 
 void	remove_node(t_env **env, char *key)
 {

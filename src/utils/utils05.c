@@ -6,11 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/19 13:09:52 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:49:52 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+# include "../../inc/minishell.h"
 
 int	ft_count_words(char **strs)
 {
@@ -22,20 +22,12 @@ int	ft_count_words(char **strs)
 	return (i);
 }
 
-int	is_alnum(char	c)
-{
-	if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'))
-		return (1);
-	return (0);
-}
-
 void	ft_strcpy(char *dest, const char *src)
 {
 	int	i;
 
 	i = 0;
-
-	while (src && src[i])
+	while (src[i])
 	{
 		dest[i] = src[i];
 		i++;

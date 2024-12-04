@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/20 18:25:22 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:09:49 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,6 @@ int					is_alpha(char c);
 int					is_number(char c);
 int					is_alnum(char c);
 int					is_valid(char *str);
-int					ft_isalnum(char	c);
 int					ft_count_words(char **strs);
 
 //BUILT_INS
@@ -187,6 +186,7 @@ void				command_env(t_token *tokens, t_env *env);
 void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
 char				*get_content_var(char *str);
+char				*get_env_value(t_env *env, char *key, int *keys_nbr);
 char				*get_var(char *str);
 void				command_export(t_token *tokens, t_env *envi);
 char				*get_home(char *pwd);

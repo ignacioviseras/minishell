@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/20 18:21:09 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:26:33 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	signal_caught;
 
-void handle_sigint(int sig)
+void signals_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -30,10 +30,6 @@ void handle_sigint(int sig)
 
 void	handle_signals(void)
 {
-	struct sigaction sa;
-
-	sa.sa_handler = handle_sigint;
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	signal(SIGINT, signals_handler);
+	signal(SIGQUIT, signals_handler);
 }
