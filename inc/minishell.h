@@ -6,12 +6,13 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/25 00:03:52 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/03 01:33:09 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <limits.h>
 #include <stdint.h>
@@ -27,6 +28,10 @@
 
 # ifndef WRITE_END
 #  define WRITE_END 1
+# endif
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
 # endif
 
 //* Types of tokens, used to create the AST in the parser.
@@ -170,6 +175,7 @@ int					is_alnum(char c);
 int					is_valid(char *str);
 int					ft_isalnum(char	c);
 int					ft_count_words(char **strs);
+char				*gnl(int fd);
 
 //BUILT_INS
 int					flags_validator(char *flags, char *command_flags);

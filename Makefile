@@ -6,7 +6,7 @@
 #    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/11/22 18:45:21 by igvisera         ###   ########.fr        #
+#    Updated: 2024/12/03 01:32:43 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ UTILS_SRC		=	utils01.c \
 					utils06.c \
 					mem_alloc.c \
 					frees.c \
+					gnl.c \
 
 OBJS			=	${PARSING:.c=.o} \
 					${UTILS:.c=.o} \

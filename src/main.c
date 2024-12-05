@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/23 21:10:23 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/03 21:04:44 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,15 @@ void	print_ast(t_ast *node, int depth)
 int	count_ast_nodes(t_ast *node)
 {
 	t_token *data;
-
+// tengo q cambiar los trcmp por los TYPE y el tipo de dato pero q PUTA pereza
 	if (node == NULL)
 		return 0;
 	data = (t_token *)(node->data);
-	if (data != NULL && ft_strcmp(data->cmd, "|") == 0)
+	if (data != NULL && (ft_strcmp(data->cmd, "|") == 0))
 		return (count_ast_nodes(node->left) + count_ast_nodes(node->right));
+	if (data != NULL && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 ||
+						 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
+		return (count_ast_nodes(node->right)); // ignora lso << >> < >
 
 	return (1 + count_ast_nodes(node->left) + count_ast_nodes(node->right));
 }
@@ -94,7 +97,6 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env;
 	char	*input;
 
-	//atexit(leaks);
 	(void)argv;
 	if (argc == 1)
 	{
@@ -104,8 +106,10 @@ int	main(int argc, char **argv, char **envp)
 		{
 			input = readline("$megashell> ");
 			add_history(input);
-			if (input != NULL)
+			if (input != NULL){
+				dprintf(2, "estas accediendo aqui??\n");
 				handle_input(env, input);
+			}
 			else
 			{
 				free_env(env);
