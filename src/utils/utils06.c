@@ -6,26 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:20:14 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/04 11:53:37 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:07:16 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
-
-int is_alpha(char c)
-{
-    return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
-}
-
-int is_number(char c)
-{
-    return (c >= '0' && c <= '9');
-}
-
-int is_alnum(char c)
-{
-    return (is_alpha(c) || is_number(c));
-}
+#include "../../inc/minishell.h"
 
 t_env	*new_node(char *key, char *value, int hide)
 {
@@ -44,20 +29,21 @@ t_env	*new_node(char *key, char *value, int hide)
 		env->value = NULL;
 	env->hide = hide;
 	if (!env->key || (value != NULL && !env->value))
-    {
-        free(env->key);
-        free(env->value);
-        free(env);
-        return (NULL);
-    }
+	{
+		free(env->key);
+		free(env->value);
+		free(env);
+		return (NULL);
+	}
 	env->next = NULL;
 	return (env);
 }
 
 void	add_bottom(t_env **env, t_env *new_envi)
 {
-	t_env	*iter = *env;
+	t_env	*iter;
 
+	iter = *env;
 	while (iter)
 	{
 		if (ft_strcmp(iter->key, new_envi->key) == 0)
@@ -72,7 +58,7 @@ void	add_bottom(t_env **env, t_env *new_envi)
 			return (free_variable(new_envi));
 		}
 		if (iter->next == NULL)
-			break;
+			break ;
 		iter = iter->next;
 	}
 	iter->next = new_envi;
@@ -84,13 +70,13 @@ void	remove_node(t_env **env, char *key)
 	t_env	*prev;
 
 	if (!env || !*env)
-		return;
+		return ;
 	if (ft_strcmp((*env)->key, key) == 0)
 	{
 		temp = *env;
 		*env = (*env)->next;
 		free_variable(temp);
-		return;
+		return ;
 	}
 	prev = *env;
 	temp = (*env)->next;
@@ -100,7 +86,7 @@ void	remove_node(t_env **env, char *key)
 		{
 			prev->next = temp->next;
 			free_variable(temp);
-			return;
+			return ;
 		}
 		prev = temp;
 		temp = temp->next;

@@ -6,83 +6,18 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/04 17:12:57 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:10:36 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 /*
- * Parses a token's value into its components: command, arguments, and flags.
- */
-void	create_args(t_token *token, char *value, int space_pos)
-{
-	token->cmd = ft_substr(value, 0, space_pos);
-	token->args = ft_strdup(value + space_pos + 1);
-	if (!ft_strcmp(token->args, ""))
-		token->args = NULL;
-	token->args = skip_args_spaces(token->args);
-	token->flags = NULL;
-	if (token->args && *token->args == '-')
-	{
-		space_pos = findchar(token->args, ' ');
-		if (space_pos != 0)
-			token->flags = ft_substr(token->args, 0, space_pos);
-		else
-			token->flags = ft_strdup(token->args);
-	}
-}
-
-/*
- * Creates a new token with the specified type and value,
- * allocating memory and duplicating the token's value string.
- */
-t_token	*create_token(token_type type, char *value)
-{
-	t_token	*token;
-	int		space_pos;
-
-	token = ft_malloc(sizeof(t_token));
-	token->full_cmd = ft_strdup(value);
-	space_pos = findchar(value, ' ');
-	if (space_pos > 0 && space_pos + 1 != (int)ft_strlen(value))
-		create_args(token, value, space_pos);
-	else
-	{
-		token->cmd = ft_strdup(value);
-		token->args = NULL;
-		token->flags = NULL;
-	}
-	token->type = type;
-	token->next = NULL;
-	return (token);
-}
-
-/*
- * Adds a new token to the end of the token list.
- * If the list is empty, the new token becomes the head.
- */
-void	add_token(t_token **head, t_token *new_token)
-{
-	t_token	*temp;
-
-	if (*head == NULL)
-		*head = new_token;
-	else
-	{
-		temp = *head;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new_token;
-	}
-}
-
-/*
  * Extracts and tokenizes a segment of the input based on its type,
  * handling quotes and operators. The resulting token is created and
  * added to the lexer.
  */
-void	tokenize_strings(t_lexer *lexer, token_type type, char **input)
+void	tokenize_strings(t_lexer *lexer, t_token_type type, char **input)
 {
 	char	*start;
 	char	quote;
@@ -124,17 +59,17 @@ void	tokenizer(t_lexer *lexer, char **input)
 			|| (**input == '<' && *(*input + 1) != '<'))
 	{
 		if (**input == '>')
-			tokenize_redirections(lexer, TOKEN_OUTPUT, input);
+			tokenize_strings(lexer, TOKEN_OUTPUT, input);
 		else
-			tokenize_redirections(lexer, TOKEN_INPUT, input);
+			tokenize_strings(lexer, TOKEN_INPUT, input);
 	}
 	else if ((**input == '>' && *(*input + 1) == '>') \
 			|| (**input == '<' && *(*input + 1) == '<'))
 	{
 		if (**input == '>')
-			tokenize_redirections(lexer, TOKEN_APPEND, input);
+			tokenize_strings(lexer, TOKEN_APPEND, input);
 		else
-			tokenize_redirections(lexer, TOKEN_HEREDOC, input);
+			tokenize_strings(lexer, TOKEN_HEREDOC, input);
 	}
 	else
 		tokenize_strings(lexer, TOKEN_STRING, input);

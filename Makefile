@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/12/04 11:43:43 by drestrep         ###   ########.fr        #
+#    Updated: 2024/12/07 19:18:58 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,11 @@ PARSING_SRC		=	lexer.c \
 					organize_tokens.c \
 					expander.c \
 					expand_token.c \
+					get_keys.c \
+					get_values.c \
+					get_nbr_of_keys.c \
+					token_utils.c \
+					create_args.c \
 
 SIGNALS_SRC		=	handle_signals.c \
 
@@ -48,12 +53,11 @@ UTILS_SRC		=	utils01.c \
 					utils04.c \
 					utils05.c \
 					utils06.c \
+					utils07.c \
 					skip_spaces.c \
-					expander_utils.c \
 					remove_quotes.c \
 					mem_alloc.c \
 					frees01.c \
-					frees02.c \
 
 OBJS			=	${PARSING:.c=.o} \
 					${SIGNALS:.c=.o} \

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:53:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/16 18:10:51 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:09:19 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	ft_strcmp(const char *str1, const char *str2)
 	}
 	return (*(unsigned char *)str1 - *(unsigned char *)str2);
 }
-
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

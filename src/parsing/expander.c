@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/04 16:07:33 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/06 21:04:25 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	replace_var(t_token *token, t_env *env)
 	char	**keys;
 	char	**values;
 
-	keys_nbr = nbr_of_keys(token->full_cmd);
+	keys_nbr = get_nbr_of_keys(token->full_cmd);
 	keys = get_keys(token->full_cmd, keys_nbr);
 	values = get_values(env, keys, &keys_nbr);
 	size = compute_expand_size(token->full_cmd, keys, values, keys_nbr);
@@ -73,7 +73,8 @@ void	replace_var(t_token *token, t_env *env)
 		token->args = ft_strdup(token->full_cmd + ft_strlen(token->cmd));
 		token->args = skip_args_spaces(token->args);
 	}
-	free_expander_vars(keys, values);
+	free_matrix(keys);
+	free_matrix(values);
 }
 
 void	expander(t_token **tokens, t_env *env)

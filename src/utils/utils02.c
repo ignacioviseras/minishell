@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:48:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/20 12:55:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:09:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	findchar(const char *s, int c)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return (-1);
 	while (s[i])
 	{
 		if (s[i] == (char)c)
@@ -73,7 +75,7 @@ char	ft_lstlastchar(t_token *lst)
 	return (aux->full_cmd[i]);
 }
 
-int ft_charcmp(char c1, char c2)
+int	ft_charcmp(char c1, char c2)
 {
-    return (c1 - c2);
+	return (c1 - c2);
 }

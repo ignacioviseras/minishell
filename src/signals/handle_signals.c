@@ -6,25 +6,25 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/04 13:26:33 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:13:33 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	signal_caught;
+int	g_signal_caught;
 
 void signals_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
 		printf("^C\n");
-		signal_caught = 1;
+		g_signal_caught = 1;
 	}
 	if (sig == SIGQUIT)
 	{
 		printf("^\\Quit (core dumped)");
-		signal_caught = 2;
+		g_signal_caught = 2;
 	}
 }
 

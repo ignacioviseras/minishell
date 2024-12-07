@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/04 11:43:37 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:14:46 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int flags_validator(char *flags, char *command_flags)
 			}
 		}
 		if (!valid_flag)
-			return (free(cmd_flags_splited), i);
+			return (free_matrix(cmd_flags_splited), i);
 	}
-	return (free(cmd_flags_splited), 0);
+	return (free_matrix(cmd_flags_splited), 0);
 }
 
 char		*get_home(char *pwd)

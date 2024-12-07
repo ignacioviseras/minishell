@@ -6,11 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/04 11:49:52 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:08:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 int	ft_count_words(char **strs)
 {
@@ -56,18 +56,18 @@ int	ft_strlen_v2(char **strs)
 	return (total);
 }
 
-int is_valid(char *str)
+int	is_valid(char *str)
 {
-    int i;
+	int	i;
 
 	i = 1;
 	if (!str || (!is_alpha(str[0]) && str[0] != '_'))
-        return (1);
-    while (str[i] != '\0')
+		return (1);
+	while (str[i] != '\0')
 	{
-        if (!is_alnum(str[i]) && str[i] != '_')
-            return (1);
-        i++;
-    }
-    return (0);
+		if (!is_alnum(str[i]) && str[i] != '_')
+			return (1);
+		i++;
+	}
+	return (0);
 }

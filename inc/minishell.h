@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/04 12:09:49 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 19:23:55 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@
 
 #define USAGE_ERROR "Correct use: ./minishell\n"
 
-# ifndef READ_END
-#  define READ_END 0
-# endif
+#ifndef READ_END
+# define READ_END 0
+#endif
 
-# ifndef WRITE_END
-#  define WRITE_END 1
-# endif
+#ifndef WRITE_END
+# define WRITE_END 1
+#endif
 
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
@@ -38,7 +38,7 @@ typedef enum token_type
 	TOKEN_INPUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-}			token_type;
+}			t_token_type;
 
 /*
  *	Automaton's alphabet, each symbol represents one column in
@@ -53,7 +53,7 @@ typedef enum input
 	INPUT_DOUBLE_QUOTE,
 	INPUT_SINGLE_QUOTE,
 	INPUT_ELSE
-} 			input;
+}			t_input;
 
 /*
  * Structure used to create the Abstract Syntax Tree (AST).
@@ -77,7 +77,7 @@ typedef struct s_token
 	char			*flags;
 	char			*cmd;
 	char			*args;
-	token_type		type;
+	t_token_type	type;
 	struct s_token	*next;
 }				t_token;
 
@@ -107,7 +107,6 @@ typedef struct s_params
 
 }			t_params;
 
-
 /* 
  * The environment translated into a linked list.
  * It has three variables:
@@ -130,7 +129,7 @@ typedef struct s_counters
 	int	k;
 }			t_counters;
 
-extern int			signal_caught;
+extern int			g_signal_caught;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
@@ -176,6 +175,8 @@ int					is_number(char c);
 int					is_alnum(char c);
 int					is_valid(char *str);
 int					ft_count_words(char **strs);
+int					skip_quoted_string(char	*str, int *counter);
+char				*get_quoted_str(char *str, char quote);
 
 //BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -200,16 +201,20 @@ int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
 int					is_option_n(char *str);
 
-
 // FT_MALLOC
 void				*ft_malloc(size_t size);
 
 // TOKENIZER		
-void				tokenize_strings(t_lexer *lexer, char **input);
+void				tokenize_strings(t_lexer *lexer, \
+						t_token_type type, char **input);
 void				tokenizer(t_lexer *lexer, char **input);
 void				add_token(t_token **head, t_token *new_token);
-t_token				*create_token(token_type type, char *value);
-void				organize_tokens(t_token *tokens);
+t_token				*create_token(t_token_type type, char *value);
+void				create_args(t_token *token, char *buf, int space_pos);
+void				create_redirection_args(t_token *token, char *buf);
+void				organize_tokens(t_lexer *lexer, t_token *tokens);
+char				*get_all_flags(char *args, char *token_flags, \
+					t_token_type type);
 
 // PARSER
 void				build_tree(t_token *tokens, t_ast **current_node);
@@ -224,11 +229,9 @@ void				expander(t_token **tokens, t_env *env);
 char				*expand_token(t_token *token, char **values, int size);
 char				**get_keys(char *str, int keys_nbr);
 char				**get_values(t_env *env, char **keys, int *keys_nbr);
-void				free_expander_vars(char **keys, char **values);
-int					nbr_of_keys(char *str);
+int					get_nbr_of_keys(char *str);
 int					ft_strlen_v2(char **strs);
 int					copy_len(const char *s);
-
 
 // REMOVE QUOTES
 char				*remove_quotes(char *str);

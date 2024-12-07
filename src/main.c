@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/04 17:01:21 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:00:59 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,12 @@ void	handle_input(t_env *env, char *input)
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
-	if (signal_caught == 1)
+	if (g_signal_caught == 1)
 	{
-		printf("Signal caught 1\n");
-		signal_caught = 0;
+		g_signal_caught = 0;
 		rl_on_new_line();
 	}
-	if (signal_caught == 2)
+	if (g_signal_caught == 2)
 	{
 		printf("Signal caught 2\n");
 		exit(1);
@@ -77,17 +76,11 @@ void	handle_input(t_env *env, char *input)
 	free_ast(ast);
 }
 
-/* void	leaks(void)
-{
-	system("leaks -q minishell");
-} */
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
 	char	*input;
 
-	//atexit(leaks);
 	(void)argv;
 	if (argc == 1)
 	{
@@ -96,7 +89,7 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			handle_signals();
-			input = readline("$megashell> ");
+			input = readline("megashell$ ");
 			add_history(input);
 			if (input != NULL)
 				handle_input(env, input);

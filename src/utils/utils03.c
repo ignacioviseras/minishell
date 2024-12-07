@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:05:12 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/04 12:31:59 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:27:12 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ char	*ft_strdup(const char *s)
 	char	*ptr;
 	size_t	len;
 
+	if (!s)
+		return (NULL);
 	len = ft_strlen((char *)s);
 	ptr = (char *)malloc(sizeof(char) * (len + 1));
 	if (!ptr)
@@ -89,8 +91,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	char	*c1;
 	size_t	len_max;
 
-	if (!s1)
+	if (!s1 && !s2)
 		return (NULL);
+	else if (!s1)
+		return (ft_strdup(s2));
 	else if (!s2)
 		return (ft_strdup(s1));
 	len_max = (ft_strlen(s1) + ft_strlen(s2)) + 2;
