@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/04 21:48:40 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/08 22:23:05 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,45 @@ void redirect_input(t_token *data)
     close(fd);
 }
 
-void redirect_output(t_token *data)
+void redirect_output(t_token *data, t_ast *ast, t_params *p)
 {
-    int fd = open(data->args, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd < 0) {
-        perror("open output");
-        exit(EXIT_FAILURE);
+    if (ft_strcmp(data->cmd, ">") != 0)
+    {
+        int original_stdout;
+        // printf("accedes?????????\n");
+        int fd = open(data->cmd, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        // original_stdin = dup(STDOUT_FILENO);
+        original_stdout = dup(STDOUT_FILENO);
+        if (fd < 0) {
+            perror("open output");
+            exit(EXIT_FAILURE);
+        }
+        if (dup2(fd, STDOUT_FILENO) < 0) {
+            perror("dup2 output");
+            exit(EXIT_FAILURE);
+        }
+        close(fd);
+        execute_node(ast->left, p);
+        if (dup2(original_stdout, STDOUT_FILENO) < 0)
+        {
+            perror("restore stdin");
+            exit(EXIT_FAILURE);
+        }
+        close(original_stdout);
     }
-    if (dup2(fd, 1) < 0) {
-        perror("dup2 output");
-        exit(EXIT_FAILURE);
+}
+
+void init_redirct_out(t_ast *ast, t_params *p)
+{
+    if (ast->right->data != NULL)
+    {
+        t_token *token;
+
+        token = (t_token *)(ast->right->data);
+        printf("nombre arc '%s'\n", token->cmd);
+        redirect_output(token, ast, p);
+
     }
-    close(fd);
 }
 
 void redirect_append(t_token *data)
@@ -70,7 +97,107 @@ int open_heredoc()
     return fd_file;
 }
 
-void write_heredoc(int fd_file, char *delimiter)
+//----------- GET-ENV ----------------
+char *trim_quotes(char *str) {
+    size_t len;
+
+    if (!str)
+        return (NULL);
+    len = ft_strlen(str);
+    if (len >= 2 && str[0] == '"' && str[len - 1] == '"') {
+        str[len - 1] = '\0';
+        return str + 1;
+    }
+    return str;
+}
+
+char *get_env_value(const char *key, char **environ)
+{
+    size_t key_len;
+    char **env;
+
+    if (!key || !environ)
+        return "";
+    key_len = ft_strlen(key);
+    env = environ;
+    while (*env)
+    {
+        if (ft_strncmp(*env, key, key_len) == 0 && (*env)[key_len] == '=')
+            return trim_quotes(*env + key_len + 1);
+        env++;
+    }
+    return "";
+}
+
+char *replace_env_vars(const char *input, char **environ)
+{
+    size_t len;
+    size_t rsult_size;
+    char *result;
+    size_t i;
+    size_t j;
+
+    if (!input || !environ)
+        return (NULL);
+    len = ft_strlen(input);
+    rsult_size = len * 2;
+    result = malloc(rsult_size + 1);
+    if (!result)
+        return NULL;
+    i = 0;
+    j = 0;
+    while (input[i] != '\0')
+    {
+        if (input[i] == '$' && (i == 0 || input[i - 1] != '\\'))
+        {
+            i++;
+            size_t start = i;
+            while (input[i] != '\0' && (ft_isalnum(input[i]) || input[i] == '_'))
+                i++;
+            if (i > start)
+            {
+                char var_name[128];
+                ft_strncpy(var_name, input + start, i - start);
+                var_name[i - start] = '\0';
+                const char *value = get_env_value(var_name, environ);
+                size_t value_len = ft_strlen(value);
+
+                // Redimensionar result si es necesario
+                if (j + value_len >= rsult_size) {
+                    rsult_size = (j + value_len) * 2; // Duplicar el tamaño actual
+                    char *new_result = realloc(result, rsult_size + 1);
+                    if (!new_result) {
+                        free(result);
+                        return NULL;
+                    }
+                    result = new_result;
+                }
+
+                ft_strcpy(result + j, value);
+                j += value_len;
+            }
+        }
+        else
+        {
+            if (j >= rsult_size) {
+                rsult_size *= 2; // Duplicar el tamaño si se necesita más espacio
+                char *new_result = realloc(result, rsult_size + 1);
+                if (!new_result) {
+                    free(result);
+                    return NULL;
+                }
+                result = new_result;
+            }
+            result[j++] = input[i++];
+        }
+    }
+    result[j] = '\0';
+    return result;
+}
+
+//----------------------------------
+
+void write_heredoc(int fd_file, char *delimiter, char **env)
 {
     char *buffer;
     ssize_t content;
@@ -87,7 +214,11 @@ void write_heredoc(int fd_file, char *delimiter)
         }
         if (ft_strlen(buffer) > 0)
         {
-            content = write(fd_file, buffer, ft_strlen(buffer));
+            //if $
+            if (ft_strchr(buffer, '/') == 0)
+                content = write(fd_file, replace_env_vars(buffer, env), ft_strlen(buffer));
+            else
+                content = write(fd_file, buffer, ft_strlen(buffer));
             if (content < 0)
             {
                 perror("write to heredoc file");
@@ -106,7 +237,7 @@ void write_heredoc(int fd_file, char *delimiter)
     }
 }
 
-void handle_heredoc(t_token *data, t_ast *node)
+void handle_heredoc(t_token *data, t_ast *node, t_params *p)
 {
     int fd_file;
     int original_stdin;
@@ -124,7 +255,7 @@ void handle_heredoc(t_token *data, t_ast *node)
         t_token *data;
 
         data = (t_token *)(node->right->data);
-        write_heredoc(fd_file, data->cmd);
+        write_heredoc(fd_file, data->cmd, p->env);
 
     }
     close(fd_file);
@@ -173,12 +304,15 @@ void handle_redirection(t_ast *node, t_params *p)
     if (ft_strcmp(data->cmd, "<") == 0)
         redirect_input(data);
     else if (ft_strcmp(data->cmd, ">") == 0)
-        redirect_output(data);
+    {
+        init_redirct_out(node, p);
+        // init_redirct_out(node);
+    }
     else if (ft_strcmp(data->cmd, ">>") == 0)
         redirect_append(data);
     else if (ft_strcmp(data->cmd, "<<") == 0)
     {
-        handle_heredoc(data, node);
+        handle_heredoc(data, node, p);
         execute_node(node->right, p);
     }
         
@@ -293,6 +427,7 @@ void execute_node(t_ast *node, t_params *p)
             close(p->fd[i]);
             i++;
         }
+        
         if (data && ft_strcmp(data->cmd, "|") == 0)
             handle_pipe(node, p);  // mueve la pipe es para casos dnd las redirect estan por el centro
         else if (data && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
