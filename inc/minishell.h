@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 14:22:32 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:52:28 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@
 #  define WRITE_END 1
 # endif
 
-#define BUFFER_SIZE 256
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
@@ -160,7 +162,7 @@ int					n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
 size_t				ft_newstrlcpy(char *dst, char *src, size_t size);
 char				*ft_strjoin(char *s1, char *s2);
-//char				*ft_strjoin_cmd(char *s1, char *s2);
+char				*ft_strjoin_cmd(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 void				ft_strcpy(char *dest, const char *src);
@@ -181,13 +183,7 @@ int					is_alpha(char c);
 int					is_number(char c);
 int					is_alnum(char c);
 int					is_valid(char *str);
-t_env				*new_node(char *key, char *value, int hide);
-void				add_bottom(t_env **env, t_env *new_envi);
-void				remove_node(t_env **env, char *key);
-int					is_alpha(char c);
-int					is_number(char c);
-int					is_alnum(char c);
-int					is_valid(char *str);
+int					ft_isalnum(char	c);
 int					ft_count_words(char **strs);
 int					skip_quoted_string(char	*str, int *counter);
 char				*get_quoted_str(char *str, char quote);
@@ -201,12 +197,8 @@ void				command_pwd(t_token *tokens);
 void				command_env(t_token *tokens, t_env *env);
 void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
-/* char				*get_content_var(char *str);
-char				*get_value(t_env **envi, char *find);
-char				*get_var(char *str);
-void				command_export(t_token *tokens, t_env *envi); */
 char				*get_content_var(char *str);
-char				*get_env_value(const char *key, char **environ);
+// char				*get_value(t_env **envi, char *find);
 char				*get_var(char *str);
 void				command_export(t_token *tokens, t_env *envi);
 char				*get_home(char *pwd);
@@ -239,7 +231,6 @@ char				*get_all_flags(char *args, char *token_flags, \
 void				build_tree(t_token *tokens, t_ast **current_node);
 t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
-
 int					count_ast_nodes(t_ast *node);
 
 // SIGNALS

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:06:17 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:54:32 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,45 @@
 
 //------------------------REDIRECCIONES------------------------------
 
-void redirect_input(t_token *data)
+void redirect_input(t_token *data, t_ast *ast, t_params *p)
 {
-    int fd;
-    fd = open(data->args, O_RDONLY);
-    if (fd < 0)
+    if (ft_strcmp(data->cmd, "<") != 0)
     {
-        perror("open input");
-        exit(EXIT_FAILURE);
+        int fd;
+        int original_stdin;
+
+        fd = open(data->cmd, O_RDONLY);
+        original_stdin = dup(STDIN_FILENO);
+        if (fd < 0)
+        {
+            perror("open input");
+            exit(EXIT_FAILURE);
+        }
+        if (dup2(fd, STDIN_FILENO) < 0)
+        {
+            perror("dup2 input");
+            exit(EXIT_FAILURE);
+        }
+        close(fd);
+        execute_node(ast->left, p);
+        if (dup2(original_stdin, STDIN_FILENO) < 0)
+        {
+            perror("restore stdin");
+            exit(EXIT_FAILURE);
+        }
+        close(original_stdin);
     }
-    if (dup2(fd, 0) < 0)
+}
+
+void init_redirct_in(t_ast *ast, t_params *p)
+{
+    if (ast->right->data != NULL)
     {
-        perror("dup2 input");
-        exit(EXIT_FAILURE);
+        t_token *token;
+
+        token = (t_token *)(ast->right->data);
+        redirect_input(token, ast, p);
     }
-    close(fd);
 }
 
 void redirect_output(t_token *data, t_ast *ast, t_params *p)
@@ -36,9 +60,7 @@ void redirect_output(t_token *data, t_ast *ast, t_params *p)
     if (ft_strcmp(data->cmd, ">") != 0)
     {
         int original_stdout;
-        // printf("accedes?????????\n");
         int fd = open(data->cmd, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        // original_stdin = dup(STDOUT_FILENO);
         original_stdout = dup(STDOUT_FILENO);
         if (fd < 0) {
             perror("open output");
@@ -66,24 +88,47 @@ void init_redirct_out(t_ast *ast, t_params *p)
         t_token *token;
 
         token = (t_token *)(ast->right->data);
-        printf("nombre arc '%s'\n", token->cmd);
         redirect_output(token, ast, p);
 
     }
 }
 
-void redirect_append(t_token *data)
+void redirect_append(t_token *data, t_ast *ast, t_params *p)
 {
-    int fd = open(data->args, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fd < 0) {
-        perror("open append");
-        exit(EXIT_FAILURE);
+    if (ft_strcmp(data->cmd, ">>") != 0)
+    {
+        int original_stdout;
+        int fd = open(data->cmd, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        original_stdout = dup(STDOUT_FILENO);
+        if (fd < 0) {
+            perror("open output");
+            exit(EXIT_FAILURE);
+        }
+        if (dup2(fd, STDOUT_FILENO) < 0) {
+            perror("dup2 output");
+            close(fd);
+            exit(EXIT_FAILURE);
+        }
+        close(fd);
+        execute_node(ast->left, p);
+        if (dup2(original_stdout, STDOUT_FILENO) < 0)
+        {
+            perror("restore stdin");
+            exit(EXIT_FAILURE);
+        }
+        close(original_stdout);
     }
-    if (dup2(fd, 1) < 0) {
-        perror("dup2 append");
-        exit(EXIT_FAILURE);
+}
+
+void init_redritect_append(t_ast *ast, t_params *p)
+{
+    if (ast->right->data != NULL)
+    {
+        t_token *token;
+
+        token = (t_token *)(ast->right->data);
+        redirect_append(token, ast, p);
     }
-    close(fd);
 }
 
 int open_heredoc()
@@ -302,14 +347,11 @@ void handle_redirection(t_ast *node, t_params *p)
     if (data == NULL)
         return;
     if (ft_strcmp(data->cmd, "<") == 0)
-        redirect_input(data);
+        init_redirct_in(node, p);
     else if (ft_strcmp(data->cmd, ">") == 0)
-    {
         init_redirct_out(node, p);
-        // init_redirct_out(node);
-    }
     else if (ft_strcmp(data->cmd, ">>") == 0)
-        redirect_append(data);
+        init_redritect_append(node, p);
     else if (ft_strcmp(data->cmd, "<<") == 0)
     {
         handle_heredoc(data, node, p);
@@ -451,7 +493,6 @@ void execute_node(t_ast *node, t_params *p)
 void execute_ast(t_ast *node, t_params *p)
 {
 	t_token *data;
-
     if (node == NULL)
         return;
     data = (t_token *)(node->data);

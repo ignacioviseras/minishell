@@ -6,12 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/09 23:19:25 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:53:47 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
-
 
 int	ft_count_words(char **strs)
 {
