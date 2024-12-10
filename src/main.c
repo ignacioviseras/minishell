@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/07 16:00:59 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:12:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,35 @@ void	print_ast(t_ast *node, int depth)
 	print_ast(node->right, depth + 1);
 }
 
+int	count_ast_nodes(t_ast *node)
+{
+	t_token *data;
+// tengo q cambiar los trcmp por los TYPE y el tipo de dato pero q PUTA pereza
+	if (node == NULL)
+		return 0;
+	data = (t_token *)(node->data);
+	if (data != NULL && (ft_strcmp(data->cmd, "|") == 0))
+		return (count_ast_nodes(node->left) + count_ast_nodes(node->right));
+	if (data != NULL && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 ||
+						 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
+		return (count_ast_nodes(node->right)); // ignora lso << >> < >
+
+	return (1 + count_ast_nodes(node->left) + count_ast_nodes(node->right));
+}
+
 void	handle_input(t_env *env, char *input)
 {
 	t_token	*tokens;
 	t_ast	*ast;
+	t_params p;
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
-	if (g_signal_caught == 1)
-	{
-		g_signal_caught = 0;
-		rl_on_new_line();
-	}
-	if (g_signal_caught == 2)
-	{
-		printf("Signal caught 2\n");
-		exit(1);
-	}
+	p.total_cmds = count_ast_nodes(ast);
+	printf("numero de comandos %d\n", p.total_cmds);
+	p.env = init_env(env);
+	init_pipes(ast, &p);
 	build_switch(env, ast, tokens);
 	free_tokens(tokens);
 	free_ast(ast);
@@ -91,8 +102,10 @@ int	main(int argc, char **argv, char **envp)
 			handle_signals();
 			input = readline("megashell$ ");
 			add_history(input);
-			if (input != NULL)
+			if (input != NULL){
+				dprintf(2, "estas accediendo aqui??\n");
 				handle_input(env, input);
+			}
 			else
 			{
 				free_env(env);

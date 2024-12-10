@@ -6,12 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/05 17:14:46 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:20:12 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
-
 
 int flags_validator(char *flags, char *command_flags)
 {
@@ -111,9 +110,6 @@ void cd_actions(t_token *tokens)
 		printf("bash: cd: %s: No such file or directory\n", tokens->args);
 }
 
-/*
-	creo q no necesito los ft_strcmp(tokens->cmd_args, "cd") == 0
- */
 void command_cd(t_token *tokens)
 {
 	static char *home;
@@ -179,13 +175,6 @@ void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 		command_unset(tokens, env);
 	else if (ft_strcmp(tokens->cmd, "clear") == 0)
 		command_clear(tokens);
-	else if (ft_strcmp(tokens->cmd, "ls") == 0)
-	{
-		char *args[] = {"/usr/bin/ls", NULL};
-		if (execve("/usr/bin/ls", args, NULL) == -1) {
-			perror("execve");
-		}
-	}
 	else if (ft_strcmp(tokens->cmd, "exit") == 0)
 	{
 		free_env(env);

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:20:14 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/07 15:07:16 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:56:00 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,22 @@ void	remove_node(t_env **env, char *key)
 		prev = temp;
 		temp = temp->next;
 	}
+}
+
+char	*ft_strncpy(char *dest, const char *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
 }

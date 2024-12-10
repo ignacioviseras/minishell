@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/04 12:31:03 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:17:34 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	free_env(t_env *env)
 	{
 		aux = env;
 		free(env->key);
-		free(env->value);
+		if (env->value)
+			free(env->value);
 		env = env->next;
 		free(aux);
 	}
@@ -76,4 +77,15 @@ void	free_variable(t_env *node)
 	if (node->value)
 		free(node->value);
 	free(node);
+}
+
+void free_env_matrix(char **env_matrix)
+{
+    int i = 0;
+    while (env_matrix[i])
+    {
+        free(env_matrix[i]);
+        i++;
+    }
+    free(env_matrix);
 }

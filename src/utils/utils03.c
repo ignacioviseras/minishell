@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:05:12 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/06 17:27:12 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:18:41 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	*ft_strdup(const char *s)
 	return (ptr);
 }
 
-static size_t	ft_newstrlcpy(char *dst, char *src, size_t size)
+size_t	ft_newstrlcpy(char *dst, char *src, size_t size)
 {
 	size_t	index;
 	size_t	src_lenght;
@@ -101,7 +101,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	c1 = (char *)ft_calloc(len_max, sizeof(char));
 	if (!c1)
 		return (NULL);
-	ft_newstrlcpy(c1, (char *)s1, ft_strlen((const char *)s1) + 1);
+	ft_strlcpy(c1, (char *)s1, ft_strlen((const char *)s1) + 1);
 	ft_strlcat(c1, s2, len_max);
 	return (c1);
 }

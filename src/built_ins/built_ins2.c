@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/04 11:42:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:59:12 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int validate_export(char *key, char *value)
 {
+
 	if (is_valid(key) == 1)
 	{
 		if (value == NULL)
@@ -23,12 +24,11 @@ int validate_export(char *key, char *value)
 		}
 		else
 		{
+			printf("que llega ?? %s\n", value);
 			printf("bash: export: `%s=%s': not a valid identifier\n", key, value);
 			return (1);
 		}
 	}
-	free(key);
-	free(value);
 	return (0);
 }
 
@@ -50,6 +50,9 @@ char	*get_var(char *str)
 	char *variable;
 	int len_variable;
 	int len_all;
+
+	len_all = 0;
+	len_variable = 0;
 
 	len_all = ft_strlen(str);
 	len_variable = ft_strlen(ft_strchr(str, '='));
@@ -77,6 +80,7 @@ char	*get_content_var(char *str)
     if (start > end)
         return (ft_strdup(""));
     variable = ft_substr(finder, start, end - start + 1);
+	printf("contenido de la var '%s'\n", variable);
     return (variable);
 }
 
@@ -98,12 +102,11 @@ void export_actions(t_token *tokens, t_env *env)
 		}
 		else
 		{
-			if (validate_export(get_var(splt_vars[x]), get_content_var(splt_vars[x])) == 0)
-				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
+			if (validate_export(get_var(splt_vars[x]), get_content_var(tokens->args)) == 0)
+				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(tokens->args), 1));
 		}
 	}
-	free_matrix(splt_vars);
-	exit(0);
+	free(splt_vars);
 }
 
 void	command_export(t_token *tokens, t_env *env)
