@@ -6,14 +6,14 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/12/10 16:42:34 by drestrep         ###   ########.fr        #
+#    Updated: 2024/12/10 22:27:02 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 			= 	minishell
 
 CC 				= 	gcc
-CFLAGS 			= 	-g3 -Wall -Wextra -Werror #-fsanitize=address -O3
+CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address -O3
 LDFLAGS			=	-lreadline
 INCLUDES		= 	-I ./inc/
 

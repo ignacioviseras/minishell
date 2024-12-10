@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 14:47:00 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 22:55:57 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,13 @@ t_token	*lexer(char *input)
 		return (NULL);
 	}
 	free(lexer.buf);
+	/* while (lexer.tokens)
+	{
+		if (lexer.tokens->full_cmd)
+			printf("Full cmd: %s\n", lexer.tokens->full_cmd);
+		lexer.tokens++;
+	}
+	exit(0); */
 	organize_tokens(&lexer, lexer.tokens);
 	return (lexer.tokens);
 }

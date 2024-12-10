@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:54:32 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 23:08:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,7 +379,7 @@ void	get_path(char **env, t_params *p, t_token *t)
 void execute_cmd(t_params *p)
 {
     int i;
-    
+
     i = execve(p->cmd_path, p->cmd_exec, p->env);
     if (i < 0)
     {
@@ -393,8 +393,11 @@ int	tramited(char *path, t_params *p, t_token *t)
 	char		**dir;
 
 	dir = ft_split(path, ':');
-	p->cmd_path = load_param(dir, t->full_cmd);
+	p->cmd_path = load_param(dir, t->cmd);
+	printf("q tienes '%s'\n",t->cmd);
+	printf("q tienes '%s'\n", p->cmd_path);
 	p->cmd_exec = split_formated(t->full_cmd, ' ');
+	printf("q tienes '%s'\n", p->cmd_exec[0]);
 	free_matrix(dir);
 	if (p->cmd_path != NULL)
         execute_cmd(p);
@@ -490,9 +493,10 @@ void execute_node(t_ast *node, t_params *p)
     }
 }
 
-void execute_ast(t_ast *node, t_params *p)
+void	execute_ast(t_ast *node, t_params *p)
 {
 	t_token *data;
+
     if (node == NULL)
         return;
     data = (t_token *)(node->data);
