@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils03.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:05:12 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 16:47:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:31:37 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ size_t	ft_newstrlcpy(char *dst, char *src, size_t size)
 		dst[index] = src[index];
 		index++;
 	}
-	dst[index] = ' ';
+	dst[index] = '/';
 	dst[index + 1] = '\0';
 	return (src_lenght + 1);
 }
