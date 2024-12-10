@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/09 23:52:55 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:06:17 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -451,6 +451,7 @@ void execute_node(t_ast *node, t_params *p)
 void execute_ast(t_ast *node, t_params *p)
 {
 	t_token *data;
+
     if (node == NULL)
         return;
     data = (t_token *)(node->data);

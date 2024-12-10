@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/09 23:57:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:22:32 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int					n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
 size_t				ft_newstrlcpy(char *dst, char *src, size_t size);
 char				*ft_strjoin(char *s1, char *s2);
-char				*ft_strjoin_cmd(char *s1, char *s2);
+//char				*ft_strjoin_cmd(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 void				ft_strcpy(char *dest, const char *src);

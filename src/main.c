@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/09 23:12:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:23:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	handle_input(t_env *env, char *input)
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
 	p.total_cmds = count_ast_nodes(ast);
-	printf("numero de comandos %d\n", p.total_cmds);
+	//printf("numero de comandos %d\n", p.total_cmds);
 	p.env = init_env(env);
 	init_pipes(ast, &p);
 	build_switch(env, ast, tokens);
@@ -103,7 +103,7 @@ int	main(int argc, char **argv, char **envp)
 			input = readline("megashell$ ");
 			add_history(input);
 			if (input != NULL){
-				dprintf(2, "estas accediendo aqui??\n");
+				//dprintf(2, "estas accediendo aqui??\n");
 				handle_input(env, input);
 			}
 			else
