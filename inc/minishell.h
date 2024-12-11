@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 16:52:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:05:20 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ typedef struct s_counters
 	int	k;
 }			t_counters;
 
-extern int			g_signal_caught;
+extern int			g_exit_status;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
@@ -211,6 +211,7 @@ void				export_actions(t_token *tokens, t_env *env);
 int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
 int					is_option_n(char *str);
+char				*ft_itoa(int n);
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);

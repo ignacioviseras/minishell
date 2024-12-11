@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 23:08:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:40:55 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,11 +319,11 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
     // line = gnl(fd_file);
     // while (line != NULL)
     // {
-    //     printf("%s", line);
-    //     free(line);
-    //     line = gnl(fd_file);
+    //   printf("%s", line);
+    //   free(line);
+    //   line = gnl(fd_file);
     // }
-    
+        
     if (dup2(fd_file, STDIN_FILENO) < 0)
     {
         perror("dup2 heredoc");
@@ -381,10 +381,14 @@ void execute_cmd(t_params *p)
     int i;
 
     i = execve(p->cmd_path, p->cmd_exec, p->env);
+	//exit(0);
     if (i < 0)
     {
+        printf("EYYY\n");
         perror("execve");
-        exit(EXIT_FAILURE);
+        g_exit_status = 126;
+        exit(126);
+        //exit(EXIT_FAILURE);
     }
 }
 
@@ -394,10 +398,7 @@ int	tramited(char *path, t_params *p, t_token *t)
 
 	dir = ft_split(path, ':');
 	p->cmd_path = load_param(dir, t->cmd);
-	printf("q tienes '%s'\n",t->cmd);
-	printf("q tienes '%s'\n", p->cmd_path);
 	p->cmd_exec = split_formated(t->full_cmd, ' ');
-	printf("q tienes '%s'\n", p->cmd_exec[0]);
 	free_matrix(dir);
 	if (p->cmd_path != NULL)
         execute_cmd(p);
@@ -405,7 +406,7 @@ int	tramited(char *path, t_params *p, t_token *t)
 	{
 		free(p->cmd_path);
 		free_matrix(p->cmd_exec);
-		exit(1);//TODO aqui se tendria q liberar todos los daros
+		exit(127);//TODO aqui se tendria q liberar todos los datos
 	}
 	return (0);
 }
@@ -455,8 +456,9 @@ void	handle_pipe(t_ast *node, t_params *p)
 void execute_node(t_ast *node, t_params *p)
 {
     t_token *data;
-    int pid;
-    int i;
+    int     status;
+    int     pid;
+    int     i;
 
     data = (t_token *)(node->data);
     pid = fork();
@@ -484,7 +486,19 @@ void execute_node(t_ast *node, t_params *p)
     else if (pid > 0)
     {
         close(p->fd[p->fd_index + 1]);
-        waitpid(pid, NULL, 0);
+        waitpid(pid, &status, 0);
+        if (WIFEXITED(status))
+        {
+            //printf("PEPE: %s\n", ft_itoa(g_exit_status));
+            g_exit_status = WEXITSTATUS(status);
+            //printf("PEPE: %s\n", ft_itoa(g_exit_status));
+        }
+        else if (WIFSIGNALED(status))
+        {
+            //printf("NACHO: %s\n", ft_itoa(g_exit_status));
+            g_exit_status = 128 + WTERMSIG(status);
+            //printf("NACHO: %s\n", ft_itoa(g_exit_status));
+        }
     }
     else 
     {

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:52:20 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:14:17 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,10 @@ char	*get_content_var(char *str)
 
 void export_actions(t_token *tokens, t_env *env)
 {
-	char **splt_vars;
-	int x;
+	char	**splt_vars;
+	char	*var_name;
+	char	*var_content;
+	int		x;
 
 	splt_vars = ft_split(tokens->args, ' ');
 	if (!splt_vars)
@@ -102,11 +104,15 @@ void export_actions(t_token *tokens, t_env *env)
 		}
 		else
 		{
-			if (validate_export(get_var(splt_vars[x]), get_content_var(tokens->args)) == 0)
-				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(tokens->args), 1));
+			var_name = get_var(splt_vars[x]);
+            var_content = get_content_var(tokens->args);
+            if (validate_export(var_name, var_content) == 0)
+                add_bottom(&env, new_node(var_name, var_content, 0));
+			free(var_name);
+            free(var_content);
 		}
 	}
-	free(splt_vars);
+	free_matrix(splt_vars);
 }
 
 void	command_export(t_token *tokens, t_env *env)
@@ -145,14 +151,18 @@ void	print_env(t_env *env, int flag)
 	{
 		if (flag == 1)
 		{
-			printf("declare -x ");
 			if (env->value != NULL)
 				printf("%s=\"%s\"\n", env->key, env->value);
 			else
 				printf("%s\n", env->key);
 		}
 		else if(env->hide == 0)
-			printf("%s=%s\n", env->key, env->value);
+		{
+            if(env->value != NULL && ft_strcmp(env->value, "\0") != 0)
+                printf("%s=%s\n", env->key, env->value);
+            else if (ft_strcmp(env->value, "\0") != 0)
+                printf("%s\n", env->key);
+        }
 		env = env->next;
 		i++;
 	}
@@ -276,7 +286,7 @@ void print_echo(char *input)
 void command_echo(t_token *tokens)
 {
 	int x;
-	
+
 	if (tokens->flags)
 	{
 		if (ft_charcmp(tokens->flags[0], '-') == 0)
@@ -289,5 +299,8 @@ void command_echo(t_token *tokens)
 		}
 	}
 	else
+	{
+		//printf("ENTRA\n");
 		print_echo(tokens->args);
+	}
 }
