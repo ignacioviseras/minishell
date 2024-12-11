@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:54:03 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/20 12:49:04 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:51:27 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	handle_dollar_sign(const char *str, char *new_str, char **values, \
 							t_counters *counters)
 {
-	if (!is_alpha(str[counters->i + 1]) && str[counters->i + 1] != '_')
+	if (!is_alpha(str[counters->i + 1]) && str[counters->i + 1] != '_' \
+		&& str[counters->i + 1] != '?')
 		new_str[counters->k++] = str[counters->i++];
-	//TODO: else if (str[counters->i + 1] == '?')
 	else
 	{
 		ft_strcpy(new_str + counters->k, values[counters->j++]);

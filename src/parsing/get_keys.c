@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_utils.c                                   :+:      :+:    :+:   */
+/*   get_keys.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:41:52 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/07 15:01:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:10:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	**get_keys(char *str, int keys_nbr)
 	i = 0;
 	j = 0;
 	keys = ft_malloc((keys_nbr + 1) * sizeof(char *));
-	while (str[i])
+	while (str[i] && keys_nbr > 0)
 	{
 		key = get_key(str, &i);
 		if (key != NULL)

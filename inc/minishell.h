@@ -6,16 +6,18 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/07 19:23:55 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:05:20 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <limits.h>
 #include <stdint.h>
 #include <signal.h>
+#include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -25,9 +27,13 @@
 # define READ_END 0
 #endif
 
-#ifndef WRITE_END
-# define WRITE_END 1
-#endif
+# ifndef WRITE_END
+#  define WRITE_END 1
+# endif
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
@@ -98,12 +104,12 @@ typedef struct s_lexer
 
 typedef struct s_params
 {
-	char		*file1;
-	char		*file2;
-	char		*comand_path1;
-	char		*comand_path2;
-	char		**comand1;
-	char		**comand2;
+	int			*fd;
+	int			fd_index;
+	int			total_cmds;
+	char		*cmd_path;
+	char		**cmd_exec;
+	char		**env;
 
 }			t_params;
 
@@ -129,7 +135,7 @@ typedef struct s_counters
 	int	k;
 }			t_counters;
 
-extern int			g_signal_caught;
+extern int			g_exit_status;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
@@ -154,10 +160,13 @@ int					findchar(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					n_words(char const *s, char c);
 char				**split_formated(char const *s, char c);
+size_t				ft_newstrlcpy(char *dst, char *src, size_t size);
 char				*ft_strjoin(char *s1, char *s2);
+char				*ft_strjoin_cmd(char *s1, char *s2);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 void				ft_strcpy(char *dest, const char *src);
+char				*ft_strncpy(char *dest, const char *src, size_t n);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 void				**free_matrix(char **str);
 void				free_tokens(t_token *token);
@@ -174,9 +183,11 @@ int					is_alpha(char c);
 int					is_number(char c);
 int					is_alnum(char c);
 int					is_valid(char *str);
+int					ft_isalnum(char	c);
 int					ft_count_words(char **strs);
 int					skip_quoted_string(char	*str, int *counter);
 char				*get_quoted_str(char *str, char quote);
+char				*gnl(int fd);
 
 //BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -187,7 +198,7 @@ void				command_env(t_token *tokens, t_env *env);
 void				cd_actions(t_token *tokens);
 void				command_cd(t_token *token);
 char				*get_content_var(char *str);
-char				*get_env_value(t_env *env, char *key, int *keys_nbr);
+// char				*get_value(t_env **envi, char *find);
 char				*get_var(char *str);
 void				command_export(t_token *tokens, t_env *envi);
 char				*get_home(char *pwd);
@@ -200,6 +211,7 @@ void				export_actions(t_token *tokens, t_env *env);
 int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
 int					is_option_n(char *str);
+char				*ft_itoa(int n);
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);
@@ -220,6 +232,7 @@ char				*get_all_flags(char *args, char *token_flags, \
 void				build_tree(t_token *tokens, t_ast **current_node);
 t_ast				*parsing(t_token *tokens, t_env *env);
 t_ast				*create_node(void *data);
+int					count_ast_nodes(t_ast *node);
 
 // SIGNALS
 void				handle_signals(void);
@@ -237,5 +250,21 @@ int					copy_len(const char *s);
 char				*remove_quotes(char *str);
 
 // PIPES
-void				have_env(char **env, char **argv);
-int					tramited(char *path, char **env);
+void				get_path(char **env, t_params *p, t_token *t);
+int					tramited(char *path, t_params *p, t_token *t);
+void				execute_cmd(t_params *p);
+void				dup_read(t_params *p);
+void				dup_write(t_params *p);
+void				init_execute(t_token *data, t_params *p);
+void				handle_pipe(t_ast *node, t_params *p);
+void				execute_node(t_ast *node, t_params *p);
+void				execute_ast(t_ast *node, t_params *p);
+char				*create_char(t_env *env);
+int					count_env_nodes(t_env *env);
+char				**init_env(t_env *env);
+void				init_param(t_params *p, int *fd, int fd_index);
+void				init_pipes(t_ast *ast, t_params *p);
+char				*access_absolute(char *path);
+char				*access_validate(char **path, char *comand);
+void				validate_comand(char **comand_splited);
+char				*load_param(char **path, char *comand);

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/07 19:03:15 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:18:34 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ int	input_checker(t_lexer lexer, char *input, int end)
 		lexer.automaton_status = \
 		transition_table(lexer.automaton_status, get_symbol(input[i]));
 		i++;
-		if (input[i] == '\0' && lexer.automaton_status < 9)
+		if (input[i] == '\0' && lexer.automaton_status != 0 \
+			&& lexer.automaton_status < 9)
 		{
 			printf("syntax error\n");
 			return (0);

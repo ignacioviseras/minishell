@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2024/10/12 16:12:51 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:12:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
-
 
 char	*access_absolute(char *path)
 {
@@ -21,7 +20,7 @@ char	*access_absolute(char *path)
 	fd_dir1 = access(path, X_OK);
 	if (fd_dir1 == -1)
 	{
-		ft_printf("\t--- Error ---\nThere is no access\n");
+		printf("\t--- Error ---\nThere is no access\n");
 		return (NULL);
 	}
 	comand_ok = ft_strdup(path);
@@ -38,7 +37,7 @@ char	*access_validate(char **path, char *comand)
 	fd_dir1 = -1;
 	while (path[x] || fd_dir1 == 0)
 	{
-		dir1 = ft_strjoin(path[x], comand);
+		dir1 = ft_strjoin_cmd(path[x], comand);
 		fd_dir1 = access(dir1, X_OK);
 		if (fd_dir1 == 0)
 			return (dir1);
@@ -47,15 +46,16 @@ char	*access_validate(char **path, char *comand)
 	}
 	if (fd_dir1 == -1)
 	{
-		ft_printf("\t--- Error ---\nThere is no access to any directory\n");
+        //g_exit_status = 127;
+		printf("\t--- Error ---\nThere is no access to any directory\n");
 		return (NULL);
 	}
 	return (NULL);
 }
 
-void validate_comand (char **comand_splited)
+void validate_comand(char **comand_splited)
 {
-	ft_printf("\t--- Error ---\nComand empty\n");
+	printf("\t--- Error ---\nComand empty\n");
 	free_matrix(comand_splited);
 	exit(1);
 }

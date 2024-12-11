@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/04 11:42:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:14:17 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int validate_export(char *key, char *value)
 {
+
 	if (is_valid(key) == 1)
 	{
 		if (value == NULL)
@@ -23,33 +24,35 @@ int validate_export(char *key, char *value)
 		}
 		else
 		{
+			printf("que llega ?? %s\n", value);
 			printf("bash: export: `%s=%s': not a valid identifier\n", key, value);
 			return (1);
 		}
 	}
-	free(key);
-	free(value);
 	return (0);
 }
 
-/* char *get_value(t_env **envi, char *find)
-{
-    t_env *current = *envi;
+// char *get_value(t_env **envi, char *find)
+// {
+//     t_env *current = *envi;
     
-    while (current)
-    {
-        if (ft_strcmp(find, current->key) == 0)
-            return (current->value);
-        current = current->next;
-    }
-    return (NULL);
-} */
+//     while (current)
+//     {
+//         if (ft_strcmp(find, current->key) == 0)
+//             return (current->value);
+//         current = current->next;
+//     }
+//     return (NULL);
+// }
 
 char	*get_var(char *str)
 {
 	char *variable;
 	int len_variable;
 	int len_all;
+
+	len_all = 0;
+	len_variable = 0;
 
 	len_all = ft_strlen(str);
 	len_variable = ft_strlen(ft_strchr(str, '='));
@@ -77,13 +80,16 @@ char	*get_content_var(char *str)
     if (start > end)
         return (ft_strdup(""));
     variable = ft_substr(finder, start, end - start + 1);
+	printf("contenido de la var '%s'\n", variable);
     return (variable);
 }
 
 void export_actions(t_token *tokens, t_env *env)
 {
-	char **splt_vars;
-	int x;
+	char	**splt_vars;
+	char	*var_name;
+	char	*var_content;
+	int		x;
 
 	splt_vars = ft_split(tokens->args, ' ');
 	if (!splt_vars)
@@ -98,12 +104,15 @@ void export_actions(t_token *tokens, t_env *env)
 		}
 		else
 		{
-			if (validate_export(get_var(splt_vars[x]), get_content_var(splt_vars[x])) == 0)
-				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(splt_vars[x]), 1));
+			var_name = get_var(splt_vars[x]);
+            var_content = get_content_var(tokens->args);
+            if (validate_export(var_name, var_content) == 0)
+                add_bottom(&env, new_node(var_name, var_content, 0));
+			free(var_name);
+            free(var_content);
 		}
 	}
 	free_matrix(splt_vars);
-	exit(0);
 }
 
 void	command_export(t_token *tokens, t_env *env)
@@ -142,14 +151,18 @@ void	print_env(t_env *env, int flag)
 	{
 		if (flag == 1)
 		{
-			printf("declare -x ");
 			if (env->value != NULL)
 				printf("%s=\"%s\"\n", env->key, env->value);
 			else
 				printf("%s\n", env->key);
 		}
 		else if(env->hide == 0)
-			printf("%s=%s\n", env->key, env->value);
+		{
+            if(env->value != NULL && ft_strcmp(env->value, "\0") != 0)
+                printf("%s=%s\n", env->key, env->value);
+            else if (ft_strcmp(env->value, "\0") != 0)
+                printf("%s\n", env->key);
+        }
 		env = env->next;
 		i++;
 	}
@@ -273,7 +286,7 @@ void print_echo(char *input)
 void command_echo(t_token *tokens)
 {
 	int x;
-	
+
 	if (tokens->flags)
 	{
 		if (ft_charcmp(tokens->flags[0], '-') == 0)
@@ -286,5 +299,8 @@ void command_echo(t_token *tokens)
 		}
 	}
 	else
+	{
+		//printf("ENTRA\n");
 		print_echo(tokens->args);
+	}
 }

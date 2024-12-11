@@ -6,11 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/07 15:08:39 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:52:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+# include "../../inc/minishell.h"
 
 int	ft_count_words(char **strs)
 {
@@ -27,7 +27,7 @@ void	ft_strcpy(char *dest, const char *src)
 	int	i;
 
 	i = 0;
-	while (src[i])
+	while (src && src[i])
 	{
 		dest[i] = src[i];
 		i++;

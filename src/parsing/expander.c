@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/06 21:04:25 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:12:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void	expander(t_token **tokens, t_env *env)
 	{
 		if (findchar((*tokens)->full_cmd, '$') >= 0)
 			replace_var(*tokens, env);
-		if ((*tokens)->type < 2)
+		if ((*tokens)->type < 2 && \
+			(findchar((*tokens)->cmd, '\'') >= 0 || findchar((*tokens)->cmd, '\'') >= 0))
 		{
 			(*tokens)->cmd = remove_quotes((*tokens)->cmd);
 			free((*tokens)->full_cmd);
