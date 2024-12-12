@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 16:52:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:59:49 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,8 @@ int					ft_count_words(char **strs);
 int					skip_quoted_string(char	*str, int *counter);
 char				*get_quoted_str(char *str, char quote);
 char				*gnl(int fd);
+int					ft_isspace(char c);
+char				*trim_sp(const char *str);
 
 //BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -255,14 +257,14 @@ void				execute_cmd(t_params *p);
 void				dup_read(t_params *p);
 void				dup_write(t_params *p);
 void				init_execute(t_token *data, t_params *p);
-void				handle_pipe(t_ast *node, t_params *p);
-void				execute_node(t_ast *node, t_params *p);
-void				execute_ast(t_ast *node, t_params *p);
+void				handle_pipe(t_ast *node, t_params *p, t_env *env);
+void				execute_node(t_ast *node, t_params *p, t_env *env);
+void				execute_ast(t_ast *node, t_params *p, t_env *env);
 char				*create_char(t_env *env);
 int					count_env_nodes(t_env *env);
 char				**init_env(t_env *env);
 void				init_param(t_params *p, int *fd, int fd_index);
-void				init_pipes(t_ast *ast, t_params *p);
+void				init_pipes(t_ast *ast, t_params *p, t_env *env);
 char				*access_absolute(char *path);
 char				*access_validate(char **path, char *comand);
 void				validate_comand(char **comand_splited);

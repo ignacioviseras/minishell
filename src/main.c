@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 23:21:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:24:35 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ void	print_ast(t_ast *node, int depth)
 	t_token *data = (t_token *)(node->data);
 	for (int i = 0; i < depth; i++)
 		printf("	");
-	// printf("Node full_cmd: '%s', ", data->full_cmd);
-	// printf("Node cmd: '%s', ", data->cmd);
-	// printf("node args: '%s', ", data->args);
-	// printf("node flags: '%s', ", data->flags);
-	// printf("Node type: '%d'\n", data->type);
+	printf("Node full_cmd: '%s', ", data->full_cmd);
+	printf("Node cmd: '%s', ", data->cmd);
+	printf("node args: '%s', ", data->args);
+	printf("node flags: '%s', ", data->flags);
+	printf("Node type: '%d'\n", data->type);
 	print_ast(node->left, depth + 1);
 	print_ast(node->right, depth + 1);
 }
@@ -64,9 +64,9 @@ int	count_ast_nodes(t_ast *node)
 	data = (t_token *)(node->data);
 	if (data != NULL && (ft_strcmp(data->cmd, "|") == 0))
 		return (count_ast_nodes(node->left) + count_ast_nodes(node->right));
-	if (data != NULL && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 ||
-						 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
-		return (count_ast_nodes(node->right)); // ignora lso << >> < >
+	// if (data != NULL && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 ||
+	// 					 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
+	// 	return (count_ast_nodes(node->right)); // ignora lso << >> < >
 
 	return (1 + count_ast_nodes(node->left) + count_ast_nodes(node->right));
 }
@@ -81,9 +81,9 @@ void	handle_input(t_env *env, char *input)
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
 	p.total_cmds = count_ast_nodes(ast);
+	printf("numero de comandos '%d'\n", p.total_cmds);
 	p.env = init_env(env);
-	init_pipes(ast, &p);
-	build_switch(env, ast, tokens);
+	init_pipes(ast, &p, env);
 	free_tokens(tokens);
 	free_ast(ast);
 }
@@ -100,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 		create_env(env, envp);
 		while (1)
 		{
-			handle_signals();
+			// handle_signals();
 			input = readline("megashell$ ");
 			add_history(input);
 			if (input != NULL){

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 23:08:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/12 01:42:26 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 //------------------------REDIRECCIONES------------------------------
 
-void redirect_input(t_token *data, t_ast *ast, t_params *p)
+void redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
     if (ft_strcmp(data->cmd, "<") != 0)
     {
@@ -34,7 +34,7 @@ void redirect_input(t_token *data, t_ast *ast, t_params *p)
             exit(EXIT_FAILURE);
         }
         close(fd);
-        execute_node(ast->left, p);
+        execute_node(ast->left, p, env);
         if (dup2(original_stdin, STDIN_FILENO) < 0)
         {
             perror("restore stdin");
@@ -44,23 +44,26 @@ void redirect_input(t_token *data, t_ast *ast, t_params *p)
     }
 }
 
-void init_redirct_in(t_ast *ast, t_params *p)
+void init_redirct_in(t_ast *ast, t_params *p, t_env *env)
 {
     if (ast->right->data != NULL)
     {
         t_token *token;
 
         token = (t_token *)(ast->right->data);
-        redirect_input(token, ast, p);
+        redirect_input(token, ast, p, env);
     }
 }
 
-void redirect_output(t_token *data, t_ast *ast, t_params *p)
+void redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
+    dprintf(2, "BBBBBBBBBBBB\n");
+
     if (ft_strcmp(data->cmd, ">") != 0)
     {
+        dprintf(2, "AACCCEEEDEEE\n");
         int original_stdout;
-        int fd = open(data->cmd, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        int fd = open(data->args, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         original_stdout = dup(STDOUT_FILENO);
         if (fd < 0) {
             perror("open output");
@@ -71,7 +74,7 @@ void redirect_output(t_token *data, t_ast *ast, t_params *p)
             exit(EXIT_FAILURE);
         }
         close(fd);
-        execute_node(ast->left, p);
+        execute_node(ast->left, p, env);
         if (dup2(original_stdout, STDOUT_FILENO) < 0)
         {
             perror("restore stdin");
@@ -81,19 +84,21 @@ void redirect_output(t_token *data, t_ast *ast, t_params *p)
     }
 }
 
-void init_redirct_out(t_ast *ast, t_params *p)
+void init_redirct_out(t_ast *ast, t_params *p, t_env *env)
 {
-    if (ast->right->data != NULL)
-    {
+    // if (ast->right->data != NULL)
+    // {
         t_token *token;
+        dprintf(2, "QWEQWEQWE\n");
 
-        token = (t_token *)(ast->right->data);
-        redirect_output(token, ast, p);
+    //     token = (t_token *)(ast->right->data);
+        token = (t_token *)(ast->data);
+        redirect_output(token, ast, p, env);
 
-    }
+    // }
 }
 
-void redirect_append(t_token *data, t_ast *ast, t_params *p)
+void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
     if (ft_strcmp(data->cmd, ">>") != 0)
     {
@@ -110,7 +115,7 @@ void redirect_append(t_token *data, t_ast *ast, t_params *p)
             exit(EXIT_FAILURE);
         }
         close(fd);
-        execute_node(ast->left, p);
+        execute_node(ast->left, p, env);
         if (dup2(original_stdout, STDOUT_FILENO) < 0)
         {
             perror("restore stdin");
@@ -120,20 +125,20 @@ void redirect_append(t_token *data, t_ast *ast, t_params *p)
     }
 }
 
-void init_redritect_append(t_ast *ast, t_params *p)
+void init_redritect_append(t_ast *ast, t_params *p, t_env *env)
 {
     if (ast->right->data != NULL)
     {
         t_token *token;
 
         token = (t_token *)(ast->right->data);
-        redirect_append(token, ast, p);
+        redirect_append(token, ast, p, env);
     }
 }
 
 int open_heredoc()
 {
-    int fd_file = open("heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    int fd_file = open(".heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd_file < 0)
     {
         perror("open heredoc");
@@ -289,12 +294,7 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
     //char *line;
 
     fd_file = open_heredoc();
-    // printf("cmd_args '%s'\n", data->full_cmd);
-	// printf("flags '%s'\n", data->flags);
-	// printf("cmd '%s'\n", data->cmd);
-	// printf("args '%s'\n", data->args);
 	printf("type '%d'\n", data->type);
-	// printf("nombre de eof '%s'\n", node->right->data);
     if (node->right->data != NULL)
     {
         t_token *data;
@@ -310,7 +310,7 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
         perror("dup original stdin");
         exit(EXIT_FAILURE);
     }
-    fd_file = open("heredoc.tmp", O_RDONLY);
+    fd_file = open(".heredoc.tmp", O_RDONLY);
     if (fd_file < 0)
     {
         perror("open heredoc file");
@@ -339,25 +339,29 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
 }
 
 
-void handle_redirection(t_ast *node, t_params *p)
+void handle_redirection(t_ast *node, t_params *p, t_env *env)
 {
     t_token *data;
 
+    dprintf(2, "accedes??asd\n");
     data = (t_token *)(node->data);
     if (data == NULL)
         return;
     if (ft_strcmp(data->cmd, "<") == 0)
-        init_redirct_in(node, p);
+        init_redirct_in(node, p, env);
     else if (ft_strcmp(data->cmd, ">") == 0)
-        init_redirct_out(node, p);
+        init_redirct_out(node, p, env);
     else if (ft_strcmp(data->cmd, ">>") == 0)
-        init_redritect_append(node, p);
+        init_redritect_append(node, p, env);
     else if (ft_strcmp(data->cmd, "<<") == 0)
     {
         handle_heredoc(data, node, p);
-        execute_node(node->right, p);
+        execute_node(node->right, p, env);
     }
-        
+    if (node->left)
+        handle_redirection(node->left, p, env);
+    if (node->right)
+        handle_redirection(node->right, p, env);
 }
 //------------------------------------------------------
 
@@ -394,10 +398,7 @@ int	tramited(char *path, t_params *p, t_token *t)
 
 	dir = ft_split(path, ':');
 	p->cmd_path = load_param(dir, t->cmd);
-	printf("q tienes '%s'\n",t->cmd);
-	printf("q tienes '%s'\n", p->cmd_path);
 	p->cmd_exec = split_formated(t->full_cmd, ' ');
-	printf("q tienes '%s'\n", p->cmd_exec[0]);
 	free_matrix(dir);
 	if (p->cmd_path != NULL)
         execute_cmd(p);
@@ -443,16 +444,70 @@ void init_execute(t_token *data, t_params *p)
 	return;
 }
 
-void	handle_pipe(t_ast *node, t_params *p)
+void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 {
 	if (!node)
         return;
-	execute_ast(node->left, p);//procesar el nodo recursivamente lado izq
+	execute_ast(node->left, p, env);//procesar el nodo recursivamente lado izq
 	p->fd_index += 2;//mover index para extemos de los dups
-	execute_ast(node->right, p);//procesar el nodo recursivamente lado derch
+	execute_ast(node->right, p, env);//procesar el nodo recursivamente lado derch
 }
 
-void execute_node(t_ast *node, t_params *p)
+int is_builtin(char *cmd)
+{
+    char *cleaned;
+    cleaned = trim_sp(cmd);
+    dprintf(2, "1como es el trim '%s'\n", cleaned);
+    if (ft_strcmp(cleaned, "pwd") == 0)
+    {
+        free(cleaned);
+        return (0);
+    }
+	else if (ft_strcmp(cleaned, "env") == 0)
+    {
+        free(cleaned);
+        return (0);
+    }
+	else if (ft_strcmp(cleaned, "cd") == 0)
+    {
+        free(cleaned);
+        return (0);
+    }
+	else if (ft_strcmp(cleaned, "echo") == 0)
+    {
+        free(cleaned);
+        return (0);
+    }
+	else if (ft_strcmp(cleaned, "export") == 0)
+    {
+        dprintf(2, "accediste???\n");
+        free(cleaned);
+        return (0);
+    }
+	else if (ft_strcmp(cleaned, "unset") == 0)
+    {
+        free(cleaned);
+        return (0);
+    }
+	else if (ft_strcmp(cleaned, "clear") == 0)
+    {
+        free(cleaned);
+        return (0);
+    }
+	else if (ft_strcmp(cleaned, "exit") == 0)
+    {
+        free(cleaned);
+        return (0);
+    }
+    else
+    {
+        dprintf(2, "saleeesss?? '%s'\n", cleaned);
+        free(cleaned);
+        return (1);
+    }
+}
+
+void execute_node(t_ast *node, t_params *p, t_env *env)
 {
     t_token *data;
     int pid;
@@ -462,6 +517,8 @@ void execute_node(t_ast *node, t_params *p)
     pid = fork();
     if (pid == 0)
     {
+        dprintf(2, "LLLLEEEEGAS\n");
+        dprintf(2, "cmd q llegas '%s'\n", data->cmd);
         if (p->fd_index != 0)
             dup_read(p);
         if (p->fd_index < 2 * (p->total_cmds - 1))
@@ -472,14 +529,30 @@ void execute_node(t_ast *node, t_params *p)
             close(p->fd[i]);
             i++;
         }
-        
         if (data && ft_strcmp(data->cmd, "|") == 0)
-            handle_pipe(node, p);  // mueve la pipe es para casos dnd las redirect estan por el centro
+        {
+
+            dprintf(2, "cmd q llegas '%s'\n", data->cmd);
+            handle_pipe(node, p, env);  // mueve la pipe es para casos dnd las redirect estan por el centro
+        }
         else if (data && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
                            ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
-            handle_redirection(node, p);//ejecucion de las redirecciones
+            {
+                dprintf(2, "Y aqyu??\n");
+                handle_redirection(node, p, env);//ejecucion de las redirecciones
+            }
+        else if (data && (is_builtin(data->cmd) == 0))
+        {
+            
+            dprintf(2, "cmd q llegas '%s'\n", data->cmd);
+        	build_switch(env, node, data);
+        }
         else
+        {
+            dprintf(2, "cmd q llegas '%s'\n", data->cmd);
             init_execute(data, p);//ejecucion normal
+        }
+
     }
     else if (pid > 0)
     {
@@ -493,19 +566,21 @@ void execute_node(t_ast *node, t_params *p)
     }
 }
 
-void	execute_ast(t_ast *node, t_params *p)
+void	execute_ast(t_ast *node, t_params *p, t_env *env)
 {
 	t_token *data;
 
     if (node == NULL)
         return;
     data = (t_token *)(node->data);
+    dprintf(2, "accedes??bbb '%s'\n", data->cmd);
     if (ft_strcmp(data->cmd, "|") == 0)
-		handle_pipe(node, p);//manejo de la pipe
-    else if (ft_strcmp(data->cmd, "<<") == 0)
-        handle_redirection(node, p);
+		handle_pipe(node, p, env);//manejo de la pipe
+    else if ((ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
+        ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
+        handle_redirection(node, p, env);
 	else
-		execute_node(node, p);//funcionamiento del nodo
+		execute_node(node, p, env);//funcionamiento del nodo
 }
 
 char *create_char(t_env *env)
@@ -571,7 +646,7 @@ char **init_env(t_env *env)
     return (env_matrix);
 }
 
-void init_pipes(t_ast *ast, t_params *p)
+void init_pipes(t_ast *ast, t_params *p, t_env *env)
 {
     int i;
     int resultpipe;
@@ -589,7 +664,7 @@ void init_pipes(t_ast *ast, t_params *p)
         i++;
     }
     p->fd_index = 0;
-    execute_ast(ast, p);
+    execute_ast(ast, p, env);
     i = 0;
     while (i < 2 * p->total_cmds)
     {

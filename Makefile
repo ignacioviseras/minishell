@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
+#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/12/10 22:27:02 by drestrep         ###   ########.fr        #
+#    Updated: 2024/12/11 17:59:31 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,7 @@ UTILS_SRC		=	utils01.c \
 					utils05.c \
 					utils06.c \
 					utils07.c \
+					utils08.c \
 					skip_spaces.c \
 					remove_quotes.c \
 					mem_alloc.c \

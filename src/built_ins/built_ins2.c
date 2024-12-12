@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:52:20 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 22:45:06 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void export_actions(t_token *tokens, t_env *env)
 		else
 		{
 			if (validate_export(get_var(splt_vars[x]), get_content_var(tokens->args)) == 0)
-				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(tokens->args), 1));
+				add_bottom(&env, new_node(get_var(splt_vars[x]), get_content_var(tokens->args), 0));
 		}
 	}
 	free(splt_vars);
@@ -132,10 +132,10 @@ void	command_export(t_token *tokens, t_env *env)
 }
 
 
+// aqui tengo q modigicar algo para q cuando ejecute el export pinte declare -x para las var que solo tienen key
+// y no pinte en la opcion de env las q no tienen contenido
 void	print_env(t_env *env, int flag)
 {
-	// aqui tengo q modigicar algo para q cuando ejecute el export pinte declare -x para las var que solo tienen key
-	// y no pinte en la opcion de env las q no tienen contenido
 	int	i;
 
 	i = 1;
@@ -145,14 +145,18 @@ void	print_env(t_env *env, int flag)
 	{
 		if (flag == 1)
 		{
-			printf("declare -x ");
 			if (env->value != NULL)
 				printf("%s=\"%s\"\n", env->key, env->value);
 			else
 				printf("%s\n", env->key);
 		}
 		else if(env->hide == 0)
-			printf("%s=%s\n", env->key, env->value);
+		{
+			if(env->value != NULL && ft_strcmp(env->value, "\0") != 0)
+				printf("%s=%s\n", env->key, env->value);
+			else if (ft_strcmp(env->value, "\0") != 0)
+				printf("%s\n", env->key);
+		}
 		env = env->next;
 		i++;
 	}

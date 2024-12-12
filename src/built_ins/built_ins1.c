@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:44:42 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:43:32 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,28 +154,30 @@ void command_env(t_token *tokens, t_env *envi)
 
 void build_switch(t_env *env, t_ast *ast, t_token *tokens)
 {
-	/* printf("cmd_args '%s'\n", tokens->full_cmd);
-	printf("flags '%s'\n", tokens->flags);
-	printf("cmd '%s'\n", tokens->cmd);
-	printf("args '%s'\n", tokens->args);
-	printf("type '%d'\n", tokens->type); */
+	char *cleaned;
+    printf("acedes??? '%s'\n", tokens->cmd);
+    cleaned = trim_sp(tokens->cmd);
+    dprintf(2, "como es el trim22 '%s'\n", cleaned);
 	if (!tokens)
 		return ;
-	if (ft_strcmp(tokens->cmd, "pwd") == 0)
+	if (ft_strcmp(cleaned, "pwd") == 0)
 		command_pwd(tokens);
-	else if (ft_strcmp(tokens->cmd, "env") == 0)
+	else if (ft_strcmp(cleaned, "env") == 0)
 		command_env(tokens, env);
-	else if (ft_strcmp(tokens->cmd, "cd") == 0)
+	else if (ft_strcmp(cleaned, "cd") == 0)
 		command_cd(tokens);
-	else if (ft_strcmp(tokens->cmd, "echo") == 0)
+	else if (ft_strcmp(cleaned, "echo") == 0)
 		command_echo(tokens);
-	else if (ft_strcmp(tokens->cmd, "export") == 0)
+	else if (ft_strcmp(cleaned, "export") == 0)
+	{
+		free(cleaned);
 		command_export(tokens, env);
-	else if (ft_strcmp(tokens->cmd, "unset") == 0)
+	}
+	else if (ft_strcmp(cleaned, "unset") == 0)
 		command_unset(tokens, env);
-	else if (ft_strcmp(tokens->cmd, "clear") == 0)
+	else if (ft_strcmp(cleaned, "clear") == 0)
 		command_clear(tokens);
-	else if (ft_strcmp(tokens->cmd, "exit") == 0)
+	else if (ft_strcmp(cleaned, "exit") == 0)
 	{
 		free_env(env);
 		free_ast(ast);
