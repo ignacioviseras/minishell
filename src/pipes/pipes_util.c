@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/12 01:42:26 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/12 01:50:33 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,11 +319,11 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
     // line = gnl(fd_file);
     // while (line != NULL)
     // {
-    //     printf("%s", line);
-    //     free(line);
-    //     line = gnl(fd_file);
+    //   printf("%s", line);
+    //   free(line);
+    //   line = gnl(fd_file);
     // }
-    
+        
     if (dup2(fd_file, STDIN_FILENO) < 0)
     {
         perror("dup2 heredoc");
@@ -385,10 +385,14 @@ void execute_cmd(t_params *p)
     int i;
 
     i = execve(p->cmd_path, p->cmd_exec, p->env);
+	//exit(0);
     if (i < 0)
     {
+        printf("EYYY\n");
         perror("execve");
-        exit(EXIT_FAILURE);
+        g_exit_status = 126;
+        exit(126);
+        //exit(EXIT_FAILURE);
     }
 }
 
@@ -406,7 +410,7 @@ int	tramited(char *path, t_params *p, t_token *t)
 	{
 		free(p->cmd_path);
 		free_matrix(p->cmd_exec);
-		exit(1);//TODO aqui se tendria q liberar todos los daros
+		exit(127);//TODO aqui se tendria q liberar todos los datos
 	}
 	return (0);
 }
@@ -510,8 +514,9 @@ int is_builtin(char *cmd)
 void execute_node(t_ast *node, t_params *p, t_env *env)
 {
     t_token *data;
-    int pid;
-    int i;
+    int     status;
+    int     pid;
+    int     i;
 
     data = (t_token *)(node->data);
     pid = fork();
@@ -557,7 +562,19 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
     else if (pid > 0)
     {
         close(p->fd[p->fd_index + 1]);
-        waitpid(pid, NULL, 0);
+        waitpid(pid, &status, 0);
+        if (WIFEXITED(status))
+        {
+            //printf("PEPE: %s\n", ft_itoa(g_exit_status));
+            g_exit_status = WEXITSTATUS(status);
+            //printf("PEPE: %s\n", ft_itoa(g_exit_status));
+        }
+        else if (WIFSIGNALED(status))
+        {
+            //printf("NACHO: %s\n", ft_itoa(g_exit_status));
+            g_exit_status = 128 + WTERMSIG(status);
+            //printf("NACHO: %s\n", ft_itoa(g_exit_status));
+        }
     }
     else 
     {

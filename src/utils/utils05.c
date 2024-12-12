@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 16:53:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:52:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_strcpy(char *dest, const char *src)
 	int	i;
 
 	i = 0;
-	while (src[i])
+	while (src && src[i])
 	{
 		dest[i] = src[i];
 		i++;

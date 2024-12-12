@@ -6,12 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:47:02 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:12:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
-
 
 char	*access_absolute(char *path)
 {
@@ -47,6 +46,7 @@ char	*access_validate(char **path, char *comand)
 	}
 	if (fd_dir1 == -1)
 	{
+        //g_exit_status = 127;
 		printf("\t--- Error ---\nThere is no access to any directory\n");
 		return (NULL);
 	}
