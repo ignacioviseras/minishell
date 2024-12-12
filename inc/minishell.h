@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/12 01:48:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/12 09:55:08 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,3 +270,17 @@ char				*access_absolute(char *path);
 char				*access_validate(char **path, char *comand);
 void				validate_comand(char **comand_splited);
 char				*load_param(char **path, char *comand);
+void				handle_redirection(t_ast *node, t_params *p, t_env *env);
+int					is_builtin(char *cmd);
+void				redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env);
+void				init_redritect_append(t_ast *ast, t_params *p, t_env *env);
+int					open_heredoc();
+char				*trim_quotes(char *str);
+char				*get_env_value(const char *key, char **environ);
+char				*replace_env_vars(const char *input, char **environ);
+void				write_heredoc(int fd_file, char *delimiter, char **env);
+void				handle_heredoc(t_token *data, t_ast *node, t_params *p);
+void				redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env);
+void				init_redirct_in(t_ast *ast, t_params *p, t_env *env);
+void				redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env);
+void				init_redirct_out(t_ast *ast, t_params *p, t_env *env);

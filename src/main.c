@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/12 01:49:27 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/12 01:55:30 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ void	print_ast(t_ast *node, int depth)
 	t_token *data = (t_token *)(node->data);
 	for (int i = 0; i < depth; i++)
 		printf("	");
-	printf("Node full_cmd: '%s', ", data->full_cmd);
-	printf("Node cmd: '%s', ", data->cmd);
-	printf("node args: '%s', ", data->args);
-	printf("node flags: '%s', ", data->flags);
-	printf("Node type: '%d'\n", data->type);
 	printf("Node full_cmd: '%s', ", data->full_cmd);
 	printf("Node cmd: '%s', ", data->cmd);
 	printf("node args: '%s', ", data->args);
