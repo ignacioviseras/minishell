@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/12 19:15:21 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:10:18 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void handle_redirection(t_ast *node, t_params *p, t_env *env)
 {
     t_token *data;
 
-    dprintf(2, "accedes??asd\n");
     data = (t_token *)(node->data);
     if (data == NULL)
         return;

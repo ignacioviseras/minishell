@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/14 18:18:29 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/17 22:18:54 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ void dup_read(t_params *p)
 {
 	int result;
 
-    dprintf(2, "dup_read? fd'%d'\n", p->fd[p->fd_index - 2]);
 	result = dup2(p->fd[p->fd_index - 2], 0);
-    dprintf(2, "****que da result??****'%d'\n", result);
 	if(result < 0)
 	{
 		perror("dup2 input");
@@ -49,7 +47,6 @@ void dup_write(t_params *p)
 {
 	int result;
 
-    dprintf(2, "dup_write? fd'%d'\n", p->fd[p->fd_index + 1]);
 	result = dup2(p->fd[p->fd_index + 1], 1);
 	if (result < 0)
 	{
@@ -77,7 +74,6 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
 
     data = (t_token *)(node->data);
     builtin = is_builtin(data->cmd);
-    dprintf(2, "n de comands '%d'\n", p->total_cmds);
     if (p->total_cmds == 1 && builtin == 0)
         build_switch(env, node, data);
     else
@@ -85,40 +81,25 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
         pid = fork();
         if (pid == 0)
         {
-            dprintf(2, "LLLLEEEEGAS\n");
-            dprintf(2, "cmd q llegas '%s'\n", data->cmd);
             if (p->fd_index != 0)
-            {
-                dprintf(2, "accedes read? fd'%d'\n", p->fd_index);
                 dup_read(p);
-            }
             if (p->fd_index < 2 * (p->total_cmds - 1))
-            {
-                dprintf(2, "accedes write? fd'%d'\n", p->fd_index);
-                dprintf(2, "--------tlt cmd-------- '%d'\n", p->total_cmds - 1);
                 dup_write(p);
-            }
             i = 0;
             while (i < 2 * p->total_cmds)
             {
                 close(p->fd[i]);
                 i++;
             }
-            if (data && ft_strcmp(data->cmd, "|") == 0)
-            {
-                dprintf(2, "Pipe '%s'\n", data->cmd);
+            if (data && data->type == TOKEN_PIPE)
                 handle_pipe(node, p, env);  // mueve la pipe es para casos dnd las redirect estan por el centro
-            }
-            else if (data && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
-                            ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
-            {
-                dprintf(2, "redirect\n");
+            else if (data && (data->type == TOKEN_HEREDOC || data->type == TOKEN_INPUT || 
+                    data->type == TOKEN_OUTPUT || data->type == TOKEN_APPEND))
+            // else if (data && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
+            //                 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
                 handle_redirection(node, p, env);//ejecucion de las redirecciones
-            }
             else if (data && builtin == 0)
             {
-                dprintf(2, "que das?? '%d'\n", is_builtin(data->cmd));
-                dprintf(2, "cmd q llegas_built? '%s'\n", data->cmd);
                 build_switch(env, node, data);
                 exit(0);
             }

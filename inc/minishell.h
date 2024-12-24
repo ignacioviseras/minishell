@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/12 09:55:08 by igvisera         ###   ########.fr       */
+/*   Updated: 2024/12/17 22:19:58 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@
 typedef enum token_type
 {
 	TOKEN_STRING,
-	TOKEN_PIPE,
-	TOKEN_OUTPUT,
-	TOKEN_INPUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
+	TOKEN_PIPE,		// |
+	TOKEN_OUTPUT,	// >
+	TOKEN_INPUT,	// <
+	TOKEN_APPEND,	// >>
+	TOKEN_HEREDOC,	// <<
 }			t_token_type;
 
 /*
@@ -139,6 +139,7 @@ extern int			g_exit_status;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
+void				add_path(t_env **env);
 
 t_token				*lexer(char *line);
 void				lexer_init(t_lexer *lexer);
