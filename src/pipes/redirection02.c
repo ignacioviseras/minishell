@@ -14,7 +14,8 @@
 
 void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
-    if (ft_strcmp(data->cmd, ">>") != 0)
+    //if (ft_strcmp(data->cmd, ">>") != 0)
+    if (data->type == TOKEN_APPEND)
     {
         int original_stdout;
         int fd = open(data->cmd, O_WRONLY | O_CREAT | O_APPEND, 0644);

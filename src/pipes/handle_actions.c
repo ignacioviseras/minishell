@@ -28,13 +28,17 @@ void handle_redirection(t_ast *node, t_params *p, t_env *env)
     data = (t_token *)(node->data);
     if (data == NULL)
         return;
-    if (ft_strcmp(data->cmd, "<") == 0)
+    //if (ft_strcmp(data->cmd, "<") == 0)
+    // else if (ft_strcmp(data->cmd, ">") == 0)
+    //else if (ft_strcmp(data->cmd, ">>") == 0)
+    //else if (ft_strcmp(data->cmd, "<<") == 0)
+    if (data->type == TOKEN_INPUT)
         init_redirct_in(node, p, env);
-    else if (ft_strcmp(data->cmd, ">") == 0)
+    else if (data->type == TOKEN_OUTPUT)
         init_redirct_out(node, p, env);
-    else if (ft_strcmp(data->cmd, ">>") == 0)
+    else if (data->type == TOKEN_APPEND)
         init_redritect_append(node, p, env);
-    else if (ft_strcmp(data->cmd, "<<") == 0)
+    else if (data->type == TOKEN_HEREDOC)
     {
         handle_heredoc(data, node, p);
         execute_node(node->right, p, env);

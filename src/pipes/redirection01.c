@@ -14,7 +14,8 @@
 
 void redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
-    if (ft_strcmp(data->cmd, "<") != 0)
+    //if (ft_strcmp(data->cmd, "<") != 0)
+    if (data->type == TOKEN_INPUT)
     {
         int fd;
         int original_stdin;
@@ -57,7 +58,8 @@ void redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
     dprintf(2, "BBBBBBBBBBBB '%s'\n", data->cmd);
 
-    if (ft_strcmp(data->cmd, ">") == 0)
+    //if (ft_strcmp(data->cmd, ">") == 0)
+    if (data->type == TOKEN_OUTPUT)
     {
         dprintf(2, "AACCCEEEDEEE\n");
         int original_stdout;
