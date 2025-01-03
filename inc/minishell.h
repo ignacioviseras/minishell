@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/12 23:36:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:47:13 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@
 typedef enum token_type
 {
 	TOKEN_STRING,
-	TOKEN_PIPE,
-	TOKEN_OUTPUT,
-	TOKEN_INPUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
+	TOKEN_PIPE,		// |
+	TOKEN_OUTPUT,	// >
+	TOKEN_INPUT,	// <
+	TOKEN_APPEND,	// >>
+	TOKEN_HEREDOC,	// <<
 }			t_token_type;
 
 /*
@@ -157,10 +157,11 @@ typedef struct s_counters
 	int	k;
 }			t_counters;
 
-extern int			g_signal_caught;
+extern int			g_exit_status;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
+void				add_path(t_env **env);
 
 t_token				*lexer(char *line);
 void				lexer_init(t_lexer *lexer);
@@ -210,6 +211,8 @@ int					ft_count_words(char **strs);
 int					skip_quoted_string(char	*str, int *counter);
 char				*get_quoted_str(char *str, char quote);
 char				*gnl(int fd);
+int					ft_isspace(char c);
+char				*trim_sp(const char *str);
 
 //BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -233,6 +236,7 @@ void				export_actions(t_token *tokens, t_env *env);
 int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
 int					is_option_n(char *str);
+char				*ft_itoa(int n);
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);
@@ -277,15 +281,29 @@ void				execute_cmd(t_params *p);
 void				dup_read(t_params *p);
 void				dup_write(t_params *p);
 void				init_execute(t_token *data, t_params *p);
-void				handle_pipe(t_ast *node, t_params *p);
-void				execute_node(t_ast *node, t_params *p);
-void				execute_ast(t_ast *node, t_params *p);
+void				handle_pipe(t_ast *node, t_params *p, t_env *env);
+void				execute_node(t_ast *node, t_params *p, t_env *env);
+void				execute_ast(t_ast *node, t_params *p, t_env *env);
 char				*create_char(t_env *env);
 int					count_env_nodes(t_env *env);
 char				**init_env(t_env *env);
 void				init_param(t_params *p, int *fd, int fd_index);
-void				init_pipes(t_ast *ast, t_params *p);
+void				init_pipes(t_ast *ast, t_params *p, t_env *env);
 char				*access_absolute(char *path);
 char				*access_validate(char **path, char *comand);
 void				validate_comand(char **comand_splited);
 char				*load_param(char **path, char *comand);
+void				handle_redirection(t_ast *node, t_params *p, t_env *env);
+int					is_builtin(char *cmd);
+void				redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env);
+void				init_redritect_append(t_ast *ast, t_params *p, t_env *env);
+int					open_heredoc();
+char				*trim_quotes(char *str);
+char				*get_env_value(const char *key, char **environ);
+char				*replace_env_vars(const char *input, char **environ);
+void				write_heredoc(int fd_file, char *delimiter, char **env);
+void				handle_heredoc(t_token *data, t_ast *node, t_params *p);
+void				redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env);
+void				init_redirct_in(t_ast *ast, t_params *p, t_env *env);
+void				redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env);
+void				init_redirct_out(t_ast *ast, t_params *p, t_env *env);

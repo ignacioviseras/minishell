@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:01:43 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/07 19:02:59 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:03:01 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	update_nbr_of_keys(char **str, int *keys)
 		}
 		(*str)++;
 	}
-	else if (**str == '$' && (is_alpha(*(*str + 1)) || *(*str + 1) == '_'))
+	else if (**str == '$' && \
+	(is_alpha(*(*str + 1)) || *(*str + 1) == '_' || *(*str + 1) == '?'))
 	{
 		(*str)++;
 		(*keys)++;

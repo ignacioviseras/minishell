@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/12 22:32:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:47:27 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ void	print_ast(t_ast *node, int depth)
 int	count_ast_nodes(t_ast *node)
 {
 	t_token *data;
-// tengo q cambiar los trcmp por los TYPE y el tipo de dato pero q PUTA pereza
+	// tengo q cambiar los trcmp por los TYPE y el tipo de dato pero q PUTA pereza
 	if (node == NULL)
 		return 0;
 	data = (t_token *)(node->data);
-	if (data != NULL && (ft_strcmp(data->cmd, "|") == 0))
+	if (data != NULL && data->type == TOKEN_PIPE)
 		return (count_ast_nodes(node->left) + count_ast_nodes(node->right));
-	if (data != NULL && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 ||
-						 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
-		return (count_ast_nodes(node->right)); // ignora lso << >> < >
+	// if (data != NULL && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 ||
+	// 					 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
+	// 	return (count_ast_nodes(node->right)); // ignora lso << >> < >
 
 	return (1 + count_ast_nodes(node->left) + count_ast_nodes(node->right));
 }
@@ -82,11 +82,36 @@ void	handle_input(t_env *env, char *input)
 	print_ast(ast, 0);
 	exit(0);
 	p.total_cmds = count_ast_nodes(ast);
+	printf("numero de comandos '%d'\n", p.total_cmds);
 	p.env = init_env(env);
-	init_pipes(ast, &p);
-	build_switch(env, ast, tokens);
+	init_pipes(ast, &p, env);
 	free_tokens(tokens);
 	free_ast(ast);
+}
+
+void	add_path(t_env **env)
+{
+	t_env	*aux;
+	t_env	*new_node;
+	char	*value;
+
+	value = "/usr/sbin:/usr/bin:/sbin:/bin:"
+			"/usr/games:/usr/local/games:/usr/lib/wsl/lib";
+	aux = *env;
+	while (aux)
+	{
+		if (ft_strcmp(aux->key, "PATH") == 0)
+			return;
+		aux = aux->next;
+	}
+	new_node = (t_env *)malloc(sizeof(t_env));
+	if (!new_node)
+		return;
+	new_node->key = ft_strdup("PATH");
+	new_node->value = ft_strdup(value);
+	new_node->hide = 0;
+	new_node->next = *env;
+	*env = new_node;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -99,20 +124,17 @@ int	main(int argc, char **argv, char **envp)
 	{
 		env = ft_malloc(sizeof(t_env));
 		create_env(env, envp);
+		add_path(&env);
+		//add path en caso de no tener por env -i
 		while (1)
 		{
-			handle_signals();
+			// handle_signals();
 			input = readline("megashell$ ");
 			add_history(input);
-			if (input != NULL){
-				//dprintf(2, "estas accediendo aqui??\n");
+			if (input != NULL)
 				handle_input(env, input);
-			}
 			else
-			{
-				free_env(env);
-				return (0);
-			}
+				return (free_env(env), 0);
 			rl_on_new_line();
 			free(input);
 		}
