@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:04:57 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 22:54:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:09:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,26 @@ void	organize_strings(t_token *tokens, t_token *aux)
 void	organize_tokens(t_lexer *lexer, t_token *tokens)
 {
 	t_token	*start;
+
+	start = tokens;
+	while (tokens)
+	{
+		/* if (tokens->type == 0)
+		{
+			
+		} */
+		if (tokens->type == 0 && tokens->next \
+		&& findchar(tokens->args, '-' >= 0))
+			tokens->flags = get_all_flags(tokens->args, \
+			tokens->flags, tokens->type);
+		tokens = tokens->next;
+	}
+	tokens = start;
+}
+
+/* void	organize_tokens(t_lexer *lexer, t_token *tokens)
+{
+	t_token	*start;
 	t_token	*aux;
 
 	start = tokens;
@@ -124,4 +144,6 @@ void	organize_tokens(t_lexer *lexer, t_token *tokens)
 		tokens = tokens->next;
 	}
 	tokens = start;
-}
+} */
+
+

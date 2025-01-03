@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 16:46:17 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/12 22:31:40 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@ void	tokenize_strings(t_lexer *lexer, t_token_type type, char **input)
 	char	quote;
 
 	start = *input;
-	if (type == TOKEN_OUTPUT || type == TOKEN_INPUT)
-		(*input)++;
-	else if (type == TOKEN_APPEND || type == TOKEN_HEREDOC)
-		*input += 2;
-	while (**input && **input != '|' && **input != '>' && **input != '<')
+	while (**input && **input != '|')
 	{
 		if (**input == '"' || **input == '\'')
 		{
@@ -55,7 +51,7 @@ void	tokenizer(t_lexer *lexer, char **input)
 		add_token(&lexer->tokens, create_token(TOKEN_PIPE, "|"));
 		(*input)++;
 	}
-	else if ((**input == '>' && *(*input + 1) != '>') \
+	/* else if ((**input == '>' && *(*input + 1) != '>') \
 			|| (**input == '<' && *(*input + 1) != '<'))
 	{
 		if (**input == '>')
@@ -70,7 +66,7 @@ void	tokenizer(t_lexer *lexer, char **input)
 			tokenize_strings(lexer, TOKEN_APPEND, input);
 		else
 			tokenize_strings(lexer, TOKEN_HEREDOC, input);
-	}
+	} */
 	else
 		tokenize_strings(lexer, TOKEN_STRING, input);
 }

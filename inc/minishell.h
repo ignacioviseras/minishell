@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 16:52:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/12 23:36:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ typedef enum input
 	INPUT_ELSE
 }			t_input;
 
+typedef enum redirect_type
+{
+	APPEND,
+	WRITE,
+	INFILE,
+	HEREDOC
+}
+			t_redirect_type;
 /*
  * Structure used to create the Abstract Syntax Tree (AST).
  * It holds the data and two pointers to each of its children.
@@ -71,6 +79,18 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 }				t_ast;
+
+typedef struct redirect_file
+{
+	char			*name;
+	t_redirect_type type;
+}		t_redirect_file;
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}	t_list;
 
 /*
  * Structure representing a token.
@@ -84,6 +104,8 @@ typedef struct s_token
 	char			*cmd;
 	char			*args;
 	t_token_type	type;
+	t_list			*infiles;
+	t_list			*outfiles;
 	struct s_token	*next;
 }				t_token;
 

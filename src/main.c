@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 23:21:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2024/12/12 22:32:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ void	print_ast(t_ast *node, int depth)
 	t_token *data = (t_token *)(node->data);
 	for (int i = 0; i < depth; i++)
 		printf("	");
-	// printf("Node full_cmd: '%s', ", data->full_cmd);
-	// printf("Node cmd: '%s', ", data->cmd);
-	// printf("node args: '%s', ", data->args);
-	// printf("node flags: '%s', ", data->flags);
-	// printf("Node type: '%d'\n", data->type);
+	printf("Node full_cmd: '%s', ", data->full_cmd);
+	printf("Node cmd: '%s', ", data->cmd);
+	printf("node args: '%s', ", data->args);
+	printf("node flags: '%s', ", data->flags);
+	printf("Node type: '%d'\n", data->type);
 	print_ast(node->left, depth + 1);
 	print_ast(node->right, depth + 1);
 }
@@ -80,6 +80,7 @@ void	handle_input(t_env *env, char *input)
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
+	exit(0);
 	p.total_cmds = count_ast_nodes(ast);
 	p.env = init_env(env);
 	init_pipes(ast, &p);
