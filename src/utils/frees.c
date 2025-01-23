@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   frees01.c                                          :+:      :+:    :+:   */
+/*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:47:14 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:34:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ void	free_env(t_env *env)
 	}
 }
 
+//TODO: FREE REDIRECIONS ln.55
+// Al parecer eso no dan leaks??
+
 void	free_tokens(t_token *token)
 {
 	t_token	*temp;
@@ -50,6 +53,16 @@ void	free_tokens(t_token *token)
 	{
 		temp = token;
 		token = token->next;
+		if (temp->infiles)
+		{
+			free(temp->infiles->content);
+			free(temp->infiles);
+		}
+		if (temp->outfiles)
+		{
+			free(temp->outfiles->content);
+			free(temp->outfiles);
+		}
 		free(temp->flags);
 		free(temp->args);
 		free(temp->cmd);
@@ -79,13 +92,15 @@ void	free_variable(t_env *node)
 	free(node);
 }
 
-void free_env_matrix(char **env_matrix)
+void	free_env_matrix(char **env_matrix)
 {
-    int i = 0;
-    while (env_matrix[i])
-    {
-        free(env_matrix[i]);
-        i++;
-    }
-    free(env_matrix);
+	int	i;
+
+	i = 0;
+	while (env_matrix[i])
+	{
+		free(env_matrix[i]);
+		i++;
+	}
+	free(env_matrix);
 }

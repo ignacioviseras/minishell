@@ -6,13 +6,19 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:59:18 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/11 17:31:44 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:45:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 int	g_exit_status = 0;
+
+char	*get_exit_status(int *keys_nbr)
+{
+	(*keys_nbr)--;
+	return (ft_itoa(g_exit_status));
+}
 
 char	*get_value(t_env *env, char *key, int *keys_nbr)
 {
@@ -22,10 +28,7 @@ char	*get_value(t_env *env, char *key, int *keys_nbr)
 	aux = env;
 	value = NULL;
 	if (ft_strcmp(key, "?") == 0)
-	{
-		value = ft_itoa(g_exit_status);
-		(*keys_nbr)--;
-	}
+		value = get_exit_status(keys_nbr);
 	while (env && *keys_nbr > 0)
 	{
 		if (ft_strcmp(key, env->key) == 0)
@@ -38,7 +41,6 @@ char	*get_value(t_env *env, char *key, int *keys_nbr)
 		{
 			value = "";
 			(*keys_nbr)--;
-			//keys_nbr--;
 		}
 	}
 	env = aux;

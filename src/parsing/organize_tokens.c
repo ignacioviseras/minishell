@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:04:57 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/03 13:09:39 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:53:16 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	get_nbr_of_flags(char *args, t_token_type type)
 	i = 0;
 	while (args && args[i])
 	{
-		i = skip_quoted_string(args, &i);
+		i = skip_quoted_string(args, i);
 		if (args[i++] == '-')
 			nbr_of_flags++;
 	}
@@ -41,7 +41,7 @@ char	*get_all_flags(char *args, char *token_flags, t_token_type type)
 	flags = ft_malloc((get_nbr_of_flags(args, type) + 1) * sizeof(char *));
 	while (args && args[i] && j < get_nbr_of_flags(args, type))
 	{
-		i = skip_quoted_string(args, &i);
+		i = skip_quoted_string(args, i);
 		if (args[i] == '-')
 			flags[j++] = ft_substr(args + i, 0, copy_len(args + i) + 1);
 		i++;
@@ -116,6 +116,14 @@ void	organize_tokens(t_lexer *lexer, t_token *tokens)
 		tokens = tokens->next;
 	}
 	tokens = start;
+	(void)lexer;
+	/* while (tokens)
+	{
+		printf("%s\n", tokens->full_cmd);
+		tokens = tokens->next;
+	} */
+	//printf("SALE\n");
+	//exit(0);
 }
 
 /* void	organize_tokens(t_lexer *lexer, t_token *tokens)
@@ -145,5 +153,3 @@ void	organize_tokens(t_lexer *lexer, t_token *tokens)
 	}
 	tokens = start;
 } */
-
-

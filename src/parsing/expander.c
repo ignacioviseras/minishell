@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/11 20:12:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:43:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,32 @@ void	replace_var(t_token *token, t_env *env)
 		token->args = ft_strdup(token->full_cmd + ft_strlen(token->cmd));
 		token->args = skip_args_spaces(token->args);
 	}
+	if (token->flags)
+	{
+		free(token->flags);
+		token->flags = ft_strdup(token->full_cmd + ft_strlen(token->cmd));
+		token->flags = skip_args_spaces(token->flags);
+	}
 	free_matrix(keys);
-	free_matrix(values);
+	if (ft_strcmp(*values, ""))
+		free_matrix(values);
+	else
+		free(values);
 }
 
 void	expander(t_token **tokens, t_env *env)
 {
-	t_token	*aux;
+	t_token	*start;
+	char	*aux;
 
-	aux = *tokens;
+	start = *tokens;
 	while (tokens && *tokens)
 	{
 		if (findchar((*tokens)->full_cmd, '$') >= 0)
 			replace_var(*tokens, env);
 		if ((*tokens)->type < 2 && \
-			(findchar((*tokens)->cmd, '\'') >= 0 || findchar((*tokens)->cmd, '\'') >= 0))
+			(findchar((*tokens)->cmd, '\'') >= 0 || \
+			findchar((*tokens)->cmd, '\'') >= 0))
 		{
 			(*tokens)->cmd = remove_quotes((*tokens)->cmd);
 			free((*tokens)->full_cmd);
@@ -95,5 +106,8 @@ void	expander(t_token **tokens, t_env *env)
 		}
 		*tokens = (*tokens)->next;
 	}
-	*tokens = aux;
+	*tokens = start;
+	aux = get_unquoted_str((*tokens)->flags);
+	free((*tokens)->flags);
+	(*tokens)->flags = aux;
 }

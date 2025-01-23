@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:19:37 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/12 22:31:40 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:50:52 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,6 @@ void	tokenizer(t_lexer *lexer, char **input)
 		add_token(&lexer->tokens, create_token(TOKEN_PIPE, "|"));
 		(*input)++;
 	}
-	/* else if ((**input == '>' && *(*input + 1) != '>') \
-			|| (**input == '<' && *(*input + 1) != '<'))
-	{
-		if (**input == '>')
-			tokenize_strings(lexer, TOKEN_OUTPUT, input);
-		else
-			tokenize_strings(lexer, TOKEN_INPUT, input);
-	}
-	else if ((**input == '>' && *(*input + 1) == '>') \
-			|| (**input == '<' && *(*input + 1) == '<'))
-	{
-		if (**input == '>')
-			tokenize_strings(lexer, TOKEN_APPEND, input);
-		else
-			tokenize_strings(lexer, TOKEN_HEREDOC, input);
-	} */
 	else
 		tokenize_strings(lexer, TOKEN_STRING, input);
 }

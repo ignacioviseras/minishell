@@ -6,86 +6,81 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 19:13:41 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/03 13:10:03 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:33:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+//TODO: Este caso falla: export a=" -pepe"
 
-//TODO ESTO A LA MIERDA :DDDDD
-/* void	handle_quoted_argument(t_token *token, char **buf)
+void	find_args(t_token *token, char *str)
 {
-	char	quote;
+	char	*aux;
+	int		i;
+	int		j;
 
-	token->args = get_quoted_str(*buf, **buf);
-	quote = **buf;
-	while (**buf != quote)
-		(*buf)++;
-	token->flags = get_all_flags(token->full_cmd, \
-	token->flags, token->type);
-}
-
-void	handle_space_separated_argument(t_token *token, char **buf)
-{
-	token->args = ft_substr(*buf, 0, findchar(*buf, ' '));
-	*buf += findchar(*buf, ' ');
-	while (**buf && **buf == ' ')
-		(*buf)++;
-	token->flags = ft_strdup(*buf);
-	free(token->full_cmd);
-	token->full_cmd = ft_strjoin(token->cmd, token->args);
-}
-
-void	handle_default_argument(t_token *token, char *buf)
-{
-	token->args = ft_strdup(buf);
-	token->flags = NULL;
-}
-
-void	create_redirection_args(t_token *token, char *buf)
-{
-	skip_input_spaces(&buf);
-	while (*buf && !is_alnum(*buf) && *buf != '-' && \
-			*buf != '"' && *buf != '\'')
-		buf++;
-	if ((findchar(buf, '"') >= 0 && (findchar(buf, '"') < findchar(buf, ' '))) \
-	|| (findchar(buf, '\'') >= 0 && (findchar(buf, '\'') < findchar(buf, ' '))))
-		handle_quoted_argument(token, &buf);
-	else if (findchar(buf, ' ') > 0)
-		handle_space_separated_argument(token, &buf);
-	else
-		handle_default_argument(token, buf);
-} */
-
-
-char	*find_args(char *str, int *i)
-{
-	skip_input_spaces(&str + *i); //idk if this is okay
-	if (str[*i] == '"' || str[*i] == '\'')
-			*i = skip_quoted_string(str, i);
-	while (is_alnum(str[*i]) || str[*i] == '-' || str[*i] == '|')
-		(*i)++;
-	while (str[*i] && str[*i] != '|')
+	i = 0;
+	j = 1;
+	if (str[i] == '"' || str[i] == '\'')
+		i = skip_quoted_string(str, i);
+	while (is_alnum(str[i]) || str[i] == '-' || str[i] == '|' || \
+			str[i] == '"' || str[i] == '\'')
+		i++;
+	while (str[i] && str[i] != '|')
 	{
-		if (str[*i] == '"' || str[*i] == '\'')
-			return (get_quoted_str(str + *i, str[*i]));
-		if (is_alnum(str[*i]) || str[*i] == '-')
+		if (str[i] == '"' || str[i] == '\'')
 		{
-			if (findchar(str + *i, ' ') >= 0 )
-				return (ft_substr(str + *i, 0, findchar(str + *i, ' ')));
-			else if (findchar(str + *i, ' ') >= 0 && findchar(str + *i, '|') >= 0 \
-				&& findchar(str + *i, ' ') < findchar(str + *i, '|'))
-				return ("EY");
-			/* else
-				args; */
+			aux = get_quoted_str(str + i, str[i]);
+			while (aux[j] == ' ')
+				j++;
+			if (aux[j] == '-' && !ft_strcmp(token->args, "export"))
+				token->flags = append_str(token->flags, aux);
+			else
+				token->args = append_str(token->args, aux);
+			i += ft_strlen(aux);
+			free(aux);
 		}
-		(*i)++;
+		else if (is_alnum(str[i]) || str[i] == '-')
+		{
+			if (findchar(str + i, ' ') >= 0)
+				aux = ft_substr(str + i, 0, findchar(str + i, ' '));
+			else
+				aux = ft_strdup(str + i);
+			if (aux[0] == '-' && !ft_strcmp(token->args, "export"))
+				token->flags = append_str(token->flags, aux);
+			else
+				token->args = append_str(token->args, aux);
+			i += ft_strlen(aux);
+			free(aux);
+		}
+		else
+			i++;
 	}
-	return (NULL);
 }
 
-int	ft_is_redirection(char *str, int i)
+void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
+{
+	int	i;
+
+	i = 0;
+	token->cmd = NULL;
+	if (!token->cmd && (full_cmd[i] == '\'' || full_cmd[i] == '"'))
+	{
+		token->cmd = get_unquoted_str(full_cmd);
+		i += ft_strlen(token->cmd);
+	}
+	if (!token->cmd)
+	{
+		while (is_alpha(full_cmd[i]) || \
+		full_cmd[i] == '_' || full_cmd[i] == '$')
+			i++;
+		token->cmd = ft_substr(full_cmd, 0, i);
+	}
+	find_args(token, full_cmd);
+}
+
+int	is_redirection(char *str, int i)
 {
 	if ((str[i] == '>' && str[i + 1] != '>') || \
 		(str[i] == '<' && str[i + 1] != '<'))
@@ -102,38 +97,109 @@ char	*get_args(t_token *token)
 	int		i;
 	int		redirect;
 	char	*args;
-	
-	i = ft_strlen(token->cmd);
+
+	i = 0;
+	args = NULL;
 	while (token->full_cmd[i])
 	{
-		redirect = ft_is_redirection(token->full_cmd, i);
+		redirect = is_redirection(token->full_cmd, i);
 		if (redirect > 0)
 		{
 			i += redirect;
-			args = find_args(token->full_cmd, &i);
+			find_args(token, token->full_cmd);
 		}
 		i++;
+	}
+	return (args);
+}
+
+void	manage_redirection(t_token *token, t_redirect_file *redirection)
+{
+	t_list			*new_node;
+
+	new_node = ft_malloc(sizeof(t_list));
+	if (redirection->value[0] == '>')
+	{
+		new_node->content = redirection;
+		new_node->next = NULL;
+		ft_lstadd_back(&token->outfiles, new_node);
+		if (redirection->value[1] == '>')
+			redirection->type = APPEND;
+		else
+			redirection->type = WRITE;
+	}
+	else if (redirection->value[0] == '<')
+	{
+		new_node->content = redirection;
+		new_node->next = NULL;
+		ft_lstadd_back(&token->infiles, new_node);
+		if (redirection->value[1] == '<')
+			redirection->type = HEREDOC;
+		else
+			redirection->type = INFILE;
+	}
+}
+
+void	get_redirection(t_token *token, char *full_cmd)
+{
+	t_redirect_file	*redirection;
+	char			*aux;
+	int				j;
+	int				i;
+
+	redirection = ft_malloc(sizeof(t_redirect_file));
+	i = 0;
+	while (is_redirection(full_cmd, i) == 0)
+		i++;
+	j = is_redirection(full_cmd, i);
+	while (full_cmd[i + j] == ' ')
+		j++;
+	if (full_cmd[i + j] == '\'' || full_cmd[i + j] == '"')
+	{
+		aux = get_quoted_str(full_cmd + i + j, full_cmd[i + j]);
+		j += ft_strlen(aux);
+		free(aux);
+		redirection->value = ft_substr(full_cmd, i, j);
+	}
+	else
+	{
+		while (is_alnum(full_cmd[i + j]) \
+		|| full_cmd[i + j] == '$' || full_cmd[i + j] == '_')
+			j++;
+		redirection->value = ft_substr(full_cmd, i, j);
+	}
+	manage_redirection(token, redirection);
+	full_cmd = remove_substr(redirection->value, full_cmd);
+}
+
+void	get_redirections(t_token *token)
+{
+	int	i;
+
+	i = 0;
+	while (token->full_cmd[i])
+	{
+		if (token->full_cmd[i] == '>' || token->full_cmd[i] == '<')
+		{
+			get_redirection(token, token->full_cmd);
+			while (token->full_cmd[i] && token->full_cmd[i] == ' ')
+				i++;
+		}
+		else
+			i++;
 	}
 }
 
 /*
  * Parses a token's value into its components: command, arguments, and flags.
  */
-void	create_args(t_token *token, char *buf, int space_pos)
+void	get_token_values(t_token *token, char *buf, int space_pos)
 {
-	token->cmd = ft_substr(buf, 0, space_pos);
-	/* if (token->type > 1)
-		create_redirection_args(token, buf);
-	else */
-	printf("%s\n", token->full_cmd);
-	exit(0);
-	token->flags = NULL;
-	token->args = get_args(token);
-	token->args = ft_strdup(buf + space_pos + 1);
-	if (!ft_strcmp(token->args, ""))
-		token->args = NULL;
-	token->args = skip_args_spaces(token->args);
-	if (token->args && *token->args == '-')
-		token->flags = get_all_flags(token->args, \
-		token->flags, token->type);
+	(void) buf;
+	(void)space_pos;
+	if (token->type == 0)
+	{
+		get_redirections(token);
+		get_cmd_flags_and_args(token, token->full_cmd);
+	}
 }

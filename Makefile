@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
+#    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2024/12/12 15:58:52 by igvisera         ###   ########.fr        #
+#    Updated: 2025/01/23 14:57:22 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,10 +70,11 @@ UTILS_SRC		=	utils01.c \
 					utils06.c \
 					utils07.c \
 					utils08.c \
+					utils09.c \
 					skip_spaces.c \
 					remove_quotes.c \
 					mem_alloc.c \
-					frees01.c \
+					frees.c \
 					gnl.c \
 
 OBJS			=	${PARSING:.c=.o} \

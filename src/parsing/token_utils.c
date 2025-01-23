@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 19:33:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/07 19:14:40 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:51:27 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,15 @@ t_token	*create_token(t_token_type type, char *buf)
 	int		space_pos;
 
 	token = ft_malloc(sizeof(t_token));
+	ft_bzero(token, sizeof(t_token));
 	token->full_cmd = ft_strdup(buf);
 	token->type = type;
 	space_pos = findchar(buf, ' ');
-	if (space_pos > 0 && space_pos + 1 != (int)ft_strlen(buf))
-		create_args(token, buf, space_pos);
+	if ((space_pos > 0 && space_pos + 1 != (int)ft_strlen(buf)) ||
+		findchar(token->full_cmd, '>') || findchar(token->full_cmd, '<'))
+		get_token_values(token, buf, space_pos);
 	else
-	{
 		token->cmd = ft_strdup(buf);
-		token->args = NULL;
-		token->flags = NULL;
-	}
 	token->next = NULL;
 	return (token);
 }

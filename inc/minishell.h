@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/03 13:47:13 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:55:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef enum input
 	INPUT_ELSE
 }			t_input;
 
-typedef enum redirect_type
+typedef enum t_redirect_type
 {
 	APPEND,
 	WRITE,
@@ -82,7 +82,7 @@ typedef struct s_ast
 
 typedef struct redirect_file
 {
-	char			*name;
+	char			*value;
 	t_redirect_type type;
 }		t_redirect_file;
 
@@ -208,11 +208,15 @@ int					is_alnum(char c);
 int					is_valid(char *str);
 int					ft_isalnum(char	c);
 int					ft_count_words(char **strs);
-int					skip_quoted_string(char	*str, int *counter);
+int					skip_quoted_string(char	*str, int counter);
+char				*get_unquoted_str(char *str);
 char				*get_quoted_str(char *str, char quote);
 char				*gnl(int fd);
 int					ft_isspace(char c);
 char				*trim_sp(const char *str);
+char				*append_str(char *base, char *suffix);
+char				*remove_substr(char *substr, char *old_str);
+
 
 //BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -247,7 +251,7 @@ void				tokenize_strings(t_lexer *lexer, \
 void				tokenizer(t_lexer *lexer, char **input);
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(t_token_type type, char *value);
-void				create_args(t_token *token, char *buf, int space_pos);
+void				get_token_values(t_token *token, char *buf, int space_pos);
 void				create_redirection_args(t_token *token, char *buf);
 void				organize_tokens(t_lexer *lexer, t_token *tokens);
 char				*get_all_flags(char *args, char *token_flags, \
@@ -307,3 +311,5 @@ void				redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env);
 void				init_redirct_in(t_ast *ast, t_params *p, t_env *env);
 void				redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env);
 void				init_redirct_out(t_ast *ast, t_params *p, t_env *env);
+void				ft_lstadd_back(t_list **lst, t_list *new);
+

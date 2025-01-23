@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/03 13:47:27 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:39:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,27 @@ void	print_ast(t_ast *node, int depth)
 	printf("node args: '%s', ", data->args);
 	printf("node flags: '%s', ", data->flags);
 	printf("Node type: '%d'\n", data->type);
+	/* t_redirect_file	*redirection;
+	t_list			*infiles;
+	t_list			*outfiles;
+	outfiles = data->outfiles;
+	infiles = data->infiles;
+	printf("Outfiles:\n");
+	while (outfiles)
+	{
+		redirection = (t_redirect_file *)outfiles->content;
+		if (redirection)
+			printf("Value: %s, Type: %d\n", redirection->value, redirection->type);
+		outfiles = outfiles->next;
+	}
+	printf("Infiles:\n");
+	while (infiles)
+	{
+		redirection = (t_redirect_file *)infiles->content;
+		if (redirection)
+			printf("Value: %s, Type: %d\n", redirection->value, redirection->type);
+		infiles = infiles->next;
+	} */
 	print_ast(node->left, depth + 1);
 	print_ast(node->right, depth + 1);
 }
@@ -78,9 +99,42 @@ void	handle_input(t_env *env, char *input)
 	t_params p;
 
 	tokens = lexer(input);
+	/* int	i = 0;
+	while (tokens)
+	{
+		printf("Token %d:\n", i++);
+		printf("	Cmd: %s\n", tokens->cmd);
+		printf("	Flags: %s\n", tokens->flags);
+		printf("	Args: %s\n", tokens->args);
+
+		t_redirect_file	*redirection;
+		t_list			*infiles;
+		t_list			*outfiles;
+
+		outfiles = tokens->outfiles;
+		infiles = tokens->infiles;
+
+		printf("	Outfiles:\n");
+		while (outfiles)
+		{
+			redirection = (t_redirect_file *)outfiles->content;
+			if (redirection)
+				printf("		Value: %s, Type: %d\n", redirection->value, redirection->type);
+			outfiles = outfiles->next;
+		}
+		printf("	Infiles:\n");
+		while (infiles)
+		{
+			redirection = (t_redirect_file *)infiles->content;
+			if (redirection)
+				printf("		Value: %s, Type: %d\n", redirection->value, redirection->type);
+			infiles = infiles->next;
+		}
+		tokens = tokens->next;
+	}
+	exit(0); */
 	ast = parsing(tokens, env);
 	print_ast(ast, 0);
-	exit(0);
 	p.total_cmds = count_ast_nodes(ast);
 	printf("numero de comandos '%d'\n", p.total_cmds);
 	p.env = init_env(env);

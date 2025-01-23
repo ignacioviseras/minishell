@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_signals.c                                   :+:      :+:    :+:   */
+/*   utils09.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/22 17:25:40 by drestrep         ###   ########.fr       */
+/*   Created: 2025/01/22 17:28:59 by drestrep          #+#    #+#             */
+/*   Updated: 2025/01/22 17:29:11 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	signals_handler(int sig)
+int	is_alpha(char c)
 {
-	if (sig == SIGINT)
-	{
-		printf("\n");
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		g_exit_status = 130;
-	}
-	if (sig == SIGQUIT)
-		exit(0);
+	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }
 
-void	handle_signals(void)
+int	is_number(char c)
 {
-	signal(SIGINT, signals_handler);
-	signal(SIGQUIT, signals_handler);
+	return (c >= '0' && c <= '9');
+}
+
+int	is_alnum(char c)
+{
+	return (is_alpha(c) || is_number(c));
 }
