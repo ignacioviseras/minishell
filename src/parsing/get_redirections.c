@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 19:13:41 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 14:55:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:54:18 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,30 +45,30 @@ int	is_redirection(char *str, int i)
 	return (args);
 } */
 
-void	manage_redirection(t_token *token, t_redirect_file *redirection)
+void	manage_redirection(t_token *token, t_redirect_file *redir)
 {
 	t_list			*new_node;
 
 	new_node = ft_malloc(sizeof(t_list));
-	if (redirection->value[0] == '>')
+	if (redir->value[0] == '>')
 	{
-		new_node->content = redirection;
+		new_node->content = redir;
 		new_node->next = NULL;
 		ft_lstadd_back(&token->outfiles, new_node);
-		if (redirection->value[1] == '>')
-			redirection->type = APPEND;
+		if (redir->value[1] == '>')
+			redir->type = APPEND;
 		else
-			redirection->type = WRITE;
+			redir->type = WRITE;
 	}
-	else if (redirection->value[0] == '<')
+	else if (redir->value[0] == '<')
 	{
-		new_node->content = redirection;
+		new_node->content = redir;
 		new_node->next = NULL;
 		ft_lstadd_back(&token->infiles, new_node);
-		if (redirection->value[1] == '<')
-			redirection->type = HEREDOC;
+		if (redir->value[1] == '<')
+			redir->type = HEREDOC;
 		else
-			redirection->type = INFILE;
+			redir->type = INFILE;
 	}
 }
 
@@ -120,4 +120,5 @@ void	get_redirections(t_token *token)
 		else
 			i++;
 	}
+	free(redir);
 }
