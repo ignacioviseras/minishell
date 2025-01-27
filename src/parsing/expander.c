@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/23 16:43:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:26:58 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,14 @@ char	*get_command(char *full_cmd)
 	return (cmd);
 }
 
-int	compute_expand_size(char *cmd, char **keys, char **values, int keys_nbr)
+char	*get_flags_or_args(t_token *token, char *var)
 {
-	int	original_len;
-	int	values_len;
-	int	keys_len;
+	char	*new_var;
 
-	original_len = ft_strlen(cmd);
-	values_len = ft_strlen_v2(values);
-	keys_len = ft_strlen_v2(keys);
-	return (original_len - keys_len + values_len - keys_nbr + 1);
+	free(var);
+	new_var = ft_strdup(token->full_cmd + ft_strlen(token->cmd));
+	new_var = skip_args_spaces(new_var);
+	return (new_var);
 }
 
 void	replace_var(t_token *token, t_env *env)
@@ -63,22 +61,15 @@ void	replace_var(t_token *token, t_env *env)
 	keys_nbr = get_nbr_of_keys(token->full_cmd);
 	keys = get_keys(token->full_cmd, keys_nbr);
 	values = get_values(env, keys, &keys_nbr);
-	size = compute_expand_size(token->full_cmd, keys, values, keys_nbr);
+	size = ft_strlen(token->full_cmd) - ft_strlen_v2(keys) \
+	+ ft_strlen_v2(values) - keys_nbr + 1;
 	token->full_cmd = expand_token(token, values, size);
 	free(token->cmd);
 	token->cmd = get_command(token->full_cmd);
 	if (token->args)
-	{
-		free(token->args);
-		token->args = ft_strdup(token->full_cmd + ft_strlen(token->cmd));
-		token->args = skip_args_spaces(token->args);
-	}
+		token->args = get_flags_or_args(token, token->args);
 	if (token->flags)
-	{
-		free(token->flags);
-		token->flags = ft_strdup(token->full_cmd + ft_strlen(token->cmd));
-		token->flags = skip_args_spaces(token->flags);
-	}
+		token->flags = get_flags_or_args(token, token->flags);
 	free_matrix(keys);
 	if (ft_strcmp(*values, ""))
 		free_matrix(values);

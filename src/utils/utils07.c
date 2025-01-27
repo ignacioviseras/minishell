@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:11:16 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/23 16:22:58 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:31:40 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,52 +25,18 @@ int	skip_quoted_string(char	*str, int counter)
 	return (++counter);
 }
 
-/* char	*get_unquoted_str(char *str)
-{
-	char	*unquoted_str;
-	char	quote;
-	int		i;
-
-	i = 1;
-	while (str[i + 1] != quote)
-		i++;
-	unquoted_str = ft_malloc((i + 1) * sizeof(char));
-	unquoted_str[0] = str[1];
-	i = 2;
-	while (str[i] != quote)
-	{
-		unquoted_str[i - 1] = str[i];
-		i++;
-	}
-	unquoted_str[i - 1] = '\0';
-	return (unquoted_str);
-} */
-
 char	*get_unquoted_str(char *str)
 {
 	char	*unquoted_str;
-	char	quote;
-	int		i;
 	int		nbr_of_quotes;
+	int		i;
 
-	i = 0;
-	nbr_of_quotes = 0;
 	if (findchar(str, '"') < 0 && findchar(str, '\'') < 0)
-		return (str);
-	printf("String: %s\n", str);
-	while (str[i])
-	{
-		if (str[i] == '"' || str[i] == '\'')
-		{
-			quote = str[i++];
-			while (str[i] != quote)
-				i++;
-			nbr_of_quotes += 2;
-		}
-		i++;
-	}
-	unquoted_str = ft_malloc((i - nbr_of_quotes + 1) * sizeof(char));
+		return (ft_strdup(str));
 	i = 0;
+	nbr_of_quotes = count_quotes(str);
+	unquoted_str = ft_malloc((ft_strlen(str) - nbr_of_quotes + 1) \
+	* sizeof(char));
 	nbr_of_quotes = 0;
 	while (str[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:04:57 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/23 11:53:16 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:34:34 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,6 @@ void	organize_tokens(t_lexer *lexer, t_token *tokens)
 	start = tokens;
 	while (tokens)
 	{
-		/* if (tokens->type == 0)
-		{
-			
-		} */
 		if (tokens->type == 0 && tokens->next \
 		&& findchar(tokens->args, '-' >= 0))
 			tokens->flags = get_all_flags(tokens->args, \
@@ -117,13 +113,6 @@ void	organize_tokens(t_lexer *lexer, t_token *tokens)
 	}
 	tokens = start;
 	(void)lexer;
-	/* while (tokens)
-	{
-		printf("%s\n", tokens->full_cmd);
-		tokens = tokens->next;
-	} */
-	//printf("SALE\n");
-	//exit(0);
 }
 
 /* void	organize_tokens(t_lexer *lexer, t_token *tokens)

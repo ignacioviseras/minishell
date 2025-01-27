@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 19:33:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/22 17:51:27 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:15:26 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,13 @@ t_token	*create_token(t_token_type type, char *buf)
 	token->full_cmd = ft_strdup(buf);
 	token->type = type;
 	space_pos = findchar(buf, ' ');
-	if ((space_pos > 0 && space_pos + 1 != (int)ft_strlen(buf)) ||
-		findchar(token->full_cmd, '>') || findchar(token->full_cmd, '<'))
-		get_token_values(token, buf, space_pos);
+	if (((space_pos > 0 && space_pos + 1 != (int)ft_strlen(buf)) || \
+		(findchar(token->full_cmd, '>') || findchar(token->full_cmd, '<'))) && \
+		token->type == 0)
+	{
+		get_redirections(token);
+		get_cmd_flags_and_args(token, token->full_cmd);
+	}
 	else
 		token->cmd = ft_strdup(buf);
 	token->next = NULL;
