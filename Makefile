@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/01/27 14:16:17 by drestrep         ###   ########.fr        #
+#    Updated: 2025/01/27 17:30:09 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ PARSING_SRC		=	lexer.c \
 					get_keys.c \
 					get_values.c \
 					get_nbr_of_keys.c \
-					token_utils.c \
+					create_and_add_token.c \
 					get_redirections.c \
 					get_cmd_flags_and_args.c \
 

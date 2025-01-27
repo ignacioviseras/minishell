@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 19:13:41 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 15:54:18 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:00:15 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,11 @@ void	get_redirections(t_token *token)
 	int				i;
 
 	i = 0;
-	redir = ft_malloc(sizeof(t_redirect_file));
 	while (token->full_cmd[i])
 	{
 		if (token->full_cmd[i] == '>' || token->full_cmd[i] == '<')
 		{
+			redir = ft_malloc(sizeof(t_redirect_file));
 			get_redirection(redir, token->full_cmd);
 			manage_redirection(token, redir);
 			token->full_cmd = remove_substr(redir->value, token->full_cmd);
@@ -120,5 +120,4 @@ void	get_redirections(t_token *token)
 		else
 			i++;
 	}
-	free(redir);
 }

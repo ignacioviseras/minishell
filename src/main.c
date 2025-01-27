@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 15:53:43 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:29:52 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,9 @@ void	handle_input(t_env *env, char *input)
 	t_params p;
 
 	tokens = lexer(input);
-	
-	//exit(0);
 	ast = parsing(tokens, env);
-	/* while (tokens)
+	/* int	i = 0;
+	while (tokens)
 	{
 		printf("Token %d:\n", i++);
 		printf("	Cmd: %s\n", tokens->cmd);
@@ -110,22 +109,29 @@ void	handle_input(t_env *env, char *input)
 		printf("	Args: %s\n", tokens->args);
 
 		t_redirect_file	*redirection;
+		t_list			*infiles;
+		t_list			*outfiles;
 
-		redirection = tokens->infiles->content;
-		if (tokens->infiles->content != NULL || tokens->outfiles->content != NULL)
-		{
+		outfiles = tokens->outfiles;
+		infiles = tokens->infiles;
 
-		}
-		
-		
 		printf("	Outfiles:\n");
-		while (tokens->outfiles)while (tokens->outfiles)
+		while (outfiles)
 		{
-			redirection = (t_redirect_file *)tokens->outfiles->content;
+			redirection = (t_redirect_file *)outfiles->content;
 			if (redirection)
 				printf("		Value: %s, Type: %d\n", redirection->value, redirection->type);
-			tokens->outfiles = tokens->outfiles->next;
+			outfiles = outfiles->next;
 		}
+		printf("	Infiles:\n");
+		while (infiles)
+		{
+			redirection = (t_redirect_file *)infiles->content;
+			if (redirection)
+				printf("		Value: %s, Type: %d\n", redirection->value, redirection->type);
+			infiles = infiles->next;
+		}
+		tokens = tokens->next;
 	} */
 	print_ast(ast, 0);
 	p.total_cmds = count_ast_nodes(ast);
