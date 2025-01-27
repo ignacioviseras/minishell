@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/12 16:20:33 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:08:03 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,14 +177,10 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
 
     fd_file = open_heredoc();
 	printf("type '%d'\n", data->type);
-    if (node->right->data != NULL)
-    {
-        t_token *data;
+    t_token *data;
 
-        data = (t_token *)(node->right->data);
-        write_heredoc(fd_file, data->cmd, p->env);
-
-    }
+    data = (t_token *)(node->data);
+    write_heredoc(fd_file, data->cmd, p->env);
     close(fd_file);
     original_stdin = dup(STDIN_FILENO);
     if (original_stdin < 0)

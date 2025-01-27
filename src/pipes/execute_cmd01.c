@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/17 22:18:54 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/27 19:29:48 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,39 @@ void init_execute(t_token *data, t_params *p)
 		tramited("", p, data);
 	return;
 }
+int have_redirection(t_token *token)
+{
+    t_redirect_file	*redirection;
+
+    if (token->outfiles)
+    {
+        redirection = (t_redirect_file *)token->outfiles->content;
+        if (redirection)
+            return (redirection->type);
+    }    
+    else if (token->infiles)
+    {
+        redirection = (t_redirect_file *)token->infiles->content;
+        if (redirection)
+            return (redirection->type);
+    }
+    return (-1);
+}
+
+void before_execute(t_ast *node, t_params *p, t_env *env)
+{
+    t_token *data;
+    int     have_redirect;
+
+    data = (t_token *)(node->data);
+    have_redirect = have_redirection(data);
+    printf("accedes a execute_node '%d'\n", have_redirect);
+    if (have_redirect != -1)
+        handle_redirection(node, p, env, have_redirect);//ejecucion de las redirecciones
+    else
+        execute_node(node, p, env);
+
+}
 
 void execute_node(t_ast *node, t_params *p, t_env *env)
 {
@@ -71,6 +104,7 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
     int     builtin;
     int     pid;
     int     i;
+
 
     data = (t_token *)(node->data);
     builtin = is_builtin(data->cmd);
@@ -93,11 +127,6 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
             }
             if (data && data->type == TOKEN_PIPE)
                 handle_pipe(node, p, env);  // mueve la pipe es para casos dnd las redirect estan por el centro
-            else if (data && (data->type == TOKEN_HEREDOC || data->type == TOKEN_INPUT || 
-                    data->type == TOKEN_OUTPUT || data->type == TOKEN_APPEND))
-            // else if (data && (ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
-            //                 ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
-                handle_redirection(node, p, env);//ejecucion de las redirecciones
             else if (data && builtin == 0)
             {
                 build_switch(env, node, data);
@@ -133,5 +162,6 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
             exit(EXIT_FAILURE);
         }
     }
+
 
 }

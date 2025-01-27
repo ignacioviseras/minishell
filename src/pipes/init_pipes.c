@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/17 18:09:17 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/27 19:31:25 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@ void	execute_ast(t_ast *node, t_params *p, t_env *env)
     if (data->type == TOKEN_PIPE)
     // if (ft_strcmp(data->cmd, "|") == 0)
 		handle_pipe(node, p, env);//manejo de la pipe
-    else if (data->type == TOKEN_HEREDOC || data->type == TOKEN_INPUT || 
-        data->type == TOKEN_OUTPUT || data->type == TOKEN_APPEND)
-    // else if ((ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
-    //     ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
-        handle_redirection(node, p, env);
+    // else if (data->type == TOKEN_HEREDOC || data->type == TOKEN_INPUT || 
+    //     data->type == TOKEN_OUTPUT || data->type == TOKEN_APPEND)
+    // // else if ((ft_strcmp(data->cmd, "<<") == 0 || ft_strcmp(data->cmd, "<") == 0 || 
+    // //     ft_strcmp(data->cmd, ">") == 0 || ft_strcmp(data->cmd, ">>") == 0))
+    //     handle_redirection(node, p, env);
 	else
-		execute_node(node, p, env);//funcionamiento del nodo
+		before_execute(node, p, env);//funcionamiento del nodo
+		// execute_node(node, p, env);//funcionamiento del nodo
 }
 
 char *create_char(t_env *env)
