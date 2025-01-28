@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/27 20:05:36 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:49:45 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,36 @@
 
 void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
+    int fd;
     int original_stdout;
-    int fd = open(data->cmd, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    t_redirect_file *outfile;
+    t_list *outfiles;
+
+    fd = -1;
     original_stdout = dup(STDOUT_FILENO);
-    if (fd < 0) {
-        perror("open output");
+    if (original_stdout < 0)
+    {
+        perror("dup original stdout");
         exit(EXIT_FAILURE);
     }
-    if (dup2(fd, STDOUT_FILENO) < 0) {
-        perror("dup2 output");
+    outfiles = data->outfiles;
+    while (outfiles)
+    {
+        outfile = (t_redirect_file *)outfiles->content;
+        dprintf(2, "outfile->value '%s'\n", outfile->value);
+        fd = open(outfile->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (fd < 0)
+        {
+            perror("open append");
+            exit(EXIT_FAILURE);
+        }
+        if (outfiles->next)
+            close(fd);
+        outfiles = outfiles->next;
+    }
+    if (dup2(fd, STDOUT_FILENO) < 0)
+    {
+        perror("dup2 append");
         close(fd);
         exit(EXIT_FAILURE);
     }
@@ -30,7 +51,7 @@ void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
     execute_node(ast, p, env);
     if (dup2(original_stdout, STDOUT_FILENO) < 0)
     {
-        perror("restore stdin");
+        perror("restore stdout");
         exit(EXIT_FAILURE);
     }
     close(original_stdout);

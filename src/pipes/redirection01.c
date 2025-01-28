@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 19:19:08 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:50:21 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,12 @@
 // }
 void redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
-    int fd = -1;
+    int fd;
     int original_stdin;
     t_redirect_file *infile;
     t_list *infiles;
 
+    fd = -1;
     original_stdin = dup(STDIN_FILENO);
     if (original_stdin < 0)
     {
@@ -57,9 +58,6 @@ void redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env)
     while (infiles)
     {
         infile = (t_redirect_file *)infiles->content;
-        dprintf(2, "infile->value '%s'\n", infile->value);
-
-        // Abrir archivo en modo lectura
         fd = open(infile->value, O_RDONLY);
         if (fd < 0)
         {
