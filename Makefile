@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/01/27 17:30:09 by drestrep         ###   ########.fr        #
+#    Updated: 2025/01/28 17:59:06 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,8 @@ UTILS_SRC		=	utils01.c \
 					skip_spaces.c \
 					remove_quotes.c \
 					mem_alloc.c \
-					frees.c \
+					frees01.c \
+					frees02.c \
 					gnl.c \
 
 OBJS			=	${PARSING:.c=.o} \

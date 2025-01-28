@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 19:13:41 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 17:00:15 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:53:19 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,7 @@ int	is_redirection(char *str, int i)
 		return (0);
 }
 
-/* char	*get_args(t_token *token)
-{
-	int		i;
-	int		redirect;
-	char	*args;
-
-	i = 0;
-	args = NULL;
-	while (token->full_cmd[i])
-	{
-		redirect = is_redirection(token->full_cmd, i);
-		if (redirect > 0)
-		{
-			i += redirect;
-			find_args(token, token->full_cmd);
-		}
-		i++;
-	}
-	return (args);
-} */
-
-void	manage_redirection(t_token *token, t_redirect_file *redir)
+void	classify_redirection(t_token *token, t_redirect_file *redir)
 {
 	t_list			*new_node;
 
@@ -93,11 +72,28 @@ void	get_redirection(t_redirect_file *redir, char *full_cmd)
 	}
 	else
 	{
-		while (is_alnum(full_cmd[i + j]) \
-		|| full_cmd[i + j] == '$' || full_cmd[i + j] == '_')
+		while (full_cmd[i + j] && valid_char_filename(full_cmd[i + j]))
 			j++;
 		redir->value = ft_substr(full_cmd, i, j);
 	}
+}
+
+char	*remove_redirection_operators(char *str)
+{
+	char	*new_redir;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (!valid_char_filename(str[i]))
+		i++;
+	new_redir = ft_malloc((ft_strlen(str + i) + 1) * sizeof(char));
+	while (str[i])
+		new_redir[j++] = str[i++];
+	new_redir[j] = '\0';
+	free(str);
+	return (new_redir);
 }
 
 void	get_redirections(t_token *token)
@@ -112,8 +108,9 @@ void	get_redirections(t_token *token)
 		{
 			redir = ft_malloc(sizeof(t_redirect_file));
 			get_redirection(redir, token->full_cmd);
-			manage_redirection(token, redir);
+			classify_redirection(token, redir);
 			token->full_cmd = remove_substr(redir->value, token->full_cmd);
+			redir->value = remove_redirection_operators(redir->value);
 			while (token->full_cmd[i] && token->full_cmd[i] == ' ')
 				i++;
 		}

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 15:05:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:53:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,7 @@ int					ft_isspace(char c);
 char				*trim_sp(const char *str);
 char				*append_str(char *base, char *suffix);
 char				*remove_substr(char *substr, char *old_str);
+int					valid_char_filename(char c);
 
 
 //BUILT_INS

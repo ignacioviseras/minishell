@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 17:29:52 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:51:21 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,8 @@ void	handle_input(t_env *env, char *input)
 			infiles = infiles->next;
 		}
 		tokens = tokens->next;
-	} */
+	}
+	exit(0); */
 	print_ast(ast, 0);
 	p.total_cmds = count_ast_nodes(ast);
 	printf("numero de comandos '%d'\n", p.total_cmds);
