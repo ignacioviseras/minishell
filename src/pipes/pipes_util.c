@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 19:50:01 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 21:47:15 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int open_heredoc()
 
 //----------------------------------
 
-void write_heredoc(int fd_file, char *delimiter, char **env)
+void write_heredoc(int fd_file, char *delimiter)
 {
     char *buffer;
     ssize_t content;
@@ -145,12 +145,7 @@ void write_heredoc(int fd_file, char *delimiter, char **env)
         }
         if (ft_strlen(buffer) > 0)
         {
-            //if $
-            if (ft_strchr(buffer, '/') == 0)
-                printf("dato '%s'", env[0]);
-            //     content = write(fd_file, replace_env_vars(buffer, env), ft_strlen(buffer));
-            else
-                content = write(fd_file, buffer, ft_strlen(buffer));
+            content = write(fd_file, buffer, ft_strlen(buffer));
             if (content < 0)
             {
                 perror("write to heredoc file");
@@ -169,18 +164,36 @@ void write_heredoc(int fd_file, char *delimiter, char **env)
     }
 }
 
+void delete_heredoc(t_params *p)
+{
+    int i;
+    char *rm[4];
+
+    rm[0] = "/bin/rm";
+    rm[1] = "-f";
+    rm[2] = ".heredoc.tmp";
+    rm[3] = NULL;
+    i = execve("/bin/rm", rm, p->env);
+    if (i < 0)
+    {
+        perror("execve");
+        g_exit_status = 126;
+        exit(126);
+    }
+}
+
 void handle_heredoc(t_token *data, t_ast *node, t_params *p)
 {
     int fd_file;
     int original_stdin;
-    //char *line;
+    t_redirect_file *heredocs;
+    t_list *heredoc;
 
+    heredoc = data->infiles;
+    heredocs = (t_redirect_file *)heredoc->content;
     fd_file = open_heredoc();
-	printf("type '%d'\n", data->type);
-   // t_token *data;
-
     data = (t_token *)(node->data);
-    write_heredoc(fd_file, data->cmd, p->env);
+    write_heredoc(fd_file, heredocs->value);
     close(fd_file);
     original_stdin = dup(STDIN_FILENO);
     if (original_stdin < 0)
@@ -194,14 +207,6 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
         perror("open heredoc file");
         exit(EXIT_FAILURE);
     }
-    // line = gnl(fd_file);
-    // while (line != NULL)
-    // {
-    //   printf("%s", line);
-    //   free(line);
-    //   line = gnl(fd_file);
-    // }
-        
     if (dup2(fd_file, STDIN_FILENO) < 0)
     {
         perror("dup2 heredoc");
@@ -213,6 +218,7 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
         perror("restore stdin");
         exit(EXIT_FAILURE);
     }
+    delete_heredoc(p);
     close(original_stdin);
 }
 

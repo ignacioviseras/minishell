@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/27 20:07:36 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/28 21:57:35 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
 {
     t_token *data;
     data = (t_token *)(node->data);
-    printf("accedes a handle_redirection '%d'\n", type);
     if (data == NULL)
         return;
     if (type == INFILE) // <
@@ -64,13 +63,11 @@ void handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
         init_redritect_append(node, p, env);
     else if (type == HEREDOC) // <<
     {
+        printf("after heredoc '%s'\n", p->cmd_path);
         handle_heredoc(data, node, p);
-        execute_node(node, p, env);
+        if (data->cmd != NULL)
+            execute_node(node, p, env);
     }
-    // if (node->left)
-    //     handle_redirection(node->left, p, env);
-    // if (node->right)
-    //     handle_redirection(node->right, p, env);
 }
 
 int is_builtin(char *cmd)
