@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 19:13:41 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/28 17:53:19 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:47:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,9 @@ void	get_redirections(t_token *token)
 	i = 0;
 	while (token->full_cmd[i])
 	{
-		if (token->full_cmd[i] == '>' || token->full_cmd[i] == '<')
+		if (token->full_cmd[i] == '\'' || token->full_cmd[i] == '"')
+			i = skip_quoted_string(token->full_cmd, i);
+		else if (token->full_cmd[i] == '>' || token->full_cmd[i] == '<')
 		{
 			redir = ft_malloc(sizeof(t_redirect_file));
 			get_redirection(redir, token->full_cmd);
