@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/28 17:51:21 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:03:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	print_ast(t_ast *node, int depth)
 	printf("node args: '%s', ", data->args);
 	printf("node flags: '%s', ", data->flags);
 	printf("Node type: '%d'\n", data->type);
-	/* t_redirect_file	*redirection;
+	t_redirect_file	*redirection;
 	t_list			*infiles;
 	t_list			*outfiles;
 	outfiles = data->outfiles;
@@ -71,7 +71,7 @@ void	print_ast(t_ast *node, int depth)
 		if (redirection)
 			printf("Value: %s, Type: %d\n", redirection->value, redirection->type);
 		infiles = infiles->next;
-	} */
+	} 
 	print_ast(node->left, depth + 1);
 	print_ast(node->right, depth + 1);
 }

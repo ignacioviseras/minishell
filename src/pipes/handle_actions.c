@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/17 18:10:18 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:07:36 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,57 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 	execute_ast(node->right, p, env);//procesar el nodo recursivamente lado derch
 }
 
-void handle_redirection(t_ast *node, t_params *p, t_env *env)
+// void handle_redirection(t_ast *node, t_params *p, t_env *env)
+// {
+//     t_token *data;
+
+//     data = (t_token *)(node->data);
+//     if (data == NULL)
+//         return;
+//     //if (ft_strcmp(data->cmd, "<") == 0)
+//     // else if (ft_strcmp(data->cmd, ">") == 0)
+//     //else if (ft_strcmp(data->cmd, ">>") == 0)
+//     //else if (ft_strcmp(data->cmd, "<<") == 0)
+//     if (data->type == TOKEN_INPUT)
+//         init_redirct_in(node, p, env);
+//     else if (data->type == TOKEN_OUTPUT)
+//         init_redirct_out(node, p, env);
+//     else if (data->type == TOKEN_APPEND)
+//         init_redritect_append(node, p, env);
+//     else if (data->type == TOKEN_HEREDOC)
+//     {
+//         handle_heredoc(data, node, p);
+//         execute_node(node->right, p, env);
+//     }
+//     // if (node->left)
+//     //     handle_redirection(node->left, p, env);
+//     // if (node->right)
+//     //     handle_redirection(node->right, p, env);
+// }
+
+void handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
 {
     t_token *data;
-
     data = (t_token *)(node->data);
+    printf("accedes a handle_redirection '%d'\n", type);
     if (data == NULL)
         return;
-    //if (ft_strcmp(data->cmd, "<") == 0)
-    // else if (ft_strcmp(data->cmd, ">") == 0)
-    //else if (ft_strcmp(data->cmd, ">>") == 0)
-    //else if (ft_strcmp(data->cmd, "<<") == 0)
-    if (data->type == TOKEN_INPUT)
+    if (type == INFILE) // <
         init_redirct_in(node, p, env);
-    else if (data->type == TOKEN_OUTPUT)
+    else if (type == WRITE) // >
         init_redirct_out(node, p, env);
-    else if (data->type == TOKEN_APPEND)
+    else if (type == APPEND) // >>
         init_redritect_append(node, p, env);
-    else if (data->type == TOKEN_HEREDOC)
+    else if (type == HEREDOC) // <<
     {
         handle_heredoc(data, node, p);
-        execute_node(node->right, p, env);
+        execute_node(node, p, env);
     }
     // if (node->left)
     //     handle_redirection(node->left, p, env);
     // if (node->right)
     //     handle_redirection(node->right, p, env);
 }
-
 
 int is_builtin(char *cmd)
 {

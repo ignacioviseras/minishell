@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/28 17:53:39 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:03:22 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,8 @@ char				*access_absolute(char *path);
 char				*access_validate(char **path, char *comand);
 void				validate_comand(char **comand_splited);
 char				*load_param(char **path, char *comand);
-void				handle_redirection(t_ast *node, t_params *p, t_env *env);
+void				before_execute(t_ast *node, t_params *p, t_env *env);
+void				handle_redirection(t_ast *node, t_params *p, t_env *env, int type);
 int					is_builtin(char *cmd);
 void				redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env);
 void				init_redritect_append(t_ast *ast, t_params *p, t_env *env);
