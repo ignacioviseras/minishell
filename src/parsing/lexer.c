@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 17:56:18 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:12:37 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	input_checker(t_lexer lexer, char *input, int end)
 		transition_table(lexer.automaton_status, get_symbol(input[i]));
 		i++;
 		if (input[i] == '\0' && lexer.automaton_status != 0 \
-			&& lexer.automaton_status < 9)
+			&& lexer.automaton_status <= 9)
 		{
 			printf("syntax error\n");
 			return (0);
