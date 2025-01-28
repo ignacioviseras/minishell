@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:12:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 14:44:42 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:58:26 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 	}
 	if (!token->cmd)
 	{
-		while (is_alpha(full_cmd[i]) || \
+		while (is_alpha(full_cmd[i]) || full_cmd[i] == '/' || \
 		full_cmd[i] == '_' || full_cmd[i] == '$')
 			i++;
 		token->cmd = ft_substr(full_cmd, 0, i);
