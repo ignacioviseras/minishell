@@ -6,15 +6,11 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 21:47:15 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/28 22:01:32 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
-
-//------------------------REDIRECCIONES------------------------------
-
-
 
 int open_heredoc()
 {
@@ -222,4 +218,3 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p)
     close(original_stdin);
 }
 
-//------------------------------------------------------

@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/27 19:29:48 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/28 22:03:27 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void before_execute(t_ast *node, t_params *p, t_env *env)
 
     data = (t_token *)(node->data);
     have_redirect = have_redirection(data);
-    printf("accedes a execute_node '%d'\n", have_redirect);
     if (have_redirect != -1)
         handle_redirection(node, p, env, have_redirect);//ejecucion de las redirecciones
     else
@@ -133,19 +132,7 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
                 exit(0);
             }
             else
-            {
-                // t_token *token;
-
-                // token = (t_token *)(node->right->data);
-                // dprintf(2, "node left '%s'\n", token->cmd);
-                // if (node->right != NULL)
-                // {
-                //     dprintf(2, "llegas aqui perr=");
-                //     init_redirct_out(node, p, env);
-                // }
                 init_execute(data, p);//ejecucion normal
-            }
-
         }
         else if (pid > 0)
         {
@@ -162,6 +149,4 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
             exit(EXIT_FAILURE);
         }
     }
-
-
 }

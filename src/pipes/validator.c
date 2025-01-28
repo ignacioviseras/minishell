@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/11 20:12:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/28 22:04:58 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,6 @@ void validate_comand(char **comand_splited)
 	exit(1);
 }
 
-
-/*
-	creo q tendre q actualizar esto
-*/
 char	*load_param(char **path, char *comand)
 {
 	char	**comand_splited;

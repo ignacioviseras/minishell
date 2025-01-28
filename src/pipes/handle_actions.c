@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 21:57:35 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/28 22:01:09 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,6 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 	p->fd_index += 2;//mover index para extemos de los dups
 	execute_ast(node->right, p, env);//procesar el nodo recursivamente lado derch
 }
-
-// void handle_redirection(t_ast *node, t_params *p, t_env *env)
-// {
-//     t_token *data;
-
-//     data = (t_token *)(node->data);
-//     if (data == NULL)
-//         return;
-//     //if (ft_strcmp(data->cmd, "<") == 0)
-//     // else if (ft_strcmp(data->cmd, ">") == 0)
-//     //else if (ft_strcmp(data->cmd, ">>") == 0)
-//     //else if (ft_strcmp(data->cmd, "<<") == 0)
-//     if (data->type == TOKEN_INPUT)
-//         init_redirct_in(node, p, env);
-//     else if (data->type == TOKEN_OUTPUT)
-//         init_redirct_out(node, p, env);
-//     else if (data->type == TOKEN_APPEND)
-//         init_redritect_append(node, p, env);
-//     else if (data->type == TOKEN_HEREDOC)
-//     {
-//         handle_heredoc(data, node, p);
-//         execute_node(node->right, p, env);
-//     }
-//     // if (node->left)
-//     //     handle_redirection(node->left, p, env);
-//     // if (node->right)
-//     //     handle_redirection(node->right, p, env);
-// }
 
 void handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
 {
