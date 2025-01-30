@@ -6,56 +6,56 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/12 13:48:53 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:30:04 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-
-int validate_export(char *key, char *value)
+int	validate_export(char *key, char *value)
 {
-
 	if (is_valid(key) == 1)
 	{
 		if (value == NULL)
 		{
-			printf("bash: export: `%s': not a valid identifier\n", key);
+			printf("bash: export: `%s':", key);
+			printf(" not a valid identifier\n");
 			return (1);
 		}
 		else
 		{
-			printf("bash: export: `%s=%s': not a valid identifier\n",\
-				key, value);
+			printf("bash: export: `%s=%s':", key, value);
+			printf(" not a valid identifier\n");
 			return (1);
 		}
 	}
 	return (0);
 }
 
-// char *get_value(t_env **envi, char *find)
-// {
-//     t_env *current = *envi;
-    
-//     while (current)
-//     {
-//         if (ft_strcmp(find, current->key) == 0)
-//             return (current->value);
-//         current = current->next;
-//     }
-//     return (NULL);
-// }
-
-void export_actions(t_token *tokens, t_env *env)
+void	handle_variable_export(char *var, t_env *env, char *args)
 {
-	char	**splt_vars;
 	char	*var_name;
 	char	*var_content;
+
+	var_name = get_var(var);
+	var_content = get_content_var(args);
+	if (validate_export(var_name, var_content) == 0)
+		add_bottom(&env, new_node(var_name, var_content, 0));
+	free(var_name);
+	free(var_content);
+}
+
+void	export_actions(t_token *tokens, t_env *env)
+{
 	int		x;
+	char	**splt_vars;
 
 	splt_vars = ft_split(tokens->args, ' ');
 	if (!splt_vars)
-		return;//TODO mirar esto dara errores el control del malloc
+	{
+		free(splt_vars);
+		return ;
+	}
 	x = -1;
 	while (splt_vars[++x])
 	{
@@ -65,14 +65,7 @@ void export_actions(t_token *tokens, t_env *env)
 				add_bottom(&env, new_node(splt_vars[x], NULL, 1));
 		}
 		else
-		{
-			var_name = get_var(splt_vars[x]);
-            var_content = get_content_var(tokens->args);
-            if (validate_export(var_name, var_content) == 0)
-                add_bottom(&env, new_node(var_name, var_content, 0));
-			free(var_name);
-            free(var_content);
-		}
+			handle_variable_export(splt_vars[x], env, tokens->args);
 	}
 	free_matrix(splt_vars);
 }
@@ -90,7 +83,7 @@ void	command_export(t_token *tokens, t_env *env)
 				if (flags_validator(tokens->flags, "f n p") == 0)
 				{
 					printf("flags are not implemented\n");
-					return;
+					return ;
 				}
 			}
 		}
@@ -101,12 +94,15 @@ void	command_export(t_token *tokens, t_env *env)
 
 void	unset_actions(t_token *tokens, t_env *env)
 {
-	char **splt_vars;
-	int x;
+	char	**splt_vars;
+	int		x;
 
 	splt_vars = ft_split(tokens->args, ' ');
 	if (!splt_vars)
-		return;//TODO mirar esto dara errores el control del malloc
+	{
+		free(splt_vars);
+		return ;
+	}
 	x = -1;
 	while (splt_vars[++x])
 	{
@@ -120,8 +116,8 @@ void	unset_actions(t_token *tokens, t_env *env)
 
 void	command_unset(t_token *tokens, t_env *env)
 {
-	int x;
-	
+	int	x;
+
 	if (tokens->flags)
 	{
 		if (ft_charcmp(tokens->flags[0], '-') == 0)
@@ -131,8 +127,8 @@ void	command_unset(t_token *tokens, t_env *env)
 				printf("flags are not implemented\n");
 			else
 			{
-				printf("bash: unset: -%c: invalid option\n", \
-				tokens->flags[x]);
+				printf("bash: unset: -%c:", tokens->flags[x]);
+				printf(" invalid option\n");
 				printf("unset: usage: unset [-f] [-v] [-n] [name ...]\n");
 			}
 		}

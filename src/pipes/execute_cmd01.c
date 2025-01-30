@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 22:03:27 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:28:07 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,25 @@
 int	tramited(char *path, t_params *p, t_token *t)
 {
 	char		**dir;
+    char        *trim;
 
-	dir = ft_split(path, ':');
-	p->cmd_path = load_param(dir, t->cmd);
-	p->cmd_exec = split_formated(t->full_cmd, ' ');
-	free_matrix(dir);
-	if (p->cmd_path != NULL)
+    dir = ft_split(path, ':');
+    trim = trim_sp(t->full_cmd);
+    if (ft_strcmp(trim, "./minishell") == 0)
+        p->cmd_path = load_param(dir, t->full_cmd);
+    else    
+        p->cmd_path = load_param(dir, t->cmd);
+    p->cmd_exec = split_formated(t->full_cmd, ' ');
+    free(trim);
+    free_matrix(dir);
+    if (p->cmd_path != NULL)
         execute_cmd(p);
-	else
-	{
-		free(p->cmd_path);
-		free_matrix(p->cmd_exec);
-		exit(127);//TODO aqui se tendria q liberar todos los datos
-	}
+    else
+    {
+        free(p->cmd_path);
+        free_matrix(p->cmd_exec);
+        exit(127);
+    }
 	return (0);
 }
 
@@ -55,11 +61,29 @@ void dup_write(t_params *p)
 	}
 }
 
+int	have_path(char **env)
+{
+	int	x;
+
+	x = 0;
+	while (env[x])
+	{
+		if (ft_strncmp("PATH=", env[x], 5) == 0)
+			return (1);
+		x++;
+	}
+	return (0);
+}
+
+
 void init_execute(t_token *data, t_params *p)
 {
-	if (p->env && p->env[0])
+	if (have_path(p->env) == 1)
+	// if (p->env && p->env[0])
 		get_path(p->env, p, data);
 	else if (ft_strchr(data->cmd, '/'))
+		tramited("", p, data);
+    else
 		tramited("", p, data);
 	return;
 }
@@ -90,10 +114,9 @@ void before_execute(t_ast *node, t_params *p, t_env *env)
     data = (t_token *)(node->data);
     have_redirect = have_redirection(data);
     if (have_redirect != -1)
-        handle_redirection(node, p, env, have_redirect);//ejecucion de las redirecciones
+        handle_redirection(node, p, env, have_redirect);
     else
         execute_node(node, p, env);
-
 }
 
 void execute_node(t_ast *node, t_params *p, t_env *env)
@@ -125,14 +148,14 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
                 i++;
             }
             if (data && data->type == TOKEN_PIPE)
-                handle_pipe(node, p, env);  // mueve la pipe es para casos dnd las redirect estan por el centro
+                handle_pipe(node, p, env);
             else if (data && builtin == 0)
             {
                 build_switch(env, node, data);
                 exit(0);
             }
             else
-                init_execute(data, p);//ejecucion normal
+                init_execute(data, p);
         }
         else if (pid > 0)
         {
@@ -143,10 +166,75 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
             else if (WIFSIGNALED(status))
                 g_exit_status = 128 + WTERMSIG(status);
         }
-        else 
+        else
         {
             perror("fork");
             exit(EXIT_FAILURE);
         }
     }
 }
+
+
+// void execute_child_process(t_ast *node, t_params *p, t_env *env, t_token *data, int builtin)
+// {
+//     int i;
+
+//     if (p->fd_index != 0)
+//         dup_read(p);
+//     if (p->fd_index < 2 * (p->total_cmds - 1))
+//         dup_write(p);
+//     i = 0;
+//     while (i < 2 * p->total_cmds)
+//     {
+//         close(p->fd[i]);
+//         i++;
+//     }
+//     if (data && data->type == TOKEN_PIPE)
+//         handle_pipe(node, p, env);
+//     else if (data && builtin == 0)
+//     {
+//         build_switch(env, node, data);
+//         exit(0);
+//     }
+//     else
+//         init_execute(data, p);
+// }
+
+// void parent_process(t_params *p, int pid)
+// {
+//     int status;
+
+//     close(p->fd[p->fd_index + 1]);
+//     waitpid(pid, &status, 0);
+
+//     if (WIFEXITED(status))
+//         g_exit_status = WEXITSTATUS(status);
+//     else if (WIFSIGNALED(status))
+//         g_exit_status = 128 + WTERMSIG(status);
+// }
+
+// void execute_node(t_ast *node, t_params *p, t_env *env)
+// {
+//     t_token *data;
+//     int builtin;
+//     int pid;
+
+//     data = (t_token *)(node->data);
+//     builtin = is_builtin(data->cmd);
+
+//     if (p->total_cmds == 1 && builtin == 0)
+//         build_switch(env, node, data);
+//     else
+//     {
+//         pid = fork();
+//         if (pid == 0)
+//             execute_child_process(node, p, env, data, builtin);
+//         else if (pid > 0)
+//             parent_process(p, pid);
+//         else
+//         {
+//             perror("fork");
+//             exit(EXIT_FAILURE);
+//         }
+//     }
+// }

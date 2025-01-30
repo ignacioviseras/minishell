@@ -6,11 +6,11 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 22:04:58 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:39:01 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 char	*access_absolute(char *path)
 {
@@ -46,14 +46,14 @@ char	*access_validate(char **path, char *comand)
 	}
 	if (fd_dir1 == -1)
 	{
-        //g_exit_status = 127;
+		//g_exit_status = 127;
 		printf("\t--- Error ---\nThere is no access to any directory\n");
 		return (NULL);
 	}
 	return (NULL);
 }
 
-void validate_comand(char **comand_splited)
+void	validate_comand(char **comand_splited)
 {
 	printf("\t--- Error ---\nComand empty\n");
 	free_matrix(comand_splited);
@@ -65,6 +65,8 @@ char	*load_param(char **path, char *comand)
 	char	**comand_splited;
 	char	*result;
 
+	if (ft_strcmp(path[0], "") == 0)
+		result = access_absolute(comand);
 	if (ft_strchr(comand, '/'))
 	{
 		if (ft_strchr(comand, ' '))

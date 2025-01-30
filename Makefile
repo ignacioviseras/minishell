@@ -3,17 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
+#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/01/28 17:59:06 by drestrep         ###   ########.fr        #
+#    Updated: 2025/01/30 17:23:30 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 			= 	minishell
 
 CC 				= 	gcc
-CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address -O3
+CFLAGS 			= 	-g3 -Wall -Wextra -Werror -O3
+# CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address -O3
 LDFLAGS			=	-lreadline
 INCLUDES		= 	-I ./inc/
 
@@ -55,6 +56,7 @@ PIPES_SRC		=	pipes_util.c \
 					init_pipes.c \
 					redirection01.c \
 					redirection02.c \
+					redirection03.c \
 
 
 BUILT_SRC		=	built_ins1.c \

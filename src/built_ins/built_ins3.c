@@ -6,15 +6,15 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:34:57 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/12 11:46:36 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:01:04 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-void command_clear(t_token *tokens)
+void	command_clear(t_token *tokens)
 {
-	int x;
+	int	x;
 
 	x = 2;
 	if (tokens->flags)
@@ -41,8 +41,8 @@ void command_clear(t_token *tokens)
 
 int	is_option_n(char *str)
 {
-	int i;
-	int result;
+	int	i;
+	int	result;
 
 	i = 1;
 	result = 1;
@@ -58,18 +58,18 @@ int	is_option_n(char *str)
 	return (result);
 }
 
-void print_echo(char *input)
+void	print_echo(char *input)
 {
-	char **str_splited;
-	int no_newline;
-	int i;
+	char	**str_splited;
+	int		no_newline;
+	int		i;
 
 	i = -1;
 	no_newline = 1;
 	if (!input)
 	{
 		printf("\n");
-		return;
+		return ;
 	}
 	str_splited = ft_split(input, ' ');
 	while (str_splited[++i] && is_option_n(str_splited[i]))
@@ -86,9 +86,9 @@ void print_echo(char *input)
 	free_matrix(str_splited);
 }
 
-void command_echo(t_token *tokens)
+void	command_echo(t_token *tokens)
 {
-	int x;
+	int	x;
 
 	if (tokens->flags)
 	{

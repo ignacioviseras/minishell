@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/28 21:49:06 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/29 22:09:04 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,6 @@ extern int			g_exit_status;
 
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
-void				add_path(t_env **env);
 
 t_token				*lexer(char *line);
 void				lexer_init(t_lexer *lexer);
@@ -311,12 +310,15 @@ char				*trim_quotes(char *str);
 char				*get_env_value(const char *key, char **environ);
 char				*replace_env_vars(const char *input, char **environ);
 void				write_heredoc(int fd_file, char *delimiter);
-// void				write_heredoc(int fd_file, char *delimiter, char **env);
-void				handle_heredoc(t_token *data, t_ast *node, t_params *p);
+void				handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env);
 void				redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env);
 void				init_redirct_in(t_ast *ast, t_params *p, t_env *env);
 void				redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env);
 void				init_redirct_out(t_ast *ast, t_params *p, t_env *env);
 void				ft_lstadd_back(t_list **lst, t_list *new);
 void				delete_heredoc(t_params *p);
+void				exit_program(t_env *env, t_ast *ast, t_token *tokens);
+void				handle_command(char *cleaned, t_token *tokens, t_env *env, t_ast *ast);
+void				restore_stdin(int original_stdin);
+void				restore_stdout(int original_stdout);
 

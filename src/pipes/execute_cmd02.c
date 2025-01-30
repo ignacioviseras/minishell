@@ -6,11 +6,11 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:36:15 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/12 09:38:03 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:19:38 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	get_path(char **env, t_params *p, t_token *t)
 {
@@ -24,18 +24,17 @@ void	get_path(char **env, t_params *p, t_token *t)
 		x++;
 	}
 	tramited("", p, t);
-
 }
 
-void execute_cmd(t_params *p)
+void	execute_cmd(t_params *p)
 {
-    int i;
+	int	i;
 
-    i = execve(p->cmd_path, p->cmd_exec, p->env);
-    if (i < 0)
-    {
-        perror("execve");
-        g_exit_status = 126;
-        exit(126);
-    }
+	i = execve(p->cmd_path, p->cmd_exec, p->env);
+	if (i < 0)
+	{
+		perror("execve");
+		g_exit_status = 126;
+		exit(126);
+	}
 }

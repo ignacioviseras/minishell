@@ -6,12 +6,11 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 22:02:38 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:19:28 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
-
 
 void	execute_ast(t_ast *node, t_params *p, t_env *env)
 {
