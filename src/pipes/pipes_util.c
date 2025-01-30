@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 22:01:32 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:52:49 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,97 +124,97 @@ int open_heredoc()
 
 //----------------------------------
 
-void write_heredoc(int fd_file, char *delimiter)
-{
-    char *buffer;
-    ssize_t content;
-    ssize_t cnt;
+// void write_heredoc(int fd_file, char *delimiter)
+// {
+//     char *buffer;
+//     ssize_t content;
+//     ssize_t cnt;
 
-    buffer = NULL;
-    while (1)
-    {
-        buffer = readline("> ");
-        if (buffer == NULL || ft_strcmp(buffer, delimiter) == 0)
-        {
-            free(buffer);
-            break;
-        }
-        if (ft_strlen(buffer) > 0)
-        {
-            content = write(fd_file, buffer, ft_strlen(buffer));
-            if (content < 0)
-            {
-                perror("write to heredoc file");
-                free(buffer);
-                exit(EXIT_FAILURE);
-            }
-            cnt = write(fd_file, "\n", 1);
-            if (cnt < 0)
-            {
-                perror("write to heredoc file");
-                free(buffer);
-                exit(EXIT_FAILURE);
-            }
-        }
-        free(buffer);
-    }
-}
+//     buffer = NULL;
+//     while (1)
+//     {
+//         buffer = readline("> ");
+//         if (buffer == NULL || ft_strcmp(buffer, delimiter) == 0)
+//         {
+//             free(buffer);
+//             break;
+//         }
+//         if (ft_strlen(buffer) > 0)
+//         {
+//             content = write(fd_file, buffer, ft_strlen(buffer));
+//             if (content < 0)
+//             {
+//                 perror("write to heredoc file");
+//                 free(buffer);
+//                 exit(EXIT_FAILURE);
+//             }
+//             cnt = write(fd_file, "\n", 1);
+//             if (cnt < 0)
+//             {
+//                 perror("write to heredoc file");
+//                 free(buffer);
+//                 exit(EXIT_FAILURE);
+//             }
+//         }
+//         free(buffer);
+//     }
+// }
 
-void delete_heredoc(t_params *p)
-{
-    int i;
-    char *rm[4];
+// void delete_heredoc(t_params *p)
+// {
+//     int i;
+//     char *rm[4];
 
-    rm[0] = "/bin/rm";
-    rm[1] = "-f";
-    rm[2] = ".heredoc.tmp";
-    rm[3] = NULL;
-    i = execve("/bin/rm", rm, p->env);
-    if (i < 0)
-    {
-        perror("execve");
-        g_exit_status = 126;
-        exit(126);
-    }
-}
+//     rm[0] = "/bin/rm";
+//     rm[1] = "-f";
+//     rm[2] = ".heredoc.tmp";
+//     rm[3] = NULL;
+//     i = execve("/bin/rm", rm, p->env);
+//     if (i < 0)
+//     {
+//         perror("execve");
+//         g_exit_status = 126;
+//         exit(126);
+//     }
+// }
 
-void handle_heredoc(t_token *data, t_ast *node, t_params *p)
-{
-    int fd_file;
-    int original_stdin;
-    t_redirect_file *heredocs;
-    t_list *heredoc;
+// void handle_heredoc(t_token *data, t_ast *node, t_params *p)
+// {
+//     int fd_file;
+//     int original_stdin;
+//     t_redirect_file *heredocs;
+//     t_list *heredoc;
 
-    heredoc = data->infiles;
-    heredocs = (t_redirect_file *)heredoc->content;
-    fd_file = open_heredoc();
-    data = (t_token *)(node->data);
-    write_heredoc(fd_file, heredocs->value);
-    close(fd_file);
-    original_stdin = dup(STDIN_FILENO);
-    if (original_stdin < 0)
-    {
-        perror("dup original stdin");
-        exit(EXIT_FAILURE);
-    }
-    fd_file = open(".heredoc.tmp", O_RDONLY);
-    if (fd_file < 0)
-    {
-        perror("open heredoc file");
-        exit(EXIT_FAILURE);
-    }
-    if (dup2(fd_file, STDIN_FILENO) < 0)
-    {
-        perror("dup2 heredoc");
-        exit(EXIT_FAILURE);
-    }
-    close(fd_file);
-    if (dup2(original_stdin, STDIN_FILENO) < 0)
-    {
-        perror("restore stdin");
-        exit(EXIT_FAILURE);
-    }
-    delete_heredoc(p);
-    close(original_stdin);
-}
+//     heredoc = data->infiles;
+//     heredocs = (t_redirect_file *)heredoc->content;
+//     fd_file = open_heredoc();
+//     data = (t_token *)(node->data);
+//     write_heredoc(fd_file, heredocs->value);
+//     close(fd_file);
+//     original_stdin = dup(STDIN_FILENO);
+//     if (original_stdin < 0)
+//     {
+//         perror("dup original stdin");
+//         exit(EXIT_FAILURE);
+//     }
+//     fd_file = open(".heredoc.tmp", O_RDONLY);
+//     if (fd_file < 0)
+//     {
+//         perror("open heredoc file");
+//         exit(EXIT_FAILURE);
+//     }
+//     if (dup2(fd_file, STDIN_FILENO) < 0)
+//     {
+//         perror("dup2 heredoc");
+//         exit(EXIT_FAILURE);
+//     }
+//     close(fd_file);
+//     if (dup2(original_stdin, STDIN_FILENO) < 0)
+//     {
+//         perror("restore stdin");
+//         exit(EXIT_FAILURE);
+//     }
+//     delete_heredoc(p);
+//     close(original_stdin);
+// }
 

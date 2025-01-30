@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:12:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/28 19:58:26 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:07:18 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	find_args(t_token *token, char *str)
 	{
 		if (str[i] == '"' || str[i] == '\'')
 			manage_quoted_str(token, str, &i);
-		else if (is_alnum(str[i]) || str[i] == '-')
+		else if (is_alnum(str[i]) || str[i] == '-' || str[i] == '$')
 			manage_unquoted_str(token, str, &i);
 		else
 			i++;
