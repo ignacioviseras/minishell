@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
+#    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/01/30 17:23:30 by igvisera         ###   ########.fr        #
+#    Updated: 2025/01/30 18:53:55 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ PIPES_SRC		=	pipes_util.c \
 					init_pipes.c \
 					redirection01.c \
 					redirection02.c \
-					redirection03.c \
+					# redirection03.c \
 
 
 BUILT_SRC		=	built_ins1.c \

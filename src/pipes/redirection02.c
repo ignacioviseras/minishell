@@ -3,72 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   redirection02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 15:15:07 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:38:22 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+# include "../../inc/minishell.h"
 
-int	open_append_file(t_redirect_file *outfile)
+void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
-	int	fd;
+    int fd;
+    int original_stdout;
+    t_redirect_file *outfile;
+    t_list *outfiles;
 
-	fd = open(outfile->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd < 0)
-	{
-		perror("open append");
-		exit(EXIT_FAILURE);
-	}
-	return (fd);
+    fd = -1;
+    original_stdout = dup(STDOUT_FILENO);
+    if (original_stdout < 0)
+    {
+        perror("dup original stdout");
+        exit(EXIT_FAILURE);
+    }
+    outfiles = data->outfiles;
+    while (outfiles)
+    {
+        outfile = (t_redirect_file *)outfiles->content;
+        dprintf(2, "outfile->value '%s'\n", outfile->value);
+        fd = open(outfile->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (fd < 0)
+        {
+            perror("open append");
+            exit(EXIT_FAILURE);
+        }
+        if (outfiles->next)
+            close(fd);
+        outfiles = outfiles->next;
+    }
+    if (dup2(fd, STDOUT_FILENO) < 0)
+    {
+        perror("dup2 append");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+    close(fd);
+    execute_node(ast, p, env);
+    if (dup2(original_stdout, STDOUT_FILENO) < 0)
+    {
+        perror("restore stdout");
+        exit(EXIT_FAILURE);
+    }
+    close(original_stdout);
 }
 
-void	redirect_to_append_files(t_token *data)
+void init_redritect_append(t_ast *ast, t_params *p, t_env *env)
 {
-	int				fd;
-	t_redirect_file	*outfile;
-	t_list			*outfiles;
+    t_token *token;
 
-	fd = -1;
-	outfiles = data->outfiles;
-	while (outfiles)
-	{
-		outfile = (t_redirect_file *)outfiles->content;
-		fd = open_append_file(outfile);
-		if (outfiles->next)
-			close(fd);
-		outfiles = outfiles->next;
-	}
-	if (dup2(fd, STDOUT_FILENO) < 0)
-	{
-		perror("dup2 append");
-		close(fd);
-		exit(EXIT_FAILURE);
-	}
-	close(fd);
-}
-
-void	redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
-{
-	int	original_stdout;
-
-	original_stdout = dup(STDOUT_FILENO);
-	if (original_stdout < 0)
-	{
-		perror("dup original stdout");
-		exit(EXIT_FAILURE);
-	}
-	redirect_to_append_files(data);
-	execute_node(ast, p, env);
-	restore_stdout(original_stdout);
-}
-
-void	init_redritect_append(t_ast *ast, t_params *p, t_env *env)
-{
-	t_token	*token;
-
-	token = (t_token *)(ast->data);
-	redirect_append(token, ast, p, env);
+    token = (t_token *)(ast->data);
+    redirect_append(token, ast, p, env);
 }
