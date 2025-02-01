@@ -3,29 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   redirection02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 16:03:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:08:58 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
 
-void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
+int open_append_files(t_token *data)
 {
     int fd;
-    int original_stdout;
     t_redirect_file *outfile;
     t_list *outfiles;
 
     fd = -1;
-    original_stdout = dup(STDOUT_FILENO);
-    if (original_stdout < 0)
-    {
-        perror("dup original stdout");
-        exit(EXIT_FAILURE);
-    }
     outfiles = data->outfiles;
     while (outfiles)
     {
@@ -40,6 +33,21 @@ void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
             close(fd);
         outfiles = outfiles->next;
     }
+    return (fd);
+}
+
+void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
+{
+    int fd;
+    int original_stdout;
+
+    original_stdout = dup(STDOUT_FILENO);
+    if (original_stdout < 0)
+    {
+        perror("dup original stdout");
+        exit(EXIT_FAILURE);
+    }
+    fd = open_append_files(data);
     if (dup2(fd, STDOUT_FILENO) < 0)
     {
         perror("dup2 append");
@@ -48,11 +56,7 @@ void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
     }
     close(fd);
     execute_node(ast, p, env);
-    if (dup2(original_stdout, STDOUT_FILENO) < 0)
-    {
-        perror("restore stdout");
-        exit(EXIT_FAILURE);
-    }
+    restore_stdout(original_stdout);
     close(original_stdout);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 16:01:20 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:08:28 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,16 @@ void restore_stdin(int original_stdin)
         exit(EXIT_FAILURE);
     }
     close(original_stdin);
+}
+
+void restore_stdout(int original_stdout)
+{
+    if (dup2(original_stdout, STDOUT_FILENO) < 0)
+    {
+        perror("restore stdout");
+        exit(EXIT_FAILURE);
+    }
+    close(original_stdout);
 }
 
 void handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env)
