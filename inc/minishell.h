@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/30 18:52:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:59:25 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,6 +309,7 @@ int					open_heredoc();
 char				*trim_quotes(char *str);
 char				*get_env_value(const char *key, char **environ);
 char				*replace_env_vars(const char *input, char **environ);
+void				write_to_heredoc(int fd_file, char *buffer);
 void				write_heredoc(int fd_file, char *delimiter);
 // void				handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env);
 void				redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env);

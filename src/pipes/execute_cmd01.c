@@ -6,60 +6,11 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 18:28:07 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 11:32:49 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/minishell.h"
-
-int	tramited(char *path, t_params *p, t_token *t)
-{
-	char		**dir;
-    char        *trim;
-
-    dir = ft_split(path, ':');
-    trim = trim_sp(t->full_cmd);
-    if (ft_strcmp(trim, "./minishell") == 0)
-        p->cmd_path = load_param(dir, t->full_cmd);
-    else    
-        p->cmd_path = load_param(dir, t->cmd);
-    p->cmd_exec = split_formated(t->full_cmd, ' ');
-    free(trim);
-    free_matrix(dir);
-    if (p->cmd_path != NULL)
-        execute_cmd(p);
-    else
-    {
-        free(p->cmd_path);
-        free_matrix(p->cmd_exec);
-        exit(127);
-    }
-	return (0);
-}
-
-void dup_read(t_params *p)
-{
-	int result;
-
-	result = dup2(p->fd[p->fd_index - 2], 0);
-	if(result < 0)
-	{
-		perror("dup2 input");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void dup_write(t_params *p)
-{
-	int result;
-
-	result = dup2(p->fd[p->fd_index + 1], 1);
-	if (result < 0)
-	{
-		perror("dup2 output");
-		exit(EXIT_FAILURE);
-	}
-}
 
 int	have_path(char **env)
 {
@@ -75,11 +26,9 @@ int	have_path(char **env)
 	return (0);
 }
 
-
 void init_execute(t_token *data, t_params *p)
 {
 	if (have_path(p->env) == 1)
-	// if (p->env && p->env[0])
 		get_path(p->env, p, data);
 	else if (ft_strchr(data->cmd, '/'))
 		tramited("", p, data);
