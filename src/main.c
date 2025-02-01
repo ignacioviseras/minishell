@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 18:24:27 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 22:37:32 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc == 1)
 	{
-		env = ft_malloc(sizeof(t_env));
-		create_env(env, envp);
+		env = NULL;
+		create_env(&env, envp);
 		while (1)
 		{
 			handle_signals();

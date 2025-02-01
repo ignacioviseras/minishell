@@ -6,11 +6,19 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 18:10:13 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 22:29:50 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	update_pwd(char *pwd_key, t_env **env, char *new_pwd)
+{
+	if (*env == NULL)
+		*env = new_node(pwd_key, new_pwd, 0);
+	else
+		add_bottom(env, new_node(pwd_key, new_pwd, 0));
+}
 
 void	handle_variable_export(char *var, t_env *env, char *args)
 {

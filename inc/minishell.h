@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 18:14:43 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 22:42:03 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,12 +220,13 @@ int					valid_char_filename(char c);
 int					flags_validator(char *flags, char *command_flags);
 void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
 char				*env_finder(t_env **env, char *find);
+void				update_pwd(char *pwd_key, t_env **env, char *new_pwd);
 void				command_pwd(t_token *tokens);
 void				command_env(t_token *tokens, t_env *env);
 void				cd_actions(t_token *tokens);
-void				command_cd(t_token *token);
+void				command_cd(t_token *token, t_env *env);
 char				*get_content_var(char *str);
-// char				*get_value(t_env **envi, char *find);
+void				handle_variable_export(char *var, t_env *env, char *args);
 char				*get_var(char *str);
 void				command_export(t_token *tokens, t_env *envi);
 char				*get_home(char *pwd);

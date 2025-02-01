@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 18:24:14 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:09:23 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,33 @@ void	close_pipes(t_params *p)
 	}
 }
 
-void	create_env(t_env *env, char **envp)
+void	create_env(t_env **env, char **envp)
 {
 	t_env	*aux;
+	t_env	*new_node;
 
-	aux = env;
+	*env = NULL;
+	aux = NULL;
 	while (envp && *envp)
 	{
-		env->key = ft_substr(*envp, 0, findchar(*envp, '='));
-		env->value = ft_substr(*envp, findchar(*envp, '=') + 1, findchar(*envp,
-					'\0'));
-		env->hide = 0;
-		if (*(envp + 1))
-			env->next = ft_malloc(sizeof(t_env));
+		new_node = ft_malloc(sizeof(t_env));
+		new_node->key = ft_substr(*envp, 0, findchar(*envp, '='));
+		new_node->value = ft_substr(*envp, findchar(*envp, '=') + 1,
+				findchar(*envp, '\0'));
+		new_node->hide = 0;
+		new_node->next = NULL;
+		if (*env == NULL)
+		{
+			*env = new_node;
+			aux = *env;
+		}
 		else
-			env->next = NULL;
-		env = env->next;
+		{
+			aux->next = new_node;
+			aux = new_node;
+		}
 		envp++;
 	}
-	env = aux;
 }
 
 void	init_pipes(t_ast *ast, t_params *p, t_env *env)
