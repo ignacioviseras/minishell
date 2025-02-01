@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_actions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 18:52:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 10:41:03 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
 		init_redirct_out(node, p, env);
 	else if (type == APPEND)
 		init_redritect_append(node, p, env);
-	// else if (type == HEREDOC)
-	// 	handle_heredoc(data, node, p, env);
+	else if (type == HEREDOC)
+		handle_heredoc(data, node, p, env);
 }
 
 int	is_builtin(char *cmd)

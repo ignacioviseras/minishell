@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 10:11:56 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 10:21:46 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,22 +118,24 @@ char **init_env(t_env *env)
 // }
 
 
-void init_pipes(t_ast *ast, t_params *p, t_env *env) {
+void init_pipes(t_ast *ast, t_params *p, t_env *env)
+{
     int i;
     int resultpipe;
 
     p->fd = malloc(2 * p->total_cmds * sizeof(int));
     if (!p->fd)
         return;
-    
     ft_memset(p->fd, -1, 2 * p->total_cmds * sizeof(int));
-    
     i = 0;
-    while (i < p->total_cmds - 1) {
+    while (i < p->total_cmds - 1)
+    {
         resultpipe = pipe(p->fd + i * 2);
-        if (resultpipe < 0) {
+        if (resultpipe < 0)
+        {
             perror("pipe");
-            while (i-- > 0) {
+            while (i-- > 0)
+            {
                 close(p->fd[i * 2]);
                 close(p->fd[i * 2 + 1]);
             }
@@ -142,12 +144,11 @@ void init_pipes(t_ast *ast, t_params *p, t_env *env) {
         }
         i++;
     }
-    
     p->fd_index = 0;
     execute_ast(ast, p, env);
-    
     i = 0;
-    while (i < 2 * p->total_cmds) {
+    while (i < 2 * p->total_cmds)
+    {
         if (p->fd[i] != -1)
             close(p->fd[i]);
         i++;
@@ -155,3 +156,4 @@ void init_pipes(t_ast *ast, t_params *p, t_env *env) {
     free(p->fd);
     free_matrix(p->env);
 }
+
