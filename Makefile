@@ -3,18 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
+#    By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/01/30 18:53:55 by drestrep         ###   ########.fr        #
+#    Updated: 2025/02/01 16:26:52 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 			= 	minishell
 
 CC 				= 	gcc
-CFLAGS 			= 	-g3 -Wall -Wextra -Werror -O3
-# CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address -O3
+# CFLAGS 			= 	-g3 -Wall -Wextra -Werror -O3
+CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address -O3
 LDFLAGS			=	-lreadline
 INCLUDES		= 	-I ./inc/
 
@@ -36,7 +36,6 @@ BASE_SRC		=	main.c
 PARSING_SRC		=	lexer.c \
 					parser.c \
 					tokenizer.c \
-					organize_tokens.c \
 					expander.c \
 					expand_token.c \
 					get_keys.c \

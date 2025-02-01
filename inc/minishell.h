@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 15:59:25 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:26:54 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,11 +252,6 @@ void				tokenize_strings(t_lexer *lexer, \
 void				tokenizer(t_lexer *lexer, char **input);
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(t_token_type type, char *value);
-void				get_token_values(t_token *token);
-void				create_redirection_args(t_token *token, char *buf);
-void				organize_tokens(t_lexer *lexer, t_token *tokens);
-char				*get_all_flags(char *args, char *token_flags, \
-					t_token_type type);
 void				get_redirections(t_token *token);
 void				get_cmd_flags_and_args(t_token *token, char *full_cmd);
 
