@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 18:32:32 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:06:40 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ void	command_pwd(t_token *tokens)
 	int		x;
 	char	cwd[4096];
 
+	if (tokens->args != NULL)
+	{
+		printf("pwd: too many arguments\n");
+		return ;
+	}
 	if (tokens->args == NULL)
 	{
 		if (getcwd(cwd, sizeof(cwd)) != NULL)
@@ -120,6 +125,11 @@ void	command_env(t_token *tokens, t_env *envi)
 	int	x;
 
 	x = 0;
+	if (tokens->args != NULL)
+	{
+		printf("env: ‘%s’: No such file or directory\n", tokens->args);
+		return ;
+	}
 	if (tokens->flags == NULL)
 	{
 		print_env(envi, 0);

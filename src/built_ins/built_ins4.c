@@ -3,34 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 17:30:04 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:10:13 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-int	validate_export(char *key, char *value)
-{
-	if (is_valid(key) == 1)
-	{
-		if (value == NULL)
-		{
-			printf("bash: export: `%s':", key);
-			printf(" not a valid identifier\n");
-			return (1);
-		}
-		else
-		{
-			printf("bash: export: `%s=%s':", key, value);
-			printf(" not a valid identifier\n");
-			return (1);
-		}
-	}
-	return (0);
-}
 
 void	handle_variable_export(char *var, t_env *env, char *args)
 {

@@ -6,122 +6,93 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 16:08:28 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:57:17 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-int open_heredoc()
+void	restore_stdin(int original_stdin)
 {
-    int fd_file = open(".heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd_file < 0)
-    {
-        perror("open heredoc");
-        exit(EXIT_FAILURE);
-    }
-    return fd_file;
+	if (dup2(original_stdin, STDIN_FILENO) < 0)
+	{
+		perror("restore stdin");
+		exit(EXIT_FAILURE);
+	}
+	close(original_stdin);
 }
 
-void write_to_heredoc(int fd_file, char *buffer)
+void	restore_stdout(int original_stdout)
 {
-    ssize_t content;
-    ssize_t cnt;
-
-    content = write(fd_file, buffer, ft_strlen(buffer));
-    if (content < 0)
-    {
-        perror("write to heredoc file");
-        free(buffer);
-        exit(EXIT_FAILURE);
-    }
-    cnt = write(fd_file, "\n", 1);
-    if (cnt < 0)
-    {
-        perror("write to heredoc file");
-        free(buffer);
-        exit(EXIT_FAILURE);
-    }
+	if (dup2(original_stdout, STDOUT_FILENO) < 0)
+	{
+		perror("restore stdout");
+		exit(EXIT_FAILURE);
+	}
+	close(original_stdout);
 }
 
-void write_heredoc(int fd_file, char *delimiter)
+char	*create_char(t_env *env)
 {
-    char *buffer;
+	char	*str;
+	char	*temp;
 
-    buffer = NULL;
-    while (1)
-    {
-        buffer = readline("> ");
-        if (buffer == NULL || ft_strcmp(buffer, delimiter) == 0)
-        {
-            free(buffer);
-            break;
-        }
-        if (ft_strlen(buffer) > 0)
-            write_to_heredoc(fd_file, buffer);
-        free(buffer);
-    }
+	if (!env || !env->key)
+		return (NULL);
+	str = ft_strdup(env->key);
+	if (!str)
+		return (NULL);
+	if (env->value)
+	{
+		temp = ft_strjoin(str, "=");
+		free(str);
+		if (!temp)
+			return (NULL);
+		str = ft_strjoin(temp, env->value);
+		free(temp);
+		if (!str)
+			return (NULL);
+	}
+	return (str);
 }
 
-void set_heredoc_input(int fd_file)
+int	count_env_nodes(t_env *env)
 {
-    if (fd_file < 0)
-    {
-        perror("open heredoc file");
-        exit(EXIT_FAILURE);
-    }
-    unlink(".heredoc.tmp");
-    if (dup2(fd_file, STDIN_FILENO) < 0)
-    {
-        perror("dup2 heredoc");
-        exit(EXIT_FAILURE);
-    }
-    close(fd_file);
+	int	count;
+
+	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
 }
 
-void restore_stdin(int original_stdin)
+char	**init_env(t_env *env)
 {
-    if (dup2(original_stdin, STDIN_FILENO) < 0)
-    {
-        perror("restore stdin");
-        exit(EXIT_FAILURE);
-    }
-    close(original_stdin);
-}
+	char	**env_matrix;
+	int		env_count;
+	int		x;
 
-void restore_stdout(int original_stdout)
-{
-    if (dup2(original_stdout, STDOUT_FILENO) < 0)
-    {
-        perror("restore stdout");
-        exit(EXIT_FAILURE);
-    }
-    close(original_stdout);
-}
-
-void handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env)
-{
-    int fd_file;
-    int original_stdin;
-    t_redirect_file *heredocs;
-    t_list *heredoc;
-
-    heredoc = data->infiles;
-    heredocs = (t_redirect_file *)heredoc->content;
-    fd_file = open_heredoc();
-    data = (t_token *)(node->data);
-    write_heredoc(fd_file, heredocs->value);
-    close(fd_file);
-    original_stdin = dup(STDIN_FILENO);
-    if (original_stdin < 0)
-    {
-        perror("dup original stdin");
-        exit(EXIT_FAILURE);
-    }
-    fd_file = open(".heredoc.tmp", O_RDONLY);
-    set_heredoc_input(fd_file);
-    if (data->cmd != NULL)
-        execute_node(node, p, env);
-    restore_stdin(original_stdin);
-    close(original_stdin);
+	env_count = count_env_nodes(env);
+	env_matrix = ft_malloc((env_count + 1) * sizeof(char *));
+	if (!env_matrix)
+		return (NULL);
+	x = 0;
+	while (env)
+	{
+		env_matrix[x] = create_char(env);
+		if (!env_matrix[x])
+		{
+			while (x-- > 0)
+				free(env_matrix[x]);
+			free(env_matrix);
+			return (NULL);
+		}
+		x++;
+		env = env->next;
+	}
+	env_matrix[x] = NULL;
+	return (env_matrix);
 }

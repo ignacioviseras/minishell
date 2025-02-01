@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection02.c                                    :+:      :+:    :+:   */
+/*   redirection03.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:56:48 by igvisera         ###   ########.fr       */
+/*   Created: 2025/02/01 16:38:07 by igvisera          #+#    #+#             */
+/*   Updated: 2025/02/01 17:56:40 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	open_append_files(t_token *data)
+int	open_output_files(t_token *data)
 {
 	int				fd;
 	t_redirect_file	*outfile;
@@ -23,10 +23,10 @@ int	open_append_files(t_token *data)
 	while (outfiles)
 	{
 		outfile = (t_redirect_file *)outfiles->content;
-		fd = open(outfile->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(outfile->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
 		{
-			perror("open append");
+			perror("open output");
 			exit(EXIT_FAILURE);
 		}
 		if (outfiles->next)
@@ -36,10 +36,10 @@ int	open_append_files(t_token *data)
 	return (fd);
 }
 
-void	redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
+void	redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
-	int	fd;
 	int	original_stdout;
+	int	fd;
 
 	original_stdout = dup(STDOUT_FILENO);
 	if (original_stdout < 0)
@@ -47,10 +47,10 @@ void	redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
 		perror("dup original stdout");
 		exit(EXIT_FAILURE);
 	}
-	fd = open_append_files(data);
+	fd = open_output_files(data);
 	if (dup2(fd, STDOUT_FILENO) < 0)
 	{
-		perror("dup2 append");
+		perror("dup2 output");
 		close(fd);
 		exit(EXIT_FAILURE);
 	}
@@ -60,10 +60,10 @@ void	redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
 	close(original_stdout);
 }
 
-void	init_redritect_append(t_ast *ast, t_params *p, t_env *env)
+void	init_redirct_out(t_ast *ast, t_params *p, t_env *env)
 {
 	t_token	*token;
 
 	token = (t_token *)(ast->data);
-	redirect_append(token, ast, p, env);
+	redirect_output(token, ast, p, env);
 }

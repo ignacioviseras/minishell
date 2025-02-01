@@ -6,25 +6,11 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:36:15 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 16:14:10 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:57:42 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-void	get_path(char **env, t_params *p, t_token *t)
-{
-	int	x;
-
-	x = 0;
-	while (env[x])
-	{
-		if (ft_strncmp("PATH=", env[x], 5) == 0)
-			tramited(p->env[x] + 5, p, t);
-		x++;
-	}
-	tramited("", p, t);
-}
 
 void	execute_cmd(t_params *p)
 {
@@ -86,4 +72,15 @@ void	dup_write(t_params *p)
 		perror("dup2 output");
 		exit(EXIT_FAILURE);
 	}
+}
+
+void	init_execute(t_token *data, t_params *p)
+{
+	if (have_path(p->env) == 1)
+		get_path(p->env, p, data);
+	else if (ft_strchr(data->cmd, '/'))
+		tramited("", p, data);
+	else
+		tramited("", p, data);
+	return ;
 }

@@ -6,7 +6,7 @@
 #    By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/02/01 16:26:52 by igvisera         ###   ########.fr        #
+#    Updated: 2025/02/01 16:47:24 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,13 +49,15 @@ SIGNALS_SRC		=	handle_signals.c \
 
 PIPES_SRC		=	pipes_util.c \
 					validator.c \
-					execute_cmd02.c \
 					execute_cmd01.c \
+					execute_cmd02.c \
+					execute_cmd03.c \
 					handle_actions.c \
 					init_pipes.c \
 					redirection01.c \
 					redirection02.c \
-					# redirection03.c \
+					redirection03.c \
+					redirection04.c \
 
 
 BUILT_SRC		=	built_ins1.c \

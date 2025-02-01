@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins5.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:08 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 15:00:34 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:10:24 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,24 @@ char	*get_content_var(char *str)
 		return (ft_strdup(""));
 	variable = ft_substr(finder, start, end - start + 1);
 	return (variable);
+}
+
+int	validate_export(char *key, char *value)
+{
+	if (is_valid(key) == 1)
+	{
+		if (value == NULL)
+		{
+			printf("bash: export: `%s':", key);
+			printf(" not a valid identifier\n");
+			return (1);
+		}
+		else
+		{
+			printf("bash: export: `%s=%s':", key, value);
+			printf(" not a valid identifier\n");
+			return (1);
+		}
+	}
+	return (0);
 }

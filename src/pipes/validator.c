@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 16:18:01 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:25:19 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,17 @@ void	validate_comand(char **comand_splited)
 	exit(1);
 }
 
+char	*command_with_space(char *comand)
+{
+	char	**comand_splited;
+	char	*result;
+
+	comand_splited = ft_split(comand, ' ');
+	result = access_absolute(comand_splited[0]);
+	free_matrix(comand_splited);
+	return (result);
+}
+
 char	*load_param(char **path, char *comand)
 {
 	char	**comand_splited;
@@ -69,11 +80,7 @@ char	*load_param(char **path, char *comand)
 	if (ft_strchr(comand, '/'))
 	{
 		if (ft_strchr(comand, ' '))
-		{
-			comand_splited = ft_split(comand, ' ');
-			result = access_absolute(comand_splited[0]);
-			free_matrix(comand_splited);
-		}
+			result = command_with_space(comand);
 		else
 			result = access_absolute(comand);
 	}
