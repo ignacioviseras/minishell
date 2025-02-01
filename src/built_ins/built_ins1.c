@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 15:05:26 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:17:05 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
 	free_env(env);
 	free_ast(ast);
 	free_tokens(tokens);
-	exit(1);
+	exit(0);
 }
 
 void	handle_command(char *cleaned, t_token *tokens, t_env *env, t_ast *ast)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 18:39:01 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:18:01 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*access_validate(char **path, char *comand)
 	}
 	if (fd_dir1 == -1)
 	{
-		//g_exit_status = 127;
 		printf("\t--- Error ---\nThere is no access to any directory\n");
 		return (NULL);
 	}

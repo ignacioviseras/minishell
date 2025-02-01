@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:36:15 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 11:33:13 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:14:10 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	tramited(char *path, t_params *p, t_token *t)
 		p->cmd_path = load_param(dir, t->full_cmd);
 	else
 		p->cmd_path = load_param(dir, t->cmd);
-	p->cmd_exec = split_formated(t->full_cmd, ' ');
+	p->cmd_exec = split_formated(remove_quotes(t->full_cmd), ' ');
 	free(trim);
 	free_matrix(dir);
 	if (p->cmd_path != NULL)

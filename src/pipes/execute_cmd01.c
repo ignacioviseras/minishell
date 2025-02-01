@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 11:32:49 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:19:39 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,68 +122,3 @@ void execute_node(t_ast *node, t_params *p, t_env *env)
         }
     }
 }
-
-
-// void execute_child_process(t_ast *node, t_params *p, t_env *env, t_token *data, int builtin)
-// {
-//     int i;
-
-//     if (p->fd_index != 0)
-//         dup_read(p);
-//     if (p->fd_index < 2 * (p->total_cmds - 1))
-//         dup_write(p);
-//     i = 0;
-//     while (i < 2 * p->total_cmds)
-//     {
-//         close(p->fd[i]);
-//         i++;
-//     }
-//     if (data && data->type == TOKEN_PIPE)
-//         handle_pipe(node, p, env);
-//     else if (data && builtin == 0)
-//     {
-//         build_switch(env, node, data);
-//         exit(0);
-//     }
-//     else
-//         init_execute(data, p);
-// }
-
-// void parent_process(t_params *p, int pid)
-// {
-//     int status;
-
-//     close(p->fd[p->fd_index + 1]);
-//     waitpid(pid, &status, 0);
-
-//     if (WIFEXITED(status))
-//         g_exit_status = WEXITSTATUS(status);
-//     else if (WIFSIGNALED(status))
-//         g_exit_status = 128 + WTERMSIG(status);
-// }
-
-// void execute_node(t_ast *node, t_params *p, t_env *env)
-// {
-//     t_token *data;
-//     int builtin;
-//     int pid;
-
-//     data = (t_token *)(node->data);
-//     builtin = is_builtin(data->cmd);
-
-//     if (p->total_cmds == 1 && builtin == 0)
-//         build_switch(env, node, data);
-//     else
-//     {
-//         pid = fork();
-//         if (pid == 0)
-//             execute_child_process(node, p, env, data, builtin);
-//         else if (pid > 0)
-//             parent_process(p, pid);
-//         else
-//         {
-//             perror("fork");
-//             exit(EXIT_FAILURE);
-//         }
-//     }
-// }

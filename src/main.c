@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 16:02:22 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:21:42 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	handle_input(t_env *env, char *input)
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
-	// print_ast(ast, 0);
 	p.total_cmds = count_ast_nodes(ast);
 	p.env = init_env(env);
 	init_pipes(ast, &p, env);
