@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 10:43:44 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 12:01:45 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,30 @@ int open_heredoc()
     return fd_file;
 }
 
+void write_to_heredoc(int fd_file, char *buffer)
+{
+    ssize_t content;
+    ssize_t cnt;
+
+    content = write(fd_file, buffer, ft_strlen(buffer));
+    if (content < 0)
+    {
+        perror("write to heredoc file");
+        free(buffer);
+        exit(EXIT_FAILURE);
+    }
+    cnt = write(fd_file, "\n", 1);
+    if (cnt < 0)
+    {
+        perror("write to heredoc file");
+        free(buffer);
+        exit(EXIT_FAILURE);
+    }
+}
+
 void write_heredoc(int fd_file, char *delimiter)
 {
     char *buffer;
-    ssize_t content;
-    ssize_t cnt;
 
     buffer = NULL;
     while (1)
@@ -39,24 +58,35 @@ void write_heredoc(int fd_file, char *delimiter)
             break;
         }
         if (ft_strlen(buffer) > 0)
-        {
-            content = write(fd_file, buffer, ft_strlen(buffer));
-            if (content < 0)
-            {
-                perror("write to heredoc file");
-                free(buffer);
-                exit(EXIT_FAILURE);
-            }
-            cnt = write(fd_file, "\n", 1);
-            if (cnt < 0)
-            {
-                perror("write to heredoc file");
-                free(buffer);
-                exit(EXIT_FAILURE);
-            }
-        }
+            write_to_heredoc(fd_file, buffer);
         free(buffer);
     }
+}
+
+void set_heredoc_input(int fd_file)
+{
+    if (fd_file < 0)
+    {
+        perror("open heredoc file");
+        exit(EXIT_FAILURE);
+    }
+    unlink(".heredoc.tmp");
+    if (dup2(fd_file, STDIN_FILENO) < 0)
+    {
+        perror("dup2 heredoc");
+        exit(EXIT_FAILURE);
+    }
+    close(fd_file);
+}
+
+void restore_stdin(int original_stdin)
+{
+    if (dup2(original_stdin, STDIN_FILENO) < 0)
+    {
+        perror("restore stdin");
+        exit(EXIT_FAILURE);
+    }
+    close(original_stdin);
 }
 
 void handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env)
@@ -79,24 +109,9 @@ void handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env)
         exit(EXIT_FAILURE);
     }
     fd_file = open(".heredoc.tmp", O_RDONLY);
-    if (fd_file < 0)
-    {
-        perror("open heredoc file");
-        exit(EXIT_FAILURE);
-    }
-    unlink(".heredoc.tmp");
-    if (dup2(fd_file, STDIN_FILENO) < 0)
-    {
-        perror("dup2 heredoc");
-        exit(EXIT_FAILURE);
-    }
-    close(fd_file);
+    set_heredoc_input(fd_file);
     if (data->cmd != NULL)
         execute_node(node, p, env);
-    if (dup2(original_stdin, STDIN_FILENO) < 0)
-    {
-        perror("restore stdin");
-        exit(EXIT_FAILURE);
-    }
+    restore_stdin(original_stdin);
     close(original_stdin);
 }

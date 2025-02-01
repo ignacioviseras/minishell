@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:36:15 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 15:19:38 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 11:33:13 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,54 @@ void	execute_cmd(t_params *p)
 		perror("execve");
 		g_exit_status = 126;
 		exit(126);
+	}
+}
+
+int	tramited(char *path, t_params *p, t_token *t)
+{
+	char	**dir;
+	char	*trim;
+
+	dir = ft_split(path, ':');
+	trim = trim_sp(t->full_cmd);
+	if (ft_strcmp(trim, "./minishell") == 0)
+		p->cmd_path = load_param(dir, t->full_cmd);
+	else
+		p->cmd_path = load_param(dir, t->cmd);
+	p->cmd_exec = split_formated(t->full_cmd, ' ');
+	free(trim);
+	free_matrix(dir);
+	if (p->cmd_path != NULL)
+		execute_cmd(p);
+	else
+	{
+		free(p->cmd_path);
+		free_matrix(p->cmd_exec);
+		exit(127);
+	}
+	return (0);
+}
+
+void	dup_read(t_params *p)
+{
+	int	result;
+
+	result = dup2(p->fd[p->fd_index - 2], 0);
+	if (result < 0)
+	{
+		perror("dup2 input");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	dup_write(t_params *p)
+{
+	int	result;
+
+	result = dup2(p->fd[p->fd_index + 1], 1);
+	if (result < 0)
+	{
+		perror("dup2 output");
+		exit(EXIT_FAILURE);
 	}
 }

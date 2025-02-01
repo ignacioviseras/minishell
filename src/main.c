@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/30 20:30:04 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 11:29:11 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*
- *  Transforms the environment into a linked list.
- *  TO DO: No sé qué hacer si envp == NULL.
- */
 void	create_env(t_env *env, char **envp)
 {
 	t_env	*aux;
@@ -24,8 +20,8 @@ void	create_env(t_env *env, char **envp)
 	while (envp && *envp)
 	{
 		env->key = ft_substr(*envp, 0, findchar(*envp, '='));
-		env->value = ft_substr (*envp, findchar(*envp, '=') \
-		+ 1, findchar(*envp, '\0'));
+		env->value = ft_substr(*envp, findchar(*envp, '=') + 1, findchar(*envp,
+					'\0'));
 		env->hide = 0;
 		if (*(envp + 1))
 			env->next = ft_malloc(sizeof(t_env));
@@ -39,9 +35,14 @@ void	create_env(t_env *env, char **envp)
 
 void	print_ast(t_ast *node, int depth)
 {
+	t_token			*data;
+	t_redirect_file	*redirection;
+	t_list			*infiles;
+	t_list			*outfiles;
+
 	if (node == NULL)
 		return ;
-	t_token *data = (t_token *)(node->data);
+	data = (t_token *)(node->data);
 	for (int i = 0; i < depth; i++)
 		printf("	");
 	printf("Node full_cmd: '%s', ", data->full_cmd);
@@ -49,9 +50,6 @@ void	print_ast(t_ast *node, int depth)
 	printf("node args: '%s', ", data->args);
 	printf("node flags: '%s', ", data->flags);
 	printf("Node type: '%d'\n", data->type);
-	t_redirect_file	*redirection;
-	t_list			*infiles;
-	t_list			*outfiles;
 	outfiles = data->outfiles;
 	infiles = data->infiles;
 	printf("Outfiles:\n");
@@ -59,7 +57,8 @@ void	print_ast(t_ast *node, int depth)
 	{
 		redirection = (t_redirect_file *)outfiles->content;
 		if (redirection)
-			printf("Value: %s, Type: %d\n", redirection->value, redirection->type);
+			printf("Value: %s, Type: %d\n", redirection->value,
+					redirection->type);
 		outfiles = outfiles->next;
 	}
 	printf("Infiles:\n");
@@ -67,19 +66,20 @@ void	print_ast(t_ast *node, int depth)
 	{
 		redirection = (t_redirect_file *)infiles->content;
 		if (redirection)
-			printf("Value: %s, Type: %d\n", redirection->value, redirection->type);
+			printf("Value: %s, Type: %d\n", redirection->value,
+					redirection->type);
 		infiles = infiles->next;
-	} 
+	}
 	print_ast(node->left, depth + 1);
 	print_ast(node->right, depth + 1);
 }
 
 int	count_ast_nodes(t_ast *node)
 {
-	t_token *data;
+	t_token	*data;
 
 	if (node == NULL)
-		return 0;
+		return (0);
 	data = (t_token *)(node->data);
 	if (data != NULL && data->type == TOKEN_PIPE)
 		return (count_ast_nodes(node->left) + count_ast_nodes(node->right));
@@ -88,9 +88,9 @@ int	count_ast_nodes(t_ast *node)
 
 void	handle_input(t_env *env, char *input)
 {
-	t_token	*tokens;
-	t_ast	*ast;
-	t_params p;
+	t_token		*tokens;
+	t_ast		*ast;
+	t_params	p;
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);

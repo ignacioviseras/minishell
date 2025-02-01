@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 19:38:22 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 11:44:58 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
     while (outfiles)
     {
         outfile = (t_redirect_file *)outfiles->content;
-        dprintf(2, "outfile->value '%s'\n", outfile->value);
         fd = open(outfile->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd < 0)
         {
