@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 18:25:19 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/02 19:26:30 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,14 @@ char	*load_param(char **path, char *comand)
 	char	**comand_splited;
 	char	*result;
 
-	if (ft_strcmp(path[0], "") == 0)
+	if (path[0] == NULL && !ft_strchr(comand, '/'))
+	{
+		printf("\t--- Error ---\nThe env doesnt have PATH use only absolute command\n");
+		return (NULL);
+	}
+	if (path[0] == NULL && ft_strchr(comand, '/'))
 		result = access_absolute(comand);
-	if (ft_strchr(comand, '/'))
+	else if (ft_strchr(comand, '/'))
 	{
 		if (ft_strchr(comand, ' '))
 			result = command_with_space(comand);
@@ -94,5 +99,6 @@ char	*load_param(char **path, char *comand)
 	}
 	else
 		result = access_validate(path, comand);
+	printf("load_param '%s'\n", result);
 	return (result);
 }

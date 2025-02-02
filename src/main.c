@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 22:37:32 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/02 18:54:17 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,24 @@ void	handle_input(t_env *env, char *input)
 	free_ast(ast);
 }
 
+void create_env_null(t_env **env)
+{
+    char cwd[4096];
+
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+		*env = new_node("PWD", cwd, 0);
+}
+
+void before_create_env(t_env **env, char **envp)
+{
+    *env = ft_malloc(sizeof(t_env)); 
+    if (envp[0] == NULL)
+        create_env_null(env);
+    else    
+        create_env(*env, envp);
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
@@ -91,8 +109,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc == 1)
 	{
-		env = NULL;
-		create_env(&env, envp);
+		before_create_env(&env, envp);
 		while (1)
 		{
 			handle_signals();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 22:29:50 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/02 16:25:29 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 void	update_pwd(char *pwd_key, t_env **env, char *new_pwd)
 {
-	if (*env == NULL)
-		*env = new_node(pwd_key, new_pwd, 0);
-	else
-		add_bottom(env, new_node(pwd_key, new_pwd, 0));
+	add_bottom(env, new_node(pwd_key, new_pwd, 0));
 }
 
 void	handle_variable_export(char *var, t_env *env, char *args)

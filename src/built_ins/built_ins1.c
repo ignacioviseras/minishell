@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 22:18:16 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/02 18:49:16 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,32 +37,39 @@ void	cd_actions(t_token *tokens)
 		printf("bash: cd: %s: No such file or directory\n", tokens->args);
 }
 
+char	*have_home(t_env *env)
+{
+	while (env)
+	{
+		if (ft_strcmp("HOME", env->key) == 0)
+			return (env->value);
+		env = env ->next;
+	}
+	return (NULL);
+}
+
 void	command_cd(t_token *tokens, t_env *env)
 {
-	static char	*home;
+	char	*home;
 	char	cwd[4096];
 
 	if (tokens == NULL)
 		return ;
-	if (home == NULL && env != NULL)
+	if ((tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0))
 	{
-		home = getenv("HOME");
-		if (home == NULL)
-			home = get_home(getenv("PWD"));
+		home = have_home(env);
+		if (home != NULL)
+		{
+			if (chdir(home) != 0)
+				perror("chdir");
+		}
+		else
+			printf("\t--- Error ---\ncd: HOME not set\n");
 	}
-	//si me meten un env de solo 3 valores me puede petar lo de arriba
-	if (ft_strcmp(tokens->cmd, "cd") == 0 && \
-		(tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0))
-	{
-		if (chdir(home) != 0)
-			perror("chdir");
-	}
-	else if (ft_strcmp(tokens->cmd, "cd") == 0 && tokens->args)
+	else if (tokens->args)
 		cd_actions(tokens);
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		update_pwd("PWD", &env, cwd);
-	printf("****************\n");
-	print_env(env, 0);
 }
 
 void	exit_program(t_env *env, t_ast *ast, t_token *tokens)

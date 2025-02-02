@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils06.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:20:14 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/10 16:50:13 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/02 17:10:07 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ t_env	*new_node(char *key, char *value, int hide)
 
 	env = malloc(sizeof(t_env));
 	if (!env)
-	{
-		free(env);
 		return (NULL);
-	}
 	env->key = ft_strdup(key);
 	if (value)
 		env->value = ft_strdup(value);
