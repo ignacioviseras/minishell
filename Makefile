@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+         #
+#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/02/01 16:47:24 by igvisera         ###   ########.fr        #
+#    Updated: 2025/02/04 18:22:53 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ BUILT_SRC		=	built_ins1.c \
 					built_ins3.c \
 					built_ins4.c \
 					built_ins5.c \
+					built_ins6.c \
 
 UTILS_SRC		=	utils01.c \
 					utils02.c \
@@ -75,6 +76,8 @@ UTILS_SRC		=	utils01.c \
 					utils07.c \
 					utils08.c \
 					utils09.c \
+					utils10.c \
+					utils11.c \
 					skip_spaces.c \
 					remove_quotes.c \
 					mem_alloc.c \

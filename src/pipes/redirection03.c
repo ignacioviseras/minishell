@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection03.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:38:07 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:56:40 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:26:33 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,11 @@ void	init_redirct_out(t_ast *ast, t_params *p, t_env *env)
 
 	token = (t_token *)(ast->data);
 	redirect_output(token, ast, p, env);
+}
+
+char *path_error()
+{
+	printf("\t--- Error ---\n");
+	printf("The env doesnt have PATH use only absolute command\n");
+	return (NULL);
 }
