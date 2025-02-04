@@ -6,16 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:12:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 22:32:18 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:08:00 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/* int	valid_char_env_var_name(char c)
-{
-	if (c == )
-} */
 
 void	manage_quoted_str(t_token *token, char *str, int *i)
 {
@@ -64,10 +59,6 @@ void	find_args(t_token *token, char *str)
 	{
 		if (str[i] == '"' || str[i] == '\'')
 			manage_quoted_str(token, str, &i);
-		//else if (is_alnum(str[i]) || !valid_char_filename(str[i]) || str[i] == '-' || str[i] == '$')
-		//	manage_unquoted_str(token, str, &i);
-		//else
-		//	i++;
 		else
 		{
 			while (str[i] == ' ')

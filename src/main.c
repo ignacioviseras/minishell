@@ -6,13 +6,13 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/04 18:34:34 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:48:57 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	print_redirects(t_list *redirects, char *type)
+/* void	print_redirects(t_list *redirects, char *type)
 {
 	t_redirect_file	*redirection;
 
@@ -54,7 +54,7 @@ void	print_ast(t_ast *node, int depth)
 	print_redirects(infiles, "Infiles");
 	print_ast(node->left, depth + 1);
 	print_ast(node->right, depth + 1);
-}
+} */
 
 int	count_ast_nodes(t_ast *node)
 {
@@ -83,25 +83,24 @@ void	handle_input(t_env *env, char *input)
 	free_ast(ast);
 }
 
-void create_env_null(t_env **env)
+void	create_env_null(t_env **env)
 {
-    char cwd[4096];
+	char	cwd[4096];
 
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		*env = new_node("PWD", cwd, 0);
 }
 
-void before_create_env(t_env **env, char **envp)
+void	before_create_env(t_env **env, char **envp)
 {
-    if (envp[0] == NULL)
-        create_env_null(env);
-    else
+	if (envp[0] == NULL)
+		create_env_null(env);
+	else
 	{
 		*env = ft_malloc(sizeof(t_env));
-        create_env(*env, envp);
+		create_env(*env, envp);
 	}
 }
-
 
 int	main(int argc, char **argv, char **envp)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 17:52:50 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:14:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,53 +30,30 @@ void	handle_variable_export(char *var, t_env *env)
 	free(var_content);
 }
 
-void	export_actions(t_token *tokens, t_env *env)
+void	command_export(t_token *tokens, t_env *env)
 {
 	int		x;
 	char	**splt_vars;
-
-	splt_vars = smart_split(tokens->args);
-	if (!splt_vars)
-	{
-		free(splt_vars);
-		return ;
-	}
-	x = -1;
-	while (splt_vars[++x])
-	{
-		if (!ft_strchr(splt_vars[x], '='))
-		{
-			if (validate_export(splt_vars[x], NULL) == 0)
-				add_bottom(&env, new_node(splt_vars[x], NULL, 1));
-		}
-		else
-			handle_variable_export(splt_vars[x], env);
-	}
-	free_matrix(splt_vars);
-}
-
-void	command_export(t_token *tokens, t_env *env)
-{
-	int	x;
 
 	if (tokens->args == NULL)
 		print_env(env, 1);
 	else
 	{
-		if (tokens->flags && ft_charcmp(tokens->flags[0], '-') == 0)
+		splt_vars = smart_split(tokens->args);
+		if (!splt_vars)
+			return ;
+		x = -1;
+		while (splt_vars[++x])
 		{
-			x = flags_validator(tokens->flags, "f n p");
-			if (x == 0)
-				printf("flags are not implemented\n");
-			else
+			if (!ft_strchr(splt_vars[x], '='))
 			{
-				printf("export: usage: export [-%c]:", tokens->flags[x]);
-				return ;
+				if (validate_export(splt_vars[x], NULL) == 0)
+					add_bottom(&env, new_node(splt_vars[x], NULL, 1));
 			}
-			g_exit_status = 2; //TODO
+			else
+				handle_variable_export(splt_vars[x], env);
 		}
-		else
-			export_actions(tokens, env);
+		free_matrix(splt_vars);
 	}
 }
 
