@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/04 18:28:55 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:09:16 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,15 @@
 
 #define USAGE_ERROR "Correct use: ./minishell\n"
 
-#ifndef READ_END
-# define READ_END 0
-#endif
-
-#ifndef WRITE_END
-# define WRITE_END 1
-#endif
-
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
-#endif
-
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
 {
 	TOKEN_STRING,
-	TOKEN_PIPE,    // |
-	TOKEN_OUTPUT,  // >
-	TOKEN_INPUT,   // <
-	TOKEN_APPEND,  // >>
-	TOKEN_HEREDOC, // <<
+	TOKEN_PIPE,
+	TOKEN_OUTPUT,
+	TOKEN_INPUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
 }					t_token_type;
 
 /*
@@ -159,6 +147,7 @@ typedef struct s_counters
 extern int			g_exit_status;
 
 void				create_env_null(t_env **env);
+void				before_create_env(t_env **env, char **envp);
 void				create_env(t_env *env, char **envp);
 void				handle_input(t_env *env, char *input);
 
@@ -210,7 +199,6 @@ int					ft_count_words(char **strs);
 int					skip_quoted_string(char *str, int counter);
 char				*get_unquoted_str(char *str);
 char				*get_quoted_str(char *str, char quote);
-char				*gnl(int fd);
 int					ft_isspace(char c);
 char				*trim_sp(const char *str);
 char				*append_str(char *base, char *suffix);
@@ -219,7 +207,6 @@ int					valid_char_filename(char c);
 char				*get_next_word(char *str);
 int					count_words_smart(const char *input);
 char				**smart_split(const char *input);
-
 
 // BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -249,8 +236,7 @@ int					count_quotes(char *str);
 void				handle_cd_flags(t_token *tokens);
 void				handle_env_flags(t_token *tokens);
 void				handle_unset_flags(t_token *tokens);
-char 				*path_error();
-
+char				*path_error(void);
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);

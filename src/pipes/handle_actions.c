@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 16:42:26 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:49:50 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,23 @@ int	is_builtin(char *cmd)
 		i++;
 	}
 	return (free(cmd_trim), 1);
+}
+
+void	create_env_null(t_env **env)
+{
+	char	cwd[4096];
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		*env = new_node("PWD", cwd, 0);
+}
+
+void	before_create_env(t_env **env, char **envp)
+{
+	if (envp[0] == NULL)
+		create_env_null(env);
+	else
+	{
+		*env = ft_malloc(sizeof(t_env));
+		create_env(*env, envp);
+	}
 }

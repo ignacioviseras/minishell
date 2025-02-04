@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:12:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/04 19:08:00 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:17:07 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ void	manage_unquoted_str(t_token *token, char *str, int *i)
 
 void	find_args(t_token *token, char *str)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '"' || str[i] == '\'')
 		i = skip_quoted_string(str, i);
-	while (is_alnum(str[i]) || str[i] == '-' || str[i] == '|' || \
-			str[i] == '"' || str[i] == '\'')
+	while (is_alnum(str[i]) || str[i] == '-' || str[i] == '|' || str[i] == '"'
+		|| str[i] == '\'')
 		i++;
 	while (str[i] && str[i] != '|')
 	{
@@ -81,8 +81,8 @@ void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 	}
 	if (!token->cmd)
 	{
-		while (is_alpha(full_cmd[i]) || full_cmd[i] == '/' || \
-		full_cmd[i] == '_' || full_cmd[i] == '$')
+		while (is_alpha(full_cmd[i]) || full_cmd[i] == '/' || full_cmd[i] == '_'
+			|| full_cmd[i] == '$')
 			i++;
 		token->cmd = ft_substr(full_cmd, 0, i);
 	}

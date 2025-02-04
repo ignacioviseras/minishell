@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/04 18:48:57 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:17:36 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,6 @@ void	handle_input(t_env *env, char *input)
 	init_pipes(ast, &p, env);
 	free_tokens(tokens);
 	free_ast(ast);
-}
-
-void	create_env_null(t_env **env)
-{
-	char	cwd[4096];
-
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		*env = new_node("PWD", cwd, 0);
-}
-
-void	before_create_env(t_env **env, char **envp)
-{
-	if (envp[0] == NULL)
-		create_env_null(env);
-	else
-	{
-		*env = ft_malloc(sizeof(t_env));
-		create_env(*env, envp);
-	}
 }
 
 int	main(int argc, char **argv, char **envp)
