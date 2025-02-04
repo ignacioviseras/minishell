@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 18:10:13 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:23:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ void	unset_actions(t_token *tokens, t_env *env)
 
 	splt_vars = ft_split(tokens->args, ' ');
 	if (!splt_vars)
-	{
-		free(splt_vars);
 		return ;
-	}
 	x = -1;
 	while (splt_vars[++x])
 	{
@@ -91,7 +88,8 @@ void	unset_actions(t_token *tokens, t_env *env)
 		else
 			printf("bash: unset: `%s': not a valid identifier\n", splt_vars[x]);
 	}
-	free(splt_vars);
+	free_matrix(splt_vars);
+	//free(splt_vars);
 }
 
 void	command_unset(t_token *tokens, t_env *env)

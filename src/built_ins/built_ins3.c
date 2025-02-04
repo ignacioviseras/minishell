@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:34:57 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/30 15:01:04 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:30:28 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ void	print_echo(char *input)
 
 void	command_echo(t_token *tokens)
 {
-	int	x;
+	int		x;
+	char	*aux;
 
+	aux = remove_quotes(ft_strdup(tokens->args));
 	if (tokens->flags)
 	{
 		if (ft_charcmp(tokens->flags[0], '-') == 0)
@@ -97,10 +99,10 @@ void	command_echo(t_token *tokens)
 			x = flags_validator(tokens->flags, "e E");
 			if (x == 0)
 				printf("flags are not implemented\n");
-			else
-				print_echo(tokens->args);
 		}
 	}
 	else
-		print_echo(tokens->args);
+		print_echo(aux);
+	free(aux);
 }
+

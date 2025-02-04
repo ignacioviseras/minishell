@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 16:17:05 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:27:44 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	cd_actions(t_token *tokens)
 				printf("bash: cd: -%c: invalid option\n", tokens->flags[x]);
 				printf("cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n");
 			}
+			g_exit_status = 2;
 			return ;
 		}
 	}
@@ -35,7 +36,9 @@ void	cd_actions(t_token *tokens)
 		printf("bash: cd: too many arguments\n");
 	else if (chdir(tokens->args) != 0)
 		printf("bash: cd: %s: No such file or directory\n", tokens->args);
+	g_exit_status = 1;
 }
+
 
 void	command_cd(t_token *tokens)
 {

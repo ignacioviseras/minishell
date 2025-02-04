@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 17:48:06 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/23 12:35:15 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 20:02:32 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 
 /* 
  * Appends the suffix str to the base str and returns a new str.
- * If base does not exist, suffix will be returne and vice versa.
+ * If base does not exist, suffix will be returned and vice versa.
  */
 char	*append_str(char *base, char *suffix)
 {

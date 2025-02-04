@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 18:24:14 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:06:46 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@ void	close_pipes(t_params *p)
 
 void	create_env(t_env *env, char **envp)
 {
-	t_env	*aux;
-
-	aux = env;
 	while (envp && *envp)
 	{
 		env->key = ft_substr(*envp, 0, findchar(*envp, '='));
@@ -68,7 +65,6 @@ void	create_env(t_env *env, char **envp)
 		env = env->next;
 		envp++;
 	}
-	env = aux;
 }
 
 void	init_pipes(t_ast *ast, t_params *p, t_env *env)

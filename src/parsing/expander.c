@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/27 14:26:58 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:03:48 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,31 @@ char	*get_command(char *full_cmd)
 	return (cmd);
 }
 
-char	*get_flags_or_args(t_token *token, char *var)
+char	*get_flags_or_args(t_token *token, char *var, int caller)
 {
+	char	*aux;
 	char	*new_var;
+	char	*str;
+	int		i;
 
+	i = 0;
+	new_var = NULL;
+	str = token->full_cmd + ft_strlen(token->cmd);
+	while (str[i] && !is_alnum(str[i]) && str[i] != '-')
+		i++;
+	while (str[i])
+	{
+		while (str[i] && str[i] == ' ')
+			i++;
+		aux = get_next_word(str + i);
+		if (aux[0] == '-' && caller == 0)
+			new_var = append_str(new_var, aux);
+		else if (aux[0] != '-' && caller == 1)
+			new_var = append_str(new_var, aux);
+		i += ft_strlen(aux);
+		free(aux);
+	}
 	free(var);
-	new_var = ft_strdup(token->full_cmd + ft_strlen(token->cmd));
-	new_var = skip_args_spaces(new_var);
 	return (new_var);
 }
 
@@ -66,10 +84,10 @@ void	replace_var(t_token *token, t_env *env)
 	token->full_cmd = expand_token(token, values, size);
 	free(token->cmd);
 	token->cmd = get_command(token->full_cmd);
-	if (token->args)
-		token->args = get_flags_or_args(token, token->args);
-	if (token->flags)
-		token->flags = get_flags_or_args(token, token->flags);
+	if (token->flags && findchar(token->flags, '$') >= 0)
+		token->flags = get_flags_or_args(token, token->flags, 0);
+	if (token->args && findchar(token->args, '$') >= 0)
+		token->args = get_flags_or_args(token, token->args, 1);
 	free_matrix(keys);
 	if (ft_strcmp(*values, ""))
 		free_matrix(values);
