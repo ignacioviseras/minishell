@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/04 15:45:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:28:55 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,11 @@ void				unset_actions(t_token *tokens, t_env *env);
 int					is_option_n(char *str);
 char				*ft_itoa(int n);
 int					count_quotes(char *str);
+void				handle_cd_flags(t_token *tokens);
+void				handle_env_flags(t_token *tokens);
+void				handle_unset_flags(t_token *tokens);
+char 				*path_error();
+
 
 // FT_MALLOC
 void				*ft_malloc(size_t size);

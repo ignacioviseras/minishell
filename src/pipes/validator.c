@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 15:40:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:27:38 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,8 @@ char	*load_param(char **path, char *comand)
 	char	*result;
 
 	if (path[0] == NULL && !ft_strchr(comand, '/'))
-	{
-		printf("\t--- Error ---\nThe env doesnt have PATH use only absolute command\n");
-		return (NULL);
-	}
-	if (path[0] == NULL && ft_strchr(comand, '/'))
+		result = path_error();
+	else if (path[0] == NULL && ft_strchr(comand, '/'))
 		result = access_absolute(comand);
 	else if (ft_strchr(comand, '/'))
 	{

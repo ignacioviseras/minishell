@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 15:39:58 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:24:07 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,6 @@ void	print_env(t_env *env, int flag)
 
 void	command_env(t_token *tokens, t_env *envi)
 {
-	int	x;
-
-	x = 0;
 	if (tokens->args != NULL)
 	{
 		printf("env: ‘%s’: No such file or directory\n", tokens->args);
@@ -137,18 +134,5 @@ void	command_env(t_token *tokens, t_env *envi)
 		return ;
 	}
 	if (ft_charcmp(tokens->flags[0], '-') == 0)
-	{
-		x = flags_validator(tokens->flags, "i 0 u C S v");
-		if (x == 0)
-		{
-			printf("flags are not implemented\n");
-			g_exit_status = 777;
-		}
-		else
-		{
-			printf("env: invalid option -- '%c'\n", tokens->flags[x]);
-			printf("Try 'env --help' for more information.\n");
-			g_exit_status = 125;
-		}
-	}
+		handle_env_flags(tokens);
 }

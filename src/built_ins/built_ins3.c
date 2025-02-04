@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:34:57 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 16:38:26 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:44:08 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,3 @@ void	command_echo(t_token *tokens)
 		print_echo(aux);
 	free(aux);
 }
-
