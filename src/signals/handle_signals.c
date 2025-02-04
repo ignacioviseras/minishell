@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/22 17:25:40 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:39:53 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@ void	signals_handler(int sig)
 		rl_redisplay();
 		g_exit_status = 130;
 	}
-	if (sig == SIGQUIT)
-		exit(0);
 }
 
 void	handle_signals(void)
 {
 	signal(SIGINT, signals_handler);
-	signal(SIGQUIT, signals_handler);
 }

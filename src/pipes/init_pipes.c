@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 14:45:12 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:03:53 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ void	init_pipes(t_ast *ast, t_params *p, t_env *env)
 	int	i;
 	int	resultpipe;
 
-	p->fd = malloc(2 * p->total_cmds * sizeof(int));
-	if (!p->fd)
-		return ;
+	p->fd = ft_malloc(2 * p->total_cmds * sizeof(int));
 	ft_memset(p->fd, -1, 2 * p->total_cmds * sizeof(int));
 	i = 0;
 	while (i < p->total_cmds - 1)

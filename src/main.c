@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/02 18:54:17 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:34:34 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,13 @@ void create_env_null(t_env **env)
 
 void before_create_env(t_env **env, char **envp)
 {
-    *env = ft_malloc(sizeof(t_env)); 
     if (envp[0] == NULL)
         create_env_null(env);
-    else    
+    else
+	{
+		*env = ft_malloc(sizeof(t_env));
         create_env(*env, envp);
+	}
 }
 
 
@@ -118,7 +120,10 @@ int	main(int argc, char **argv, char **envp)
 			if (input != NULL)
 				handle_input(env, input);
 			else
+			{
+				printf("exit\n");
 				return (free_env(env), 0);
+			}
 			rl_on_new_line();
 			free(input);
 		}
