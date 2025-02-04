@@ -6,36 +6,42 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 14:42:33 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:48:58 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cd_actions(t_token *tokens)
+void	cd_actions(t_token *tokens, t_env *env)
 {
+	char	cwd[4096];
 	int	x;
 
-	if (tokens->flags)
+	if (tokens->flags && ft_charcmp(tokens->flags[0], '-') == 0)
 	{
-		if (ft_charcmp(tokens->flags[0], '-') == 0)
+		x = flags_validator(tokens->flags, "L P");
+		if (x == 0)
 		{
-			x = flags_validator(tokens->flags, "L P");
-			if (x == 0)
-				printf("flags are not implemented\n");
-			else
-			{
-				printf("bash: cd: -%c: invalid option\n", tokens->flags[x]);
-				printf("cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n");
-			}
-			g_exit_status = 2;
-			return ;
+			printf("flags are not implemented\n");
+			g_exit_status = 777;
 		}
+		else
+		{
+			printf("bash: cd: -%c: invalid option\n", tokens->flags[x]);
+			printf("cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n");
+			g_exit_status = 2;
+		}
+		return ;
 	}
-	if (ft_strcmp(tokens->cmd, "cd") == 0 && n_words(tokens->args, ' ') > 1)
+	else if (ft_strcmp(tokens->cmd, "cd") == 0 && n_words(tokens->args, ' ') > 1)
 		printf("bash: cd: too many arguments\n");
 	else if (chdir(tokens->args) != 0)
 		printf("bash: cd: %s: No such file or directory\n", tokens->args);
+	else
+	{
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
+			update_pwd("PWD", &env, cwd);
+	}
 	g_exit_status = 1;
 }
 
@@ -58,21 +64,24 @@ void	command_cd(t_token *tokens, t_env *env)
 
 	if (tokens == NULL)
 		return ;
-	if ((tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0))
+	if (tokens->args || tokens->flags)
+		cd_actions(tokens, env);
+	else if ((tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0))
 	{
 		home = have_home(env);
 		if (home != NULL)
 		{
 			if (chdir(home) != 0)
 				perror("chdir");
+			else if (getcwd(cwd, sizeof(cwd)) != NULL)
+				update_pwd("PWD", &env, cwd);
 		}
 		else
+		{
 			printf("\t--- Error ---\ncd: HOME not set\n");
+			g_exit_status = 1;
+		}
 	}
-	else if (tokens->args)
-		cd_actions(tokens);
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		update_pwd("PWD", &env, cwd);
 }
 
 void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
@@ -85,6 +94,7 @@ void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
 
 void	handle_command(char *cleaned, t_token *tokens, t_env *env, t_ast *ast)
 {
+	g_exit_status = 0;
 	if (ft_strcmp(cleaned, "pwd") == 0)
 		command_pwd(tokens);
 	else if (ft_strcmp(cleaned, "env") == 0)

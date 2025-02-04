@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:34:57 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 18:30:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:38:26 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@ void	command_clear(t_token *tokens)
 	int	x;
 
 	x = 2;
-	if (tokens->flags)
+	if (tokens->flags && ft_charcmp(tokens->flags[0], '-') == 0)
 	{
-		if (ft_charcmp(tokens->flags[0], '-') == 0)
+		x = flags_validator(tokens->flags, "T V x");
+		if (x == 0)
 		{
-			x = flags_validator(tokens->flags, "T V x");
-			if (x == 0)
-				printf("flags are not implemented\n");
-			else
-				printf("clear: invalid option -- '%c'\n", tokens->flags[x]);
+			printf("flags are not implemented\n");
+			g_exit_status = 777;
 		}
+		else
+			printf("clear: invalid option -- '%c'\n", tokens->flags[x]);
 	}
 	else if (tokens->args == NULL)
 		printf("\033[2J\033[H");
@@ -36,6 +36,7 @@ void	command_clear(t_token *tokens)
 		printf("  -T TERM     use this instead of $TERM\n");
 		printf("  -V          print curses-version\n");
 		printf("  -x          do not try to clear scrollback\n");
+		g_exit_status = 1;
 	}
 }
 
@@ -98,7 +99,10 @@ void	command_echo(t_token *tokens)
 		{
 			x = flags_validator(tokens->flags, "e E");
 			if (x == 0)
+			{
 				printf("flags are not implemented\n");
+				g_exit_status = 777;
+			}
 		}
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 18:06:40 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:39:58 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,9 @@ void	command_pwd(t_token *tokens)
 	if (tokens->args != NULL)
 	{
 		printf("pwd: too many arguments\n");
-		return ;
+		g_exit_status = 1;
 	}
-	if (tokens->args == NULL)
-	{
-		if (getcwd(cwd, sizeof(cwd)) != NULL)
-			printf("%s\n", cwd);
-		return ;
-	}
-	if (ft_charcmp(tokens->flags[0], '-') == 0)
+	else if (tokens->flags && ft_charcmp(tokens->flags[0], '-') == 0)
 	{
 		x = flags_validator(tokens->flags, "L P");
 		if (x == 0)
@@ -89,6 +83,12 @@ void	command_pwd(t_token *tokens)
 			printf("bash: pwd: -%c: invalid option\n", tokens->flags[x]);
 			printf("pwd: usage: pwd [-LP]\n");
 		}
+		g_exit_status = 2;
+	}
+	else if (tokens->args == NULL)
+	{
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
+			printf("%s\n", cwd);
 	}
 }
 
@@ -128,6 +128,7 @@ void	command_env(t_token *tokens, t_env *envi)
 	if (tokens->args != NULL)
 	{
 		printf("env: ‘%s’: No such file or directory\n", tokens->args);
+		g_exit_status = 127;
 		return ;
 	}
 	if (tokens->flags == NULL)
@@ -139,11 +140,15 @@ void	command_env(t_token *tokens, t_env *envi)
 	{
 		x = flags_validator(tokens->flags, "i 0 u C S v");
 		if (x == 0)
+		{
 			printf("flags are not implemented\n");
+			g_exit_status = 777;
+		}
 		else
 		{
 			printf("env: invalid option -- '%c'\n", tokens->flags[x]);
 			printf("Try 'env --help' for more information.\n");
+			g_exit_status = 125;
 		}
 	}
 }

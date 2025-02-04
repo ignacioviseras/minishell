@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/04 14:42:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:45:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,8 @@ char				*append_str(char *base, char *suffix);
 char				*remove_substr(char *substr, char *old_str);
 int					valid_char_filename(char c);
 char				*get_next_word(char *str);
+int					count_words_smart(const char *input);
+char				**smart_split(const char *input);
 
 
 // BUILT_INS
@@ -226,10 +228,10 @@ char				*env_finder(t_env **env, char *find);
 void				update_pwd(char *pwd_key, t_env **env, char *new_pwd);
 void				command_pwd(t_token *tokens);
 void				command_env(t_token *tokens, t_env *env);
-void				cd_actions(t_token *tokens);
+void				cd_actions(t_token *tokens, t_env *env);
 void				command_cd(t_token *token, t_env *env);
 char				*get_content_var(char *str);
-void				handle_variable_export(char *var, t_env *env, char *args);
+void				handle_variable_export(char *var, t_env *env);
 char				*get_var(char *str);
 void				command_export(t_token *tokens, t_env *envi);
 char				*get_home(char *pwd);

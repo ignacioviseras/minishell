@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 14:45:06 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:32:25 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	update_pwd(char *pwd_key, t_env **env, char *new_pwd)
 	add_bottom(env, new_node(pwd_key, new_pwd, 0));
 }
 
-void	handle_variable_export(char *var, t_env *env, char *args)
+void	handle_variable_export(char *var, t_env *env)
 {
 	char	*var_name;
 	char	*var_content;
 
 	var_name = get_var(var);
-	var_content = get_content_var(args);
+	var_content = get_content_var(var);
 	if (validate_export(var_name, var_content) == 0)
 		add_bottom(&env, new_node(var_name, var_content, 0));
 	free(var_name);
@@ -35,7 +35,7 @@ void	export_actions(t_token *tokens, t_env *env)
 	int		x;
 	char	**splt_vars;
 
-	splt_vars = ft_split(tokens->args, ' ');
+	splt_vars = smart_split(tokens->args);
 	if (!splt_vars)
 	{
 		free(splt_vars);
@@ -50,27 +50,29 @@ void	export_actions(t_token *tokens, t_env *env)
 				add_bottom(&env, new_node(splt_vars[x], NULL, 1));
 		}
 		else
-			handle_variable_export(splt_vars[x], env, tokens->args);
+			handle_variable_export(splt_vars[x], env);
 	}
 	free_matrix(splt_vars);
 }
 
 void	command_export(t_token *tokens, t_env *env)
 {
+	int x;
 	if (tokens->args == NULL)
 		print_env(env, 1);
 	else
 	{
-		if (tokens->flags)
+		if (tokens->flags && ft_charcmp(tokens->flags[0], '-') == 0)
 		{
-			if (ft_charcmp(tokens->flags[0], '-') == 0)
+			x = flags_validator(tokens->flags, "f n p");
+			if (x == 0)
+				printf("flags are not implemented\n");
+			else
 			{
-				if (flags_validator(tokens->flags, "f n p") == 0)
-				{
-					printf("flags are not implemented\n");
-					return ;
-				}
+				printf("export: usage: export [-%c]:", tokens->flags[x]);
+				return ;
 			}
+			g_exit_status = 2; //TODO
 		}
 		else
 			export_actions(tokens, env);
@@ -82,7 +84,7 @@ void	unset_actions(t_token *tokens, t_env *env)
 	char	**splt_vars;
 	int		x;
 
-	splt_vars = ft_split(tokens->args, ' ');
+	splt_vars = smart_split(tokens->args);
 	if (!splt_vars)
 		return ;
 	x = -1;
@@ -91,28 +93,39 @@ void	unset_actions(t_token *tokens, t_env *env)
 		if (!ft_strchr(splt_vars[x], '='))
 			remove_node(&env, splt_vars[x]);
 		else
+		{
 			printf("bash: unset: `%s': not a valid identifier\n", splt_vars[x]);
+			g_exit_status = 1;
+		}
 	}
 	free_matrix(splt_vars);
-	//free(splt_vars);
 }
 
 void	command_unset(t_token *tokens, t_env *env)
 {
 	int	x;
-
+	if (tokens->args == NULL)
+	{
+		printf("unset: not enough arguments\n");
+		g_exit_status = 1;
+		return ;
+	}
 	if (tokens->flags)
 	{
 		if (ft_charcmp(tokens->flags[0], '-') == 0)
 		{
 			x = flags_validator(tokens->flags, "f v n");
 			if (x == 0)
+			{
 				printf("flags are not implemented\n");
+				g_exit_status = 777;
+			}
 			else
 			{
 				printf("bash: unset: -%c:", tokens->flags[x]);
 				printf(" invalid option\n");
 				printf("unset: usage: unset [-f] [-v] [-n] [name ...]\n");
+				g_exit_status = 2;
 			}
 		}
 	}
