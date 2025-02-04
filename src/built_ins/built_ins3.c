@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:34:57 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 17:44:08 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 20:46:31 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,72 +40,49 @@ void	command_clear(t_token *tokens)
 	}
 }
 
-int	is_option_n(char *str)
+int    is_option_n(char *str)
 {
-	int	i;
-	int	result;
+    int i;
+    int result;
 
-	i = 1;
-	result = 1;
-	if (str[0] != '-')
-		result = 0;
-	else
-	{
-		while (str[i] == 'n')
-			i++;
-		if (str[i] != '\0')
-			result = 0;
-	}
-	return (result);
+    i = 1;
+    result = 1;
+    if (str[0] != '-')
+        result = 0;
+    else
+    {
+        while (str[i] == 'n')
+            i++;
+        if (str[i] != '\0')
+            result = 0;
+    }
+    return (result);
 }
 
-void	print_echo(char *input)
+void command_echo(t_token *tokens)
 {
-	char	**str_splited;
-	int		no_newline;
-	int		i;
+   char **str_splited;
+    int no_newline;
+    int i;
 
-	i = -1;
-	no_newline = 1;
-	if (!input)
-	{
-		printf("\n");
-		return ;
-	}
-	str_splited = ft_split(input, ' ');
-	while (str_splited[++i] && is_option_n(str_splited[i]))
-		no_newline = 0;
-	while (str_splited[i])
-	{
-		printf("%s", str_splited[i]);
-		if (str_splited[i + 1])
-			printf(" ");
-		i++;
-	}
-	if (no_newline)
-		printf("\n");
-	free_matrix(str_splited);
-}
-
-void	command_echo(t_token *tokens)
-{
-	int		x;
-	char	*aux;
-
-	aux = remove_quotes(ft_strdup(tokens->args));
-	if (tokens->flags)
-	{
-		if (ft_charcmp(tokens->flags[0], '-') == 0)
-		{
-			x = flags_validator(tokens->flags, "e E");
-			if (x == 0)
-			{
-				printf("flags are not implemented\n");
-				g_exit_status = 777;
-			}
-		}
-	}
-	else
-		print_echo(aux);
-	free(aux);
-}
+    i = 0;
+    no_newline = 1;
+    if (!tokens->args && !tokens->flags)
+    {
+        printf("\n");
+        return;
+    }
+    str_splited = ft_split(tokens->full_cmd, ' ');
+    while (str_splited[++i] && is_option_n(str_splited[i]))
+        no_newline = 0;
+    while (str_splited[i])
+    {
+        printf("%s", str_splited[i]);
+        if (str_splited[i + 1])
+            printf(" ");
+        i++;
+    }
+    if (no_newline)
+        printf("\n");
+    free_matrix(str_splited);
+} 
