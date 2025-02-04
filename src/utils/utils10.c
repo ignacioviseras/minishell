@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils10.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:54:18 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 18:22:08 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:46:56 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
 
 void	handle_quotes(const char *input, int *i, int *in_quotes,
 		char *quote_type)

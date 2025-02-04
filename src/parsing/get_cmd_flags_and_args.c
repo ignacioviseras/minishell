@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_flags_and_args.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:12:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 22:32:18 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:47:51 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/* int	valid_char_env_var_name(char c)
-{
-	if (c == )
-} */
 
 void	manage_quoted_str(t_token *token, char *str, int *i)
 {
@@ -52,22 +47,18 @@ void	manage_unquoted_str(t_token *token, char *str, int *i)
 
 void	find_args(t_token *token, char *str)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '"' || str[i] == '\'')
 		i = skip_quoted_string(str, i);
-	while (is_alnum(str[i]) || str[i] == '-' || str[i] == '|' || \
-			str[i] == '"' || str[i] == '\'')
+	while (is_alnum(str[i]) || str[i] == '-' || str[i] == '|' || str[i] == '"'
+		|| str[i] == '\'')
 		i++;
 	while (str[i] && str[i] != '|')
 	{
 		if (str[i] == '"' || str[i] == '\'')
 			manage_quoted_str(token, str, &i);
-		//else if (is_alnum(str[i]) || !valid_char_filename(str[i]) || str[i] == '-' || str[i] == '$')
-		//	manage_unquoted_str(token, str, &i);
-		//else
-		//	i++;
 		else
 		{
 			while (str[i] == ' ')
@@ -90,8 +81,8 @@ void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 	}
 	if (!token->cmd)
 	{
-		while (is_alpha(full_cmd[i]) || full_cmd[i] == '/' || \
-		full_cmd[i] == '_' || full_cmd[i] == '$')
+		while (is_alpha(full_cmd[i]) || full_cmd[i] == '/' || full_cmd[i] == '_'
+			|| full_cmd[i] == '$')
 			i++;
 		token->cmd = ft_substr(full_cmd, 0, i);
 	}

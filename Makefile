@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+         #
+#    By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/02/04 18:22:53 by igvisera         ###   ########.fr        #
+#    Updated: 2025/02/04 18:59:40 by igvisera         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,6 @@ UTILS_SRC		=	utils01.c \
 					mem_alloc.c \
 					frees01.c \
 					frees02.c \
-					gnl.c \
 
 OBJS			=	${PARSING:.c=.o} \
 					${SIGNALS:.c=.o} \
