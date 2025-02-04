@@ -6,11 +6,16 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 21:23:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:45:06 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	update_pwd(char *pwd_key, t_env **env, char *new_pwd)
+{
+	add_bottom(env, new_node(pwd_key, new_pwd, 0));
+}
 
 void	handle_variable_export(char *var, t_env *env, char *args)
 {

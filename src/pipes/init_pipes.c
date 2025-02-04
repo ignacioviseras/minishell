@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 21:06:46 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:45:12 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	create_env(t_env *env, char **envp)
 	while (envp && *envp)
 	{
 		env->key = ft_substr(*envp, 0, findchar(*envp, '='));
-		env->value = ft_substr(*envp, findchar(*envp, '=') + 1, findchar(*envp,
-					'\0'));
+		env->value = ft_substr (*envp, findchar(*envp, '=') \
+		+ 1, findchar(*envp, '\0'));
 		env->hide = 0;
 		if (*(envp + 1))
 			env->next = ft_malloc(sizeof(t_env));

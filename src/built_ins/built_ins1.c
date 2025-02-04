@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 14:27:44 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:42:33 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,39 @@ void	cd_actions(t_token *tokens)
 }
 
 
-void	command_cd(t_token *tokens)
+char	*have_home(t_env *env)
 {
-	static char	*home;
+	while (env)
+	{
+		if (ft_strcmp("HOME", env->key) == 0)
+			return (env->value);
+		env = env ->next;
+	}
+	return (NULL);
+}
+
+void	command_cd(t_token *tokens, t_env *env)
+{
+	char	*home;
+	char	cwd[4096];
 
 	if (tokens == NULL)
 		return ;
-	if (home == NULL)
+	if ((tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0))
 	{
-		home = getenv("HOME");
-		if (home == NULL)
-			home = get_home(getenv("PWD"));
+		home = have_home(env);
+		if (home != NULL)
+		{
+			if (chdir(home) != 0)
+				perror("chdir");
+		}
+		else
+			printf("\t--- Error ---\ncd: HOME not set\n");
 	}
-	if (ft_strcmp(tokens->cmd, "cd") == 0 && \
-		(tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0))
-	{
-		if (chdir(home) != 0)
-			perror("chdir");
-	}
-	else if (ft_strcmp(tokens->cmd, "cd") == 0 && tokens->args)
+	else if (tokens->args)
 		cd_actions(tokens);
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		update_pwd("PWD", &env, cwd);
 }
 
 void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
@@ -77,7 +90,7 @@ void	handle_command(char *cleaned, t_token *tokens, t_env *env, t_ast *ast)
 	else if (ft_strcmp(cleaned, "env") == 0)
 		command_env(tokens, env);
 	else if (ft_strcmp(cleaned, "cd") == 0)
-		command_cd(tokens);
+		command_cd(tokens, env);
 	else if (ft_strcmp(cleaned, "echo") == 0)
 		command_echo(tokens);
 	else if (ft_strcmp(cleaned, "export") == 0)
