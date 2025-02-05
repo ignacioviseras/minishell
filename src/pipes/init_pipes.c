@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 18:03:53 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:36:25 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,6 @@ void	init_pipes(t_ast *ast, t_params *p, t_env *env)
 	close_pipes(p);
 	free(p->fd);
 	free_matrix(p->env);
+	// while (wait(NULL) > 0)
+    //     ;
 }
