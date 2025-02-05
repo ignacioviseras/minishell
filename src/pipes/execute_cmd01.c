@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:57:56 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:00:05 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,39 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 		init_execute(data, p);
 }
 
+void	handle_processes(t_ast *node, t_params*p, t_env *env, t_token *data)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		pipes_and_execute(node, p, env, data);
+	}
+	else if (pid > 0)
+	{
+		signal(SIGINT, signals_handler_for_blockers);
+		signal(SIGQUIT, signals_handler_for_blockers);
+		wait_for_child(pid, p);
+	}
+	else
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void	execute_node(t_ast *node, t_params *p, t_env *env)
 {
 	t_token	*data;
 	int		builtin;
-	int		pid;
 
 	data = (t_token *)(node->data);
 	builtin = is_builtin(data->cmd);
 	if (p->total_cmds == 1 && builtin == 0)
 		build_switch(env, node, data);
 	else
-	{
-		pid = fork();
-		if (pid == 0)
-			pipes_and_execute(node, p, env, data);
-		else if (pid > 0)
-			wait_for_child(pid, p);
-		else
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-	}
+		handle_processes(node, p, env, data);
 }

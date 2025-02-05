@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_ins6.c                                       :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 17:52:06 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 17:53:38 by igvisera         ###   ########.fr       */
+/*   Created: 2025/02/05 18:53:19 by drestrep          #+#    #+#             */
+/*   Updated: 2025/02/05 18:53:59 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,19 @@ void	handle_unset_flags(t_token *tokens)
 	}
 }
 
-void	handle_cd_flags(t_token *tokens)
+void	command_unset(t_token *tokens, t_env *env)
 {
-	int	x;
-
-	x = flags_validator(tokens->flags, "L P");
-	if (x == 0)
+	if (tokens->args == NULL)
 	{
-		printf("flags are not implemented\n");
-		g_exit_status = 777;
+		printf("unset: not enough arguments\n");
+		g_exit_status = 1;
+		return ;
+	}
+	if (tokens->flags)
+	{
+		if (ft_charcmp(tokens->flags[0], '-') == 0)
+			handle_unset_flags(tokens);
 	}
 	else
-	{
-		printf("bash: cd: -%c: invalid option\n", tokens->flags[x]);
-		printf("cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n");
-		g_exit_status = 2;
-	}
+		unset_actions(tokens, env);
 }

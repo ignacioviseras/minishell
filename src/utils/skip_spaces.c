@@ -6,11 +6,17 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 12:54:59 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 14:46:34 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:37:44 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	skip_spaces(char *str, int *i)
+{
+	while (str[*i] == ' ')
+		(*i)++;
+}
 
 void	skip_input_spaces(char **input)
 {

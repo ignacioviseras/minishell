@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/04 19:09:16 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:06:56 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+# define _GNU_SOURCE
 
 #include <fcntl.h>
 #include <limits.h>
@@ -56,6 +58,7 @@ typedef enum t_redirect_type
 	INFILE,
 	HEREDOC
 }					t_redirect_type;
+
 /*
  * Structure used to create the Abstract Syntax Tree (AST).
  * It holds the data and two pointers to each of its children.
@@ -160,6 +163,7 @@ int					get_symbol(char c);
 void				*ft_memset(void *b, int c, size_t len);
 void				skip_input_spaces(char **input);
 char				*skip_args_spaces(char *args);
+void				skip_spaces(char *str, int *i);
 int					ft_charcmp(char c1, char c2);
 void				ft_bzero(void *s, size_t n);
 char				ft_lstlastchar(t_token *lst);
@@ -194,7 +198,6 @@ int					is_alpha(char c);
 int					is_number(char c);
 int					is_alnum(char c);
 int					is_valid(char *str);
-int					ft_isalnum(char c);
 int					ft_count_words(char **strs);
 int					skip_quoted_string(char *str, int counter);
 char				*get_unquoted_str(char *str);
@@ -207,11 +210,11 @@ int					valid_char_filename(char c);
 char				*get_next_word(char *str);
 int					count_words_smart(const char *input);
 char				**smart_split(const char *input);
+int					ft_atoi(const char *str);
 
 // BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
 void				build_switch(t_env *env, t_ast *ast, t_token *tokens);
-char				*env_finder(t_env **env, char *find);
 void				update_pwd(char *pwd_key, t_env **env, char *new_pwd);
 void				command_pwd(t_token *tokens);
 void				command_env(t_token *tokens, t_env *env);
@@ -221,12 +224,10 @@ char				*get_content_var(char *str);
 void				handle_variable_export(char *var, t_env *env);
 char				*get_var(char *str);
 void				command_export(t_token *tokens, t_env *envi);
-char				*get_home(char *pwd);
 void				print_env(t_env *envi, int flag);
 void				command_unset(t_token *tokens, t_env *env);
 void				command_echo(t_token *tokens);
 void				command_clear(t_token *tokens);
-void				print_echo(char *input);
 void				export_actions(t_token *tokens, t_env *env);
 int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
@@ -258,6 +259,8 @@ int					count_ast_nodes(t_ast *node);
 
 // SIGNALS
 void				handle_signals(void);
+void				signals_handler(int sig);
+void				signals_handler_for_blockers(int sig);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);

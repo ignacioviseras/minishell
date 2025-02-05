@@ -1,21 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_ins4.c                                       :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 19:14:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:59:04 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-void	update_pwd(char *pwd_key, t_env **env, char *new_pwd)
-{
-	add_bottom(env, new_node(pwd_key, new_pwd, 0));
-}
 
 void	handle_variable_export(char *var, t_env *env)
 {
@@ -28,6 +23,26 @@ void	handle_variable_export(char *var, t_env *env)
 		add_bottom(&env, new_node(var_name, var_content, 0));
 	free(var_name);
 	free(var_content);
+}
+
+int	validate_export(char *key, char *value)
+{
+	if (is_valid(key) == 1)
+	{
+		if (value == NULL)
+		{
+			printf("bash: export: `%s':", key);
+			printf(" not a valid identifier\n");
+		}
+		else
+		{
+			printf("bash: export: `%s=%s':", key, value);
+			printf(" not a valid identifier\n");
+		}
+		g_exit_status = 2;
+		return (1);
+	}
+	return (0);
 }
 
 void	command_export(t_token *tokens, t_env *env)
@@ -55,21 +70,4 @@ void	command_export(t_token *tokens, t_env *env)
 		}
 		free_matrix(splt_vars);
 	}
-}
-
-void	command_unset(t_token *tokens, t_env *env)
-{
-	if (tokens->args == NULL)
-	{
-		printf("unset: not enough arguments\n");
-		g_exit_status = 1;
-		return ;
-	}
-	if (tokens->flags)
-	{
-		if (ft_charcmp(tokens->flags[0], '-') == 0)
-			handle_unset_flags(tokens);
-	}
-	else
-		unset_actions(tokens, env);
 }

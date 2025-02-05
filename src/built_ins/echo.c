@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_ins5.c                                       :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:08 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 17:51:42 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:58:37 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,48 +49,49 @@ char	*get_content_var(char *str)
 	return (variable);
 }
 
-int	validate_export(char *key, char *value)
+int	is_option_n(char *str)
 {
-	if (is_valid(key) == 1)
-	{
-		if (value == NULL)
-		{
-			printf("bash: export: `%s':", key);
-			printf(" not a valid identifier\n");
-		}
-		else
-		{
-			printf("bash: export: `%s=%s':", key, value);
-			printf(" not a valid identifier\n");
-		}
-		g_exit_status = 2;
-		return (1);
-	}
-	return (0);
-}
+	int	i;
+	int	result;
 
-void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
-{
-	free_env(env);
-	free_ast(ast);
-	free_tokens(tokens);
-	exit(0);
-}
-
-void	handle_env_flags(t_token *tokens)
-{
-	int	x;
-
-	x = flags_validator(tokens->flags, "i 0 u C S v");
-	if (x == 0)
-	{
-		printf("flags are not implemented\n");
-		g_exit_status = 777;
-	}
+	i = 1;
+	result = 1;
+	if (str[0] != '-')
+		result = 0;
 	else
 	{
-		printf("env: invalid option -- '%c'\n", tokens->flags[x]);
-		printf("Try 'env --help' for more information.\n");
-		g_exit_status = 125;
+		while (str[i] == 'n')
+			i++;
+		if (str[i] != '\0')
+			result = 0;
 	}
+	return (result);
+}
+
+void	command_echo(t_token *tokens)
+{
+	char	**str_splited;
+	int		no_newline;
+	int		i;
+
+	i = 0;
+	no_newline = 1;
+	if (!tokens->args && !tokens->flags)
+	{
+		printf("\n");
+		return ;
+	}
+	str_splited = ft_split(tokens->full_cmd, ' ');
+	while (str_splited[++i] && is_option_n(str_splited[i]))
+		no_newline = 0;
+	while (str_splited[i])
+	{
+		printf("%s", str_splited[i]);
+		if (str_splited[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (no_newline)
+		printf("\n");
+	free_matrix(str_splited);
 }

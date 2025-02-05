@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+         #
+#    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/02/04 18:59:40 by igvisera         ###   ########.fr        #
+#    Updated: 2025/02/05 19:01:14 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,12 +60,15 @@ PIPES_SRC		=	pipes_util.c \
 					redirection04.c \
 
 
-BUILT_SRC		=	built_ins1.c \
-					built_ins2.c \
-					built_ins3.c \
-					built_ins4.c \
-					built_ins5.c \
-					built_ins6.c \
+BUILT_SRC		=	built_ins.c \
+					cd.c \
+					clear.c \
+					echo.c \
+					env.c \
+					exit.c \
+					export.c \
+					pwd.c \
+					unset.c \
 
 UTILS_SRC		=	utils01.c \
 					utils02.c \
