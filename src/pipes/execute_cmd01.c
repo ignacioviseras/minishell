@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/05 14:00:05 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/06 15:24:39 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 	i = 0;
 	while (i < 2 * p->total_cmds)
 	{
-		close(p->fd[i]);
+		// if (i != p->fd_index && i != p->fd_index + 1)
+			close(p->fd[i]);
 		i++;
 	}
 	if (data && data->type == TOKEN_PIPE)
