@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 17:48:06 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 20:02:32 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:44:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,13 @@ char	*append_str(char *base, char *suffix)
 		return (ft_strdup(base));
 	base_len = ft_strlen(base);
 	suffix_len = ft_strlen(suffix);
-	result = ft_malloc((base_len + suffix_len + 2) * sizeof(char));
+	/* result = ft_malloc((base_len + suffix_len + 2) * sizeof(char));
 	ft_strcpy(result, base);
 	result[base_len] = ' ';
-	ft_strcpy(result + base_len + 1, suffix);
+	ft_strcpy(result + base_len + 1, suffix); */
+	result = ft_malloc((base_len + suffix_len + 1) * sizeof(char));
+	ft_strcpy(result, base);
+	ft_strcpy(result + base_len, suffix);
 	free(base);
 	return (result);
 }

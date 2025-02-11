@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:36:15 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 16:40:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:26:46 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	tramited(char *path, t_params *p, t_token *t)
 		p->cmd_path = load_param(dir, t->full_cmd);
 	else
 		p->cmd_path = load_param(dir, t->cmd);
-	p->cmd_exec = split_formated(remove_quotes(t->full_cmd), ' ');
+	p->cmd_exec = split_formated(get_unquoted_str(t->full_cmd), ' ');
 	free(trim);
 	free_matrix(dir);
 	if (p->cmd_path != NULL)

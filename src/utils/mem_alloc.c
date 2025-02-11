@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:36:11 by igvisera          #+#    #+#             */
-/*   Updated: 2024/12/07 16:55:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:49:26 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	if (nmemb == SIZE_MAX || size == SIZE_MAX)
 		return (NULL);
 	total_mem = nmemb * size;
-	mem = malloc(total_mem);
-	if (!mem)
-		return (NULL);
+	mem = ft_malloc(total_mem);
 	ft_bzero(mem, total_mem);
 	return (mem);
 }

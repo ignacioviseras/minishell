@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/05 19:06:56 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/11 20:04:09 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ char				*ft_strchr(const char *s, int c);
 int					findchar(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					n_words(char const *s, char c);
-char				**split_formated(char const *s, char c);
+char				**split_formated(char *s, char c);
 size_t				ft_newstrlcpy(char *dst, char *src, size_t size);
 char				*ft_strjoin(char *s1, char *s2);
 char				*ft_strjoin_cmd(char *s1, char *s2);
@@ -207,7 +207,7 @@ char				*trim_sp(const char *str);
 char				*append_str(char *base, char *suffix);
 char				*remove_substr(char *substr, char *old_str);
 int					valid_char_filename(char c);
-char				*get_next_word(char *str);
+char				*get_next_word(char *cmd, char *str, int caller);
 int					count_words_smart(const char *input);
 char				**smart_split(const char *input);
 int					ft_atoi(const char *str);

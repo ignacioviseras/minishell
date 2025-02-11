@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:59:18 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/22 17:45:35 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:18:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,12 @@ char	*get_exit_status(int *keys_nbr)
 	return (ft_itoa(g_exit_status));
 }
 
-char	*get_value(t_env *env, char *key, int *keys_nbr)
+char	*get_env_var_value(t_env *env, char *key, int *keys_nbr)
 {
 	t_env	*aux;
 	char	*value;
 
 	aux = env;
-	value = NULL;
-	if (ft_strcmp(key, "?") == 0)
-		value = get_exit_status(keys_nbr);
 	while (env && *keys_nbr > 0)
 	{
 		if (ft_strcmp(key, env->key) == 0)
@@ -45,6 +42,14 @@ char	*get_value(t_env *env, char *key, int *keys_nbr)
 	}
 	env = aux;
 	return (value);
+}
+
+char	*get_value(t_env *env, char *key, int *keys_nbr)
+{
+	if (ft_strcmp(key, "?") == 0)
+		return (get_exit_status(keys_nbr));
+	else
+		return (get_env_var_value(env, key, keys_nbr));
 }
 
 char	**get_values(t_env *env, char **keys, int *keys_nbr)

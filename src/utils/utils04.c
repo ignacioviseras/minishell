@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:10:36 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/10 16:47:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:49:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,16 @@ char	**ft_split(char const *s, char c)
 	return (str[i] = NULL, str);
 }
 
-char	**split_formated(char const *s, char c)
+char	**split_formated(char *s, char c)
 {
 	size_t	i;
 	size_t	len_word;
 	char	**str;
+	char	*aux;
 
 	i = 0;
+	aux = s;
 	str = ft_calloc(n_words(s, c) + 1, sizeof(char *));
-	if (!str)
-		return (NULL);
 	while (s && *s != '\0')
 	{
 		while (*s && *s == c)
@@ -126,5 +126,6 @@ char	**split_formated(char const *s, char c)
 		s += len_word;
 	}
 	str[i] = NULL;
+	free(aux);
 	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 11:53:27 by drestrep          #+#    #+#             */
-/*   Updated: 2024/11/19 16:09:42 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:34:43 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	count_quotes(char *str)
 		if (*str == '"' || *str == '\'')
 		{
 			quote = *str++;
-			while (*str != quote)
+			while (*str && *str != quote)
 				str++;
 			nbr_of_quotes += 2;
 		}

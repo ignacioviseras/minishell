@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:51:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/05 18:52:36 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:23:55 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	find_imposter(char *str)
 	return (0);
 }
 
-void	get_new_exit_status(char *full_cmd, char *flags, int i)
+/* void	get_new_exit_status(char *full_cmd, char *flags, int i)
 {
 	char	*nbr;
 
@@ -52,7 +52,7 @@ void	get_new_exit_status(char *full_cmd, char *flags, int i)
 	else if (nbr)
 		g_exit_status = ft_atoi(nbr);
 	free(nbr);
-}
+} */
 
 void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
 {
@@ -69,7 +69,8 @@ void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
 	(full_cmd[i + 2] == '\0' || full_cmd[i + 2] == ' '))
 		i += 2;
 	skip_spaces(full_cmd, &i);
-	get_new_exit_status(full_cmd, tokens->flags, i);
+	//TODO
+	//get_new_exit_status(full_cmd, tokens->flags, i);
 	free(full_cmd);
 	free_env(env);
 	free_ast(ast);

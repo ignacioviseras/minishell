@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:41:52 by drestrep          #+#    #+#             */
-/*   Updated: 2024/12/11 20:10:39 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/06 20:18:04 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ char	**get_keys(char *str, int keys_nbr)
 	{
 		key = get_key(str, &i);
 		if (key != NULL)
+		{
+			keys_nbr--;
 			keys[j++] = key;
+		}
 	}
 	keys[j] = NULL;
 	return (keys);

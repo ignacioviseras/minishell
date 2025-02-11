@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/01 21:03:48 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/11 20:07:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,33 @@ char	*get_command(char *full_cmd)
 
 char	*get_flags_or_args(t_token *token, char *var, int caller)
 {
-	char	*aux;
 	char	*new_var;
+	char	*word;
 	char	*str;
-	int		i;
 
-	i = 0;
 	new_var = NULL;
 	str = token->full_cmd + ft_strlen(token->cmd);
-	while (str[i] && !is_alnum(str[i]) && str[i] != '-')
-		i++;
-	while (str[i])
+	while (*str && !is_alnum(*str) && *str != '-' \
+		&& *str != '\'' && *str != '"')
+		str++;
+	while (*str)
 	{
-		while (str[i] && str[i] == ' ')
-			i++;
-		aux = get_next_word(str + i);
-		if (aux[0] == '-' && caller == 0)
-			new_var = append_str(new_var, aux);
-		else if (aux[0] != '-' && caller == 1)
-			new_var = append_str(new_var, aux);
-		i += ft_strlen(aux);
-		free(aux);
+		while (*str && *str == ' ')
+			str++;
+ 		word = get_next_word(token->cmd, str, 1);
+		if (word == NULL || word[0] == '\0')
+		{
+			free(word);
+			break ;
+		}
+		if (word[0] == '-' && caller == 0)
+			new_var = append_str(new_var, word);
+		else if (word[0] != '-' && caller == 1)
+			new_var = append_str(new_var, word);
+		/* if (*str == '\'' || *str == '"')
+			str++; */
+		str += ft_strlen(word);
+		free(word);
 	}
 	free(var);
 	return (new_var);
@@ -94,6 +100,26 @@ void	replace_var(t_token *token, t_env *env)
 	else
 		free(values);
 }
+
+/* void	replace_var(t_token *token, t_env *env)
+{
+	int		keys_nbr;
+	char	**keys;
+	char	**values;
+
+	keys_nbr = get_nbr_of_keys(token->full_cmd);
+	keys = get_keys(token->full_cmd, keys_nbr);
+	values = get_values(env, keys, &keys_nbr);
+	token->full_cmd = expand_token(token, values, );
+	token->cmd = expand_token(NULL, token->cmd, values);
+	token->flags = expand_token(NULL, token->flags, values);
+	token->args = expand_token(token->cmd, token->args, values);
+	free_matrix(keys);
+	if (ft_strcmp(*values, ""))
+		free_matrix(values);
+	else
+		free(values);
+} */
 
 void	expander(t_token **tokens, t_env *env)
 {

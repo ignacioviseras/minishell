@@ -6,11 +6,21 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 19:33:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/30 20:04:14 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:52:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+int	number_of_spaces(char *str, int i)
+{
+	int	spaces;
+
+	spaces = 0;
+	while (str[i++] == ' ')
+		spaces++;
+	return (spaces);
+}
 
 /*
  * Creates a new token with the specified type and value,
@@ -26,15 +36,15 @@ t_token	*create_token(t_token_type type, char *buf)
 	token->full_cmd = ft_strdup(buf);
 	token->type = type;
 	space_pos = findchar(buf, ' ');
-	if (((space_pos > 0 && space_pos + 1 != (int)ft_strlen(buf)) || \
-		(findchar(token->full_cmd, '>') || findchar(token->full_cmd, '<'))) && \
-		token->type == 0)
+	if (((space_pos > 0 && space_pos + number_of_spaces(token->full_cmd, \
+		space_pos) != (int)ft_strlen(buf)) || (findchar(token->full_cmd, \
+		'>') > -1 || findchar(token->full_cmd, '<') > -1)) && token->type == 0)
 	{
 		get_redirections(token);
 		get_cmd_flags_and_args(token, token->full_cmd);
 	}
 	else
-		token->cmd = ft_strdup(buf);
+		token->cmd = get_unquoted_str(buf);
 	token->next = NULL;
 	return (token);
 }
