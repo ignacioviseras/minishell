@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:28:59 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/08 15:43:02 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:17:43 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,6 @@ char	*get_next_word(char *cmd, char *str, int caller)
 		i++;
 	if (!str[i])
 		return (NULL);
-	/* if (str[i] == '\'' || str[i] == '"')
-	{
-		j++;
-		while (str[i + j] && str[i + j] != quote)
-			j++;
-	} */
 	if (str[i] == '\'' || str[i] == '"')
 		return (get_quoted_str(str, str[i]));
 	if (ft_strcmp(cmd, "echo") == 0 && str[i] == '-' && isalpha(str[i + 1]) \
@@ -95,39 +89,8 @@ char	*get_next_word(char *cmd, char *str, int caller)
 			j++;
 		}
 	}
-	/* if (str[i + j] == '\'' || str[i + j] == '"')
-	{
-		word[j] = str[i + j];
-		j++;
-	} */
 	word[j] = '\0';
 	return (word);
 }
-
-/* char	*get_next_word(char *str)
-{
-	char		*word;
-	int			i;
-	int			j;
-
-	i = 0;
-	j = 0;
-	while (str[i] && str[i] == ' ')
-		i++;
-	if (!str[i])
-		return (NULL);
-	while (str[i + j] && str[i + j] != ' ')
-		j++;
-	word = ft_malloc((j + 1) * sizeof(char));
-	j = 0;
-	while (str[i + j] && str[i + j] != ' ' \
-			&& str[i + j] != '\'' && str[i + j] != '"')
-	{
-		word[j] = str[i + j];
-		j++;
-	}
-	word[j] = '\0';
-	return (word);
-} */
 
 

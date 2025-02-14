@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/11 20:04:09 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:27:46 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,7 @@ char				**get_values(t_env *env, char **keys, int *keys_nbr);
 int					get_nbr_of_keys(char *str);
 int					ft_strlen_v2(char **strs);
 int					copy_len(const char *s);
+char				*remove_double_quotes(char *str);
 
 // REMOVE QUOTES
 char				*remove_quotes(char *str);

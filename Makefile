@@ -6,7 +6,7 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/02/05 19:01:14 by drestrep         ###   ########.fr        #
+#    Updated: 2025/02/14 17:32:07 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ PARSING_SRC		=	lexer.c \
 					create_and_add_token.c \
 					get_redirections.c \
 					get_cmd_flags_and_args.c \
+					quotes_expansion.c	\
 
 SIGNALS_SRC		=	handle_signals.c \
 

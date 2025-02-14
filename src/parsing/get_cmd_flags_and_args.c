@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:12:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/11 19:49:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:26:36 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,6 @@ void	manage_unquoted_str(t_token *token, char *str, int *i)
 		aux = ft_strdup(str + *i);
 	if (aux[0] == '-' && ft_strcmp(token->cmd, "export") != 0)
 		token->flags = append_str(token->flags, aux);
-	/* else if (aux[0] != '-' && ft_strcmp(token->cmd, "export") == 0)
-	{
-		token->args = get_export_args(aux);
-	} */
 	else
 		token->args = append_str(token->args, aux);
 	*i += ft_strlen(aux);
@@ -75,7 +71,7 @@ void	find_args(t_token *token, char *str)
 int	find_quotes_in_word(char *str)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[i] && str[i] != ' ')
 	{
@@ -83,66 +79,13 @@ int	find_quotes_in_word(char *str)
 			return (1);
 		i++;
 	}
-	return(0);
-}
-
-int	is_between_single_quotes(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] != '\'')
-				i++;
-		}
-		else if (str[i] == '"')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-char	*remove_double_quotes(char *str)
-{
-	char	*unquoted_str;
-	int		nbr_of_quotes;
-	int		i;
-	int		j;
-	char	quote;
-
-	i = 0;
-	j = 0;
-	printf("Str: %s\n", str);
-	if (findchar(str, '"') < 0 || is_between_single_quotes(str))
-		return (ft_strdup(str));
-	nbr_of_quotes = count_quotes(str);
-	unquoted_str = ft_malloc((ft_strlen(str) - nbr_of_quotes + 1) \
-	* sizeof(char));
-	while (str[i])
-	{
-		if (str[i] == '"')
-		{
-			quote = str[i++];
-			while (str[i] && str[i] != quote)
-				unquoted_str[j++] = str[i++];
-			if (str[i] == quote)
-				i++;
-		}
-		else
-			unquoted_str[j++] = str[i++];
-	}
-	unquoted_str[j] = '\0';
-	return (unquoted_str);
+	return (0);
 }
 
 void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 {
 	char	*unquoted_str;
-	int	i;
+	int		i;
 
 	i = 0;
 	token->cmd = NULL;
@@ -165,10 +108,4 @@ void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 		token->full_cmd = unquoted_str;
 	}
 	find_args(token, token->full_cmd);
-	/* if (ft_strcmp(token->cmd, "echo") == 0)
-	{
-		unquoted_str = get_unquoted_str(token->args);
-		free(token->args);
-		token->args = unquoted_str;
-	} */
 }
