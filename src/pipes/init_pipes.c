@@ -3,90 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/05 19:36:25 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:20:45 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	execute_ast(t_ast *node, t_params *p, t_env *env)
+static void	execute_pipe_left_child(t_ast *node, t_params *p, t_env *env,
+		int in_fd)
 {
-	t_token	*data;
-
-	if (node == NULL)
-		return ;
-	data = (t_token *)(node->data);
-	if (data->type == TOKEN_PIPE)
-		handle_pipe(node, p, env);
-	else
-		before_execute(node, p, env);
-}
-
-void	pipe_error(int i, t_params *p)
-{
-	perror("pipe");
-	while (i-- > 0)
+	if (in_fd != -1)
 	{
-		close(p->fd[i * 2]);
-		close(p->fd[i * 2 + 1]);
+		if (dup2(in_fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+		close(in_fd);
 	}
-	free(p->fd);
+	if (dup2(p->fd[1], STDOUT_FILENO) == -1)
+	{
+		perror("dup2");
+		exit(EXIT_FAILURE);
+	}
+	close(p->fd[0]);
+	close(p->fd[1]);
+	execute_ast(node->left, p, env, -1);
 	exit(EXIT_FAILURE);
 }
 
-void	close_pipes(t_params *p)
+static void	execute_pipe_right_child(t_ast *node, t_params *p, t_env *env)
 {
-	int	i;
-
-	i = 0;
-	while (i < 2 * p->total_cmds)
+	if (dup2(p->fd[0], STDIN_FILENO) == -1)
 	{
-		if (p->fd[i] != -1)
-			close(p->fd[i]);
-		i++;
+		perror("dup2");
+		exit(EXIT_FAILURE);
 	}
+	close(p->fd[0]);
+	close(p->fd[1]);
+	execute_ast(node->right, p, env, -1);
+	exit(EXIT_FAILURE);
 }
 
-void	create_env(t_env *env, char **envp)
+void	create_pipe_processes(t_ast *node, t_params *p, t_env *env, int in_fd)
 {
-	while (envp && *envp)
+	p->pid_left = fork();
+	if (p->pid_left < 0)
 	{
-		env->key = ft_substr(*envp, 0, findchar(*envp, '='));
-		env->value = ft_substr (*envp, findchar(*envp, '=') \
-		+ 1, findchar(*envp, '\0'));
-		env->hide = 0;
-		if (*(envp + 1))
-			env->next = ft_malloc(sizeof(t_env));
-		else
-			env->next = NULL;
-		env = env->next;
-		envp++;
+		perror("fork");
+		exit(EXIT_FAILURE);
 	}
+	if (p->pid_left == 0)
+		execute_pipe_left_child(node, p, env, in_fd);
+	p->pid_right = fork();
+	if (p->pid_right < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (p->pid_right == 0)
+		execute_pipe_right_child(node, p, env);
 }
 
-void	init_pipes(t_ast *ast, t_params *p, t_env *env)
+void	execute_pipe_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 {
-	int	i;
-	int	resultpipe;
-
-	p->fd = ft_malloc(2 * p->total_cmds * sizeof(int));
-	ft_memset(p->fd, -1, 2 * p->total_cmds * sizeof(int));
-	i = 0;
-	while (i < p->total_cmds - 1)
+	if (pipe(p->fd) == -1)
 	{
-		resultpipe = pipe(p->fd + i * 2);
-		if (resultpipe < 0)
-			pipe_error(i, p);
-		i++;
+		perror("pipe");
+		exit(EXIT_FAILURE);
 	}
-	p->fd_index = 0;
-	execute_ast(ast, p, env);
-	close_pipes(p);
-	free(p->fd);
-	free_matrix(p->env);
-	// while (wait(NULL) > 0)
-    //     ;
+	create_pipe_processes(node, p, env, in_fd);
+	if (in_fd != -1)
+		close(in_fd);
+	close(p->fd[0]);
+	close(p->fd[1]);
+	waitpid(p->pid_left, &p->status, 0);
+	waitpid(p->pid_right, &p->status, 0);
 }

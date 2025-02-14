@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd03.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:44:47 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:55:57 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:43:09 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,21 @@ int	have_redirection(t_token *token)
 			return (redirection->type);
 	}
 	return (-1);
+}
+
+void	create_env(t_env *env, char **envp)
+{
+	while (envp && *envp)
+	{
+		env->key = ft_substr(*envp, 0, findchar(*envp, '='));
+		env->value = ft_substr(*envp, findchar(*envp, '=') + 1, findchar(*envp,
+					'\0'));
+		env->hide = 0;
+		if (*(envp + 1))
+			env->next = ft_malloc(sizeof(t_env));
+		else
+			env->next = NULL;
+		env = env->next;
+		envp++;
+	}
 }

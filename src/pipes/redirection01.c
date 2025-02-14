@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:56:59 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:25:08 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,30 @@ int	open_input_files(t_token *data)
 
 void	redirect_input(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
-	int	fd;
-	int	original_stdin;
+	pid_t	pid;
+	int		fd;
 
-	original_stdin = dup(STDIN_FILENO);
-	if (original_stdin < 0)
+	pid = fork();
+	if (pid < 0)
 	{
-		perror("dup original stdin");
+		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	fd = open_input_files(data);
-	if (dup2(fd, STDIN_FILENO) < 0)
+	if (pid == 0)
 	{
-		perror("dup2 input");
+		fd = open_input_files(data);
+		if (dup2(fd, STDIN_FILENO) < 0)
+		{
+			perror("dup2 input");
+			close(fd);
+			exit(EXIT_FAILURE);
+		}
 		close(fd);
-		exit(EXIT_FAILURE);
+		execute_node(ast, p, env);
+		exit(EXIT_SUCCESS);
 	}
-	close(fd);
-	execute_node(ast, p, env);
-	restore_stdin(original_stdin);
-	close(original_stdin);
+	else
+		waitpid(pid, &p->status, 0);
 }
 
 void	init_redirct_in(t_ast *ast, t_params *p, t_env *env)

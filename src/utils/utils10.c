@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils10.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:54:18 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 18:46:56 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:30:31 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,15 @@ char	**smart_split(const char *input)
 	}
 	result[j] = NULL;
 	return (result);
+}
+
+char	*ft_strcat(char *dest, const char *src)
+{
+	char	*ptr;
+
+	ptr = dest + ft_strlen(dest);
+	while (*src)
+		*ptr++ = *src++;
+	*ptr = '\0';
+	return (dest);
 }

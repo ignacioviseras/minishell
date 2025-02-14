@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:56:48 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:11:39 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,30 @@ int	open_append_files(t_token *data)
 
 void	redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
 {
-	int	fd;
-	int	original_stdout;
+	pid_t	pid;
+	int		fd;
 
-	original_stdout = dup(STDOUT_FILENO);
-	if (original_stdout < 0)
+	pid = fork();
+	if (pid < 0)
 	{
-		perror("dup original stdout");
+		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	fd = open_append_files(data);
-	if (dup2(fd, STDOUT_FILENO) < 0)
+	if (pid == 0)
 	{
-		perror("dup2 append");
+		fd = open_append_files(data);
+		if (dup2(fd, STDOUT_FILENO) < 0)
+		{
+			perror("dup2 append");
+			close(fd);
+			exit(EXIT_FAILURE);
+		}
 		close(fd);
-		exit(EXIT_FAILURE);
+		execute_node(ast, p, env);
+		exit(EXIT_SUCCESS);
 	}
-	close(fd);
-	execute_node(ast, p, env);
-	restore_stdout(original_stdout);
-	close(original_stdout);
+	else
+		waitpid(pid, &p->status, 0);
 }
 
 void	init_redritect_append(t_ast *ast, t_params *p, t_env *env)

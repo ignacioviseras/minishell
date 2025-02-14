@@ -3,34 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:57:17 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:33:50 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-void	restore_stdin(int original_stdin)
-{
-	if (dup2(original_stdin, STDIN_FILENO) < 0)
-	{
-		perror("restore stdin");
-		exit(EXIT_FAILURE);
-	}
-	close(original_stdin);
-}
-
-void	restore_stdout(int original_stdout)
-{
-	if (dup2(original_stdout, STDOUT_FILENO) < 0)
-	{
-		perror("restore stdout");
-		exit(EXIT_FAILURE);
-	}
-	close(original_stdout);
-}
 
 char	*create_char(t_env *env)
 {
@@ -95,4 +75,44 @@ char	**init_env(t_env *env)
 	}
 	env_matrix[x] = NULL;
 	return (env_matrix);
+}
+
+void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
+{
+	p->pid = fork();
+	if (p->pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (p->pid == 0)
+	{
+		if (in_fd != -1)
+		{
+			if (dup2(in_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2");
+				exit(EXIT_FAILURE);
+			}
+			close(in_fd);
+		}
+		before_execute(node, p, env);
+		exit(EXIT_FAILURE);
+	}
+	if (in_fd != -1)
+		close(in_fd);
+	waitpid(p->pid, &p->status, 0);
+}
+
+void	execute_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
+{
+	t_token	*data;
+
+	if (node == NULL)
+		return ;
+	data = (t_token *)node->data;
+	if (data->type == TOKEN_PIPE)
+		execute_pipe_ast(node, p, env, in_fd);
+	else
+		execute_simple_ast(node, p, env, in_fd);
 }

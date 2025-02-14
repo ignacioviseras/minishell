@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils11.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:21:43 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/05 17:57:24 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:30:44 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,45 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (sgn * res);
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	size_t	index;
+	char	*mem1;
+	char	*mem2;
+
+	index = 0;
+	if (!src && !dest)
+		return (NULL);
+	mem1 = ((char *)src);
+	mem2 = ((char *)dest);
+	if (n == 0)
+		return (mem2);
+	while (index < n)
+	{
+		mem2[index] = mem1[index];
+		index++;
+	}
+	return (mem2);
+}
+
+void	*ft_realloc(void *ptr, size_t new_size)
+{
+	void	*new_ptr;
+
+	if (!new_size)
+	{
+		free(ptr);
+		return (NULL);
+	}
+	new_ptr = ft_malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	if (ptr)
+	{
+		ft_memcpy(new_ptr, ptr, new_size);
+		free(ptr);
+	}
+	return (new_ptr);
 }

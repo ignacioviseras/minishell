@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:36:15 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/06 18:26:46 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 20:42:29 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,6 @@ int	tramited(char *path, t_params *p, t_token *t)
 	return (0);
 }
 
-void	dup_read(t_params *p)
-{
-	int	result;
-
-	result = dup2(p->fd[p->fd_index - 2], 0);
-	if (result < 0)
-	{
-		perror("dup2 input");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	dup_write(t_params *p)
-{
-	int	result;
-
-	result = dup2(p->fd[p->fd_index + 1], 1);
-	if (result < 0)
-	{
-		perror("dup2 output");
-		exit(EXIT_FAILURE);
-	}
-}
-
 void	init_execute(t_token *data, t_params *p)
 {
 	if (have_path(p->env) == 1)
@@ -82,4 +58,30 @@ void	init_execute(t_token *data, t_params *p)
 	else
 		tramited("", p, data);
 	return ;
+}
+
+int	search_priority(t_ast *node)
+{
+	int		res;
+	t_token	*data;
+
+	res = 0;
+	if (node == NULL)
+		return (0);
+	data = (t_token *)(node->data);
+	if (is_priority_command(data) == 1)
+		res = 1;
+	if (node->left)
+		res = search_priority(node->left);
+	if (node->right)
+		res = search_priority(node->right);
+	return (res);
+}
+
+int	is_priority_command(t_token *data)
+{
+	if (data->cmd && (ft_strcmp(data->cmd, "ls") == 0 || ft_strcmp(data->cmd,
+				"pwd") == 0 || ft_strcmp(data->cmd, "env") == 0))
+		return (1);
+	return (0);
 }

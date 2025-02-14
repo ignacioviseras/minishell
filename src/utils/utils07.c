@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:11:16 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/07 21:10:59 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 20:42:44 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,6 @@ int	skip_quoted_string(char	*str, int counter)
 	return (++counter);
 }
 
-
-/* 
- * Returns str without quotes.
- * If no quotes are found, returns a DUPLICATE of str.
- */
 char	*get_unquoted_str(char *str)
 {
 	char	*unquoted_str;

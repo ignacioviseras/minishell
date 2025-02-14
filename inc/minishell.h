@@ -6,9 +6,10 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/14 17:27:46 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 20:42:24 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 # define _GNU_SOURCE
 
@@ -24,6 +25,8 @@
 #include <unistd.h>
 
 #define USAGE_ERROR "Correct use: ./minishell\n"
+# define READ_FD 0
+# define WRITE_FD 1
 
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
@@ -116,13 +119,16 @@ typedef struct s_lexer
 
 typedef struct s_params
 {
-	int				*fd;
-	int				fd_index;
+	int				fd[2];
+	int				pid;
 	int				total_cmds;
+	int				pid_right;
+	int				pid_left;
+	int				status;
 	char			*cmd_path;
 	char			**cmd_exec;
 	char			**env;
-
+	
 }					t_params;
 
 /*
@@ -211,6 +217,10 @@ char				*get_next_word(char *cmd, char *str, int caller);
 int					count_words_smart(const char *input);
 char				**smart_split(const char *input);
 int					ft_atoi(const char *str);
+void				*ft_memcpy(void *dest, const void *src, size_t n);
+void				*ft_realloc(void *ptr, size_t new_size);
+char				*ft_strcat(char *dest, const char *src);
+
 
 // BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -286,17 +296,17 @@ void				dup_write(t_params *p);
 void				init_execute(t_token *data, t_params *p);
 void				handle_pipe(t_ast *node, t_params *p, t_env *env);
 void				wait_for_child(int pid, t_params *p);
+int					is_priority_command(t_token *data);
 void				pipes_and_execute(t_ast *node, t_params *p, t_env *env,
 						t_token *data);
 void				execute_node(t_ast *node, t_params *p, t_env *env);
-void				execute_ast(t_ast *node, t_params *p, t_env *env);
+void				execute_ast(t_ast *node, t_params *p, t_env *env, int prev_fd);
 char				*create_char(t_env *env);
 int					count_env_nodes(t_env *env);
 char				**init_env(t_env *env);
 void				init_param(t_params *p, int *fd, int fd_index);
 void				pipe_error(int i, t_params *p);
 void				close_pipes(t_params *p);
-void				init_pipes(t_ast *ast, t_params *p, t_env *env);
 char				*access_absolute(char *path);
 char				*access_validate(char **path, char *comand);
 void				validate_comand(char **comand_splited);
@@ -313,8 +323,11 @@ int					open_heredoc(void);
 char				*trim_quotes(char *str);
 char				*get_env_value(const char *key, char **environ);
 char				*replace_env_vars(const char *input, char **environ);
-void				write_to_heredoc(int fd_file, char *buffer);
+void				write_to_heredoc(int fd_file, char *buffer, t_env *env);
 void				write_heredoc(int fd_file, char *delimiter);
+char				*get_env_value_heredoc(t_env *env, const char *key);
+char				*expand_buffer(char *result, size_t *buf_size, size_t required_size);
+char				*expand_variable_heredoc(const char **p, t_env *env, char *result, size_t *buf_size);
 void				handle_heredoc(t_token *data, t_ast *node, t_params *p,
 						t_env *env);
 void				redirect_input(t_token *data, t_ast *ast, t_params *p,
@@ -330,3 +343,7 @@ void				handle_command(char *cleaned, t_token *tokens, t_env *env,
 						t_ast *ast);
 void				restore_stdin(int original_stdin);
 void				restore_stdout(int original_stdout);
+void	create_pipe_processes(t_ast *node, t_params *p, t_env *env, int in_fd);
+char	*expand_variables_heredoc(const char *line, t_env *env);
+void	execute_pipe_ast(t_ast *node, t_params *p, t_env *env, int in_fd);
+

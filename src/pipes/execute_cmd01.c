@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/06 15:24:39 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:40:36 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	wait_for_child(int pid, t_params *p)
 {
 	int	status;
 
-	close(p->fd[p->fd_index + 1]);
+	close(p->fd[0]);
+	close(p->fd[1]);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		g_exit_status = WEXITSTATUS(status);
@@ -40,23 +41,14 @@ void	wait_for_child(int pid, t_params *p)
 void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 {
 	int	builtin;
-	int	i;
 
 	builtin = is_builtin(data->cmd);
-	if (p->fd_index != 0)
-		dup_read(p);
-	if (p->fd_index < 2 * (p->total_cmds - 1))
-		dup_write(p);
-	i = 0;
-	while (i < 2 * p->total_cmds)
+	if (data->type == TOKEN_PIPE)
 	{
-		// if (i != p->fd_index && i != p->fd_index + 1)
-			close(p->fd[i]);
-		i++;
-	}
-	if (data && data->type == TOKEN_PIPE)
 		handle_pipe(node, p, env);
-	else if (data && builtin == 0)
+		return ;
+	}
+	else if (builtin == 0)
 	{
 		build_switch(env, node, data);
 		exit(0);
@@ -65,7 +57,7 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 		init_execute(data, p);
 }
 
-void	handle_processes(t_ast *node, t_params*p, t_env *env, t_token *data)
+void	handle_processes(t_ast *node, t_params *p, t_env *env, t_token *data)
 {
 	int	pid;
 
@@ -93,11 +85,26 @@ void	execute_node(t_ast *node, t_params *p, t_env *env)
 {
 	t_token	*data;
 	int		builtin;
+	int		pid;
 
 	data = (t_token *)(node->data);
-	builtin = is_builtin(data->cmd);
-	if (p->total_cmds == 1 && builtin == 0)
-		build_switch(env, node, data);
-	else
-		handle_processes(node, p, env, data);
+	if (data->cmd != NULL)
+	{
+		builtin = is_builtin(data->cmd);
+		if (p->total_cmds == 1 && builtin == 0)
+			build_switch(env, node, data);
+		else
+		{
+			pid = fork();
+			if (pid == 0)
+				pipes_and_execute(node, p, env, data);
+			else if (pid > 0)
+				wait_for_child(pid, p);
+			else
+			{
+				perror("fork");
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_actions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 18:49:50 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:47:19 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 {
 	if (!node)
 		return ;
-	execute_ast(node->left, p, env);
-	p->fd_index += 2;
-	execute_ast(node->right, p, env);
+	execute_ast(node->left, p, env, -1);
+	execute_ast(node->right, p, env, -1);
 }
 
 void	handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
