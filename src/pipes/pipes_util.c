@@ -6,31 +6,11 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/12 17:24:53 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:43:15 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-// void	restore_stdin(int original_stdin)
-// {
-// 	if (dup2(original_stdin, STDIN_FILENO) < 0)
-// 	{
-// 		perror("restore stdin");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	close(original_stdin);
-// }
-
-// void	restore_stdout(int original_stdout)
-// {
-// 	if (dup2(original_stdout, STDOUT_FILENO) < 0)
-// 	{
-// 		perror("restore stdout");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	close(original_stdout);
-// }
 
 char	*create_char(t_env *env)
 {
@@ -95,4 +75,24 @@ char	**init_env(t_env *env)
 	}
 	env_matrix[x] = NULL;
 	return (env_matrix);
+}
+
+void	create_pipe_processes(t_ast *node, t_params *p, t_env *env, int in_fd)
+{
+	p->pid_left = fork();
+	if (p->pid_left < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (p->pid_left == 0)
+		execute_pipe_left_child(node, p, env, in_fd);
+	p->pid_right = fork();
+	if (p->pid_right < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (p->pid_right == 0)
+		execute_pipe_right_child(node, p, env);
 }

@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2025/02/14 16:05:32 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:21:03 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ typedef struct s_params
 	int				fd[2];
 	int				pid;
 	int				total_cmds;
+	int				pid_right;
+	int				pid_left;
 	int				status;
 	char			*cmd_path;
 	char			**cmd_exec;

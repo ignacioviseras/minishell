@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils07.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:11:16 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/05 19:05:05 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:35:28 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,34 +24,6 @@ int	skip_quoted_string(char	*str, int counter)
 	}
 	return (++counter);
 }
-
-/* char	*get_unquoted_str(char *str)
-{
-	char	*unquoted_str;
-	int		nbr_of_quotes;
-	int		i;
-
-	if (findchar(str, '"') < 0 && findchar(str, '\'') < 0)
-		return (ft_strdup(str));
-	i = 0;
-	nbr_of_quotes = count_quotes(str);
-	unquoted_str = ft_malloc((ft_strlen(str) - nbr_of_quotes + 1) \
-	* sizeof(char));
-	nbr_of_quotes = 0;
-	while (str[i])
-	{
-		if (str[i] == '"' || str[i] == '\'')
-		{
-			i++;
-			nbr_of_quotes++;
-		}
-		else
-			i++;
-		unquoted_str[i - nbr_of_quotes] = str[i];
-	}
-	unquoted_str[i - nbr_of_quotes] = '\0';
-	return (unquoted_str);
-} */
 
 char	*get_unquoted_str(char *str)
 {
