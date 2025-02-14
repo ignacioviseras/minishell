@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 18:18:37 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:33:50 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	**init_env(t_env *env)
 	env_matrix[x] = NULL;
 	return (env_matrix);
 }
-
 
 void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 {
