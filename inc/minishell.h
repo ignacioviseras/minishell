@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2025/02/14 17:21:03 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:20:50 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,3 +342,7 @@ void				handle_command(char *cleaned, t_token *tokens, t_env *env,
 						t_ast *ast);
 void				restore_stdin(int original_stdin);
 void				restore_stdout(int original_stdout);
+void	create_pipe_processes(t_ast *node, t_params *p, t_env *env, int in_fd);
+char	*expand_variables_heredoc(const char *line, t_env *env);
+void	execute_pipe_ast(t_ast *node, t_params *p, t_env *env, int in_fd);
+

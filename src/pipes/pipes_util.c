@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:43:15 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:18:37 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,22 +77,43 @@ char	**init_env(t_env *env)
 	return (env_matrix);
 }
 
-void	create_pipe_processes(t_ast *node, t_params *p, t_env *env, int in_fd)
+
+void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 {
-	p->pid_left = fork();
-	if (p->pid_left < 0)
+	p->pid = fork();
+	if (p->pid < 0)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	if (p->pid_left == 0)
-		execute_pipe_left_child(node, p, env, in_fd);
-	p->pid_right = fork();
-	if (p->pid_right < 0)
+	if (p->pid == 0)
 	{
-		perror("fork");
+		if (in_fd != -1)
+		{
+			if (dup2(in_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2");
+				exit(EXIT_FAILURE);
+			}
+			close(in_fd);
+		}
+		before_execute(node, p, env);
 		exit(EXIT_FAILURE);
 	}
-	if (p->pid_right == 0)
-		execute_pipe_right_child(node, p, env);
+	if (in_fd != -1)
+		close(in_fd);
+	waitpid(p->pid, &p->status, 0);
+}
+
+void	execute_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
+{
+	t_token	*data;
+
+	if (node == NULL)
+		return ;
+	data = (t_token *)node->data;
+	if (data->type == TOKEN_PIPE)
+		execute_pipe_ast(node, p, env, in_fd);
+	else
+		execute_simple_ast(node, p, env, in_fd);
 }
