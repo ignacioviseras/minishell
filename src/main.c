@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/05 14:05:53 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:45:05 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	handle_input(t_env *env, char *input)
 	ast = parsing(tokens, env);
 	p.total_cmds = count_ast_nodes(ast);
 	p.env = init_env(env);
-	init_pipes(ast, &p, env);
+	execute_ast(ast, &p, env, -1);
+	free_matrix(p.env);
 	free_tokens(tokens);
 	free_ast(ast);
 }

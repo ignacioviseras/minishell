@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 18:27:38 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/13 19:30:27 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	*access_validate(char **path, char *comand)
 	}
 	if (fd_dir1 == -1)
 	{
+		printf("commadn '%s'\n", comand);
 		printf("\t--- Error ---\nThere is no access to any directory\n");
 		return (NULL);
 	}

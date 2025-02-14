@@ -3,34 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/01 17:57:17 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:24:53 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	restore_stdin(int original_stdin)
-{
-	if (dup2(original_stdin, STDIN_FILENO) < 0)
-	{
-		perror("restore stdin");
-		exit(EXIT_FAILURE);
-	}
-	close(original_stdin);
-}
+// void	restore_stdin(int original_stdin)
+// {
+// 	if (dup2(original_stdin, STDIN_FILENO) < 0)
+// 	{
+// 		perror("restore stdin");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	close(original_stdin);
+// }
 
-void	restore_stdout(int original_stdout)
-{
-	if (dup2(original_stdout, STDOUT_FILENO) < 0)
-	{
-		perror("restore stdout");
-		exit(EXIT_FAILURE);
-	}
-	close(original_stdout);
-}
+// void	restore_stdout(int original_stdout)
+// {
+// 	if (dup2(original_stdout, STDOUT_FILENO) < 0)
+// 	{
+// 		perror("restore stdout");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	close(original_stdout);
+// }
 
 char	*create_char(t_env *env)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:36:15 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/04 16:40:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:46:57 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	tramited(char *path, t_params *p, t_token *t)
 {
 	char	**dir;
 	char	*trim;
-
 	dir = ft_split(path, ':');
 	trim = trim_sp(t->full_cmd);
 	if (ft_strcmp(trim, "./minishell") == 0)
@@ -47,30 +46,6 @@ int	tramited(char *path, t_params *p, t_token *t)
 		exit(127);
 	}
 	return (0);
-}
-
-void	dup_read(t_params *p)
-{
-	int	result;
-
-	result = dup2(p->fd[p->fd_index - 2], 0);
-	if (result < 0)
-	{
-		perror("dup2 input");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	dup_write(t_params *p)
-{
-	int	result;
-
-	result = dup2(p->fd[p->fd_index + 1], 1);
-	if (result < 0)
-	{
-		perror("dup2 output");
-		exit(EXIT_FAILURE);
-	}
 }
 
 void	init_execute(t_token *data, t_params *p)
