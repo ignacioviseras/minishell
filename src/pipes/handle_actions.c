@@ -28,11 +28,11 @@ void	handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
 	if (data == NULL)
 		return ;
 	if (type == INFILE)
-		init_redirct_in(node, p, env);
+		redirect_input(node);
 	else if (type == WRITE)
-		init_redirct_out(node, p, env);
+		redirect_output(node);
 	else if (type == APPEND)
-		init_redritect_append(node, p, env);
+		redirect_append(node);
 	else if (type == HEREDOC)
 		handle_heredoc(data, node, p, env);
 }

@@ -36,38 +36,18 @@ int	open_append_files(t_token *data)
 	return (fd);
 }
 
-void	redirect_append(t_token *data, t_ast *ast, t_params *p, t_env *env)
-{
-	pid_t	pid;
-	int		fd;
-
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		fd = open_append_files(data);
-		if (dup2(fd, STDOUT_FILENO) < 0)
-		{
-			perror("dup2 append");
-			close(fd);
-			exit(EXIT_FAILURE);
-		}
-		close(fd);
-		execute_node(ast, p, env);
-		exit(EXIT_SUCCESS);
-	}
-	else
-		waitpid(pid, &p->status, 0);
-}
-
-void	init_redritect_append(t_ast *ast, t_params *p, t_env *env)
+void	redirect_append(t_ast *ast)
 {
 	t_token	*token;
+	int		fd;
 
 	token = (t_token *)(ast->data);
-	redirect_append(token, ast, p, env);
+	fd = open_append_files(token);
+	if (dup2(fd, STDOUT_FILENO) < 0)
+	{
+		perror("dup2 append");
+		close(fd);
+		exit(EXIT_FAILURE);
+	}
+	close(fd);
 }

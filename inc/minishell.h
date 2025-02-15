@@ -238,7 +238,6 @@ void				print_env(t_env *envi, int flag);
 void				command_unset(t_token *tokens, t_env *env);
 void				command_echo(t_token *tokens);
 void				command_clear(t_token *tokens);
-void				export_actions(t_token *tokens, t_env *env);
 int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
 int					is_option_n(char *str);
@@ -291,8 +290,6 @@ int					have_path(char **env);
 int					have_redirection(t_token *token);
 int					tramited(char *path, t_params *p, t_token *t);
 void				execute_cmd(t_params *p);
-void				dup_read(t_params *p);
-void				dup_write(t_params *p);
 void				init_execute(t_token *data, t_params *p);
 void				handle_pipe(t_ast *node, t_params *p, t_env *env);
 void				wait_for_child(int pid, t_params *p);
@@ -304,9 +301,6 @@ void				execute_ast(t_ast *node, t_params *p, t_env *env, int prev_fd);
 char				*create_char(t_env *env);
 int					count_env_nodes(t_env *env);
 char				**init_env(t_env *env);
-void				init_param(t_params *p, int *fd, int fd_index);
-void				pipe_error(int i, t_params *p);
-void				close_pipes(t_params *p);
 char				*access_absolute(char *path);
 char				*access_validate(char **path, char *comand);
 void				validate_comand(char **comand_splited);
@@ -316,33 +310,21 @@ void				before_execute(t_ast *node, t_params *p, t_env *env);
 void				handle_redirection(t_ast *node, t_params *p, t_env *env,
 						int type);
 int					is_builtin(char *cmd);
-void				redirect_append(t_token *data, t_ast *ast, t_params *p,
-						t_env *env);
-void				init_redritect_append(t_ast *ast, t_params *p, t_env *env);
+void				redirect_append(t_ast *ast);
 int					open_heredoc(void);
-char				*trim_quotes(char *str);
 char				*get_env_value(const char *key, char **environ);
-char				*replace_env_vars(const char *input, char **environ);
 void				write_to_heredoc(int fd_file, char *buffer, t_env *env);
-void				write_heredoc(int fd_file, char *delimiter);
 char				*get_env_value_heredoc(t_env *env, const char *key);
 char				*expand_buffer(char *result, size_t *buf_size, size_t required_size);
 char				*expand_variable_heredoc(const char **p, t_env *env, char *result, size_t *buf_size);
 void				handle_heredoc(t_token *data, t_ast *node, t_params *p,
 						t_env *env);
-void				redirect_input(t_token *data, t_ast *ast, t_params *p,
-						t_env *env);
-void				init_redirct_in(t_ast *ast, t_params *p, t_env *env);
-void				redirect_output(t_token *data, t_ast *ast, t_params *p,
-						t_env *env);
-void				init_redirct_out(t_ast *ast, t_params *p, t_env *env);
+void				redirect_input(t_ast *ast);
+void				redirect_output(t_ast *ast);
 void				ft_lstadd_back(t_list **lst, t_list *new);
-void				delete_heredoc(t_params *p);
 void				exit_program(t_env *env, t_ast *ast, t_token *tokens);
 void				handle_command(char *cleaned, t_token *tokens, t_env *env,
 						t_ast *ast);
-void				restore_stdin(int original_stdin);
-void				restore_stdout(int original_stdout);
 void	create_pipe_processes(t_ast *node, t_params *p, t_env *env, int in_fd);
 char	*expand_variables_heredoc(const char *line, t_env *env);
 void	execute_pipe_ast(t_ast *node, t_params *p, t_env *env, int in_fd);

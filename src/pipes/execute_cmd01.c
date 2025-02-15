@@ -21,8 +21,7 @@ void	before_execute(t_ast *node, t_params *p, t_env *env)
 	have_redirect = have_redirection(data);
 	if (have_redirect != -1)
 		handle_redirection(node, p, env, have_redirect);
-	else
-		execute_node(node, p, env);
+	execute_node(node, p, env);
 }
 
 void	wait_for_child(int pid, t_params *p)

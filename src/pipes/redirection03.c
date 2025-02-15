@@ -36,40 +36,20 @@ int	open_output_files(t_token *data)
 	return (fd);
 }
 
-void	redirect_output(t_token *data, t_ast *ast, t_params *p, t_env *env)
+void	redirect_output(t_ast *ast)
 {
-	pid_t	pid;
 	int		fd;
-
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		fd = open_output_files(data);
-		if (dup2(fd, STDOUT_FILENO) < 0)
-		{
-			perror("dup2 output");
-			close(fd);
-			exit(EXIT_FAILURE);
-		}
-		close(fd);
-		execute_node(ast, p, env);
-		exit(EXIT_SUCCESS);
-	}
-	else
-		waitpid(pid, &p->status, 0);
-}
-
-void	init_redirct_out(t_ast *ast, t_params *p, t_env *env)
-{
 	t_token	*token;
 
 	token = (t_token *)(ast->data);
-	redirect_output(token, ast, p, env);
+	fd = open_output_files(token);
+	if (dup2(fd, STDOUT_FILENO) < 0)
+	{
+		perror("dup2 output");
+		close(fd);
+		exit(EXIT_FAILURE);
+	}
+	close(fd);
 }
 
 char	*path_error(void)

@@ -108,11 +108,14 @@ void	execute_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 {
 	t_token	*data;
 
+	
 	if (node == NULL)
 		return ;
 	data = (t_token *)node->data;
 	if (data->type == TOKEN_PIPE)
 		execute_pipe_ast(node, p, env, in_fd);
+	else if (is_builtin(data->cmd)==0)
+		before_execute(node, p, env);
 	else
 		execute_simple_ast(node, p, env, in_fd);
 }
