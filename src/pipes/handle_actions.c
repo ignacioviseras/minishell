@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/12 15:47:19 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:35:29 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,71 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 	execute_ast(node->right, p, env, -1);
 }
 
-void	handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
+// void	handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
+// {
+// 	t_token	*data;
+
+// 	data = (t_token *)(node->data);
+// 	if (data == NULL)
+// 		return ;
+// 	if (type == INFILE)
+// 		redirect_input(node);
+// 	else if (type == WRITE)
+// 		redirect_output(node);
+// 	else if (type == APPEND)
+// 		redirect_append(node);
+// 	else if (type == HEREDOC)
+// 		handle_heredoc(data, node, p, env);
+// }
+void	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
+{
+	t_list				*tmp;
+	t_redirect_file		*redirection;
+
+	tmp = data->infiles;
+	while (tmp)
+	{
+		redirection = (t_redirect_file *)tmp->content;
+		if (redirection)
+		{
+			if (redirection->type == HEREDOC)
+				handle_heredoc(data, env);
+			else if (redirection->type == INFILE)
+				redirect_input(node);
+		}
+		tmp = tmp->next;
+	}
+}
+
+void	handle_output_redirections(t_ast *node, t_token *data)
+{
+	t_list				*tmp;
+	t_redirect_file		*redirection;
+
+	tmp = data->outfiles;
+	while (tmp)
+	{
+		redirection = (t_redirect_file *)tmp->content;
+		if (redirection)
+		{
+			if (redirection->type == WRITE)
+				redirect_output(node);
+			else if (redirection->type == APPEND)
+				redirect_append(node);
+		}
+		tmp = tmp->next;
+	}
+}
+
+void	handle_redirection(t_ast *node, t_env *env)
 {
 	t_token	*data;
 
 	data = (t_token *)(node->data);
-	if (data == NULL)
+	if (!data)
 		return ;
-	if (type == INFILE)
-		redirect_input(node);
-	else if (type == WRITE)
-		redirect_output(node);
-	else if (type == APPEND)
-		redirect_append(node);
-	else if (type == HEREDOC)
-		handle_heredoc(data, node, p, env);
+	handle_input_redirections(node, env, data);
+	handle_output_redirections(node, data);
 }
 
 int	is_builtin(char *cmd)

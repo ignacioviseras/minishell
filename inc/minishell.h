@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/14 20:42:24 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:19:43 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,8 +307,9 @@ void				validate_comand(char **comand_splited);
 char				*command_with_space(char *comand);
 char				*load_param(char **path, char *comand);
 void				before_execute(t_ast *node, t_params *p, t_env *env);
-void				handle_redirection(t_ast *node, t_params *p, t_env *env,
-						int type);
+// void				handle_redirection(t_ast *node, t_params *p, t_env *env);
+void				handle_redirection(t_ast *node, t_env *env);
+// void				handle_redirection(t_ast *node, t_params *p, t_env *env, int type);
 int					is_builtin(char *cmd);
 void				redirect_append(t_ast *ast);
 int					open_heredoc(void);
@@ -317,8 +318,9 @@ void				write_to_heredoc(int fd_file, char *buffer, t_env *env);
 char				*get_env_value_heredoc(t_env *env, const char *key);
 char				*expand_buffer(char *result, size_t *buf_size, size_t required_size);
 char				*expand_variable_heredoc(const char **p, t_env *env, char *result, size_t *buf_size);
-void				handle_heredoc(t_token *data, t_ast *node, t_params *p,
-						t_env *env);
+// void				handle_heredoc(t_token *data, t_ast *node, t_params *p,
+// 						t_env *env);
+void				handle_heredoc(t_token *data, t_env *env);
 void				redirect_input(t_ast *ast);
 void				redirect_output(t_ast *ast);
 void				ft_lstadd_back(t_list **lst, t_list *new);

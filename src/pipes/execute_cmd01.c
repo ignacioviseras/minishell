@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:40:36 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:19:57 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	before_execute(t_ast *node, t_params *p, t_env *env)
 	data = (t_token *)(node->data);
 	have_redirect = have_redirection(data);
 	if (have_redirect != -1)
-		handle_redirection(node, p, env, have_redirect);
+		handle_redirection(node, env);
 	execute_node(node, p, env);
 }
 

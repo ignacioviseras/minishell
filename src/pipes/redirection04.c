@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:39:48 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:43:50 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:17:43 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,21 +88,38 @@ int	process_heredoc(t_token *data, t_env *env)
 	return (fd_file);
 }
 
-void	handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env)
+// void	handle_heredoc(t_token *data, t_ast *node, t_params *p, t_env *env)
+// {
+// 	int	hd_fd;
+
+// 	hd_fd = process_heredoc(data, env);
+// 	if (dup2(hd_fd, STDIN_FILENO) == -1)
+// 	{
+// 		perror("dup2 heredoc");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	if (unlink(".heredoc.tmp") == -1)
+// 	{
+// 		perror("unlink heredoc");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	close(hd_fd);
+// 	execute_node(node, p, env);
+// }
+
+void	handle_heredoc(t_token *data, t_env *env)
 {
 	int	hd_fd;
 
 	hd_fd = process_heredoc(data, env);
+	if (hd_fd == -1)
+		return ;
 	if (dup2(hd_fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2 heredoc");
-		exit(EXIT_FAILURE);
-	}
-	if (unlink(".heredoc.tmp") == -1)
-	{
-		perror("unlink heredoc");
+		close(hd_fd);
 		exit(EXIT_FAILURE);
 	}
 	close(hd_fd);
-	execute_node(node, p, env);
+	unlink(".heredoc.tmp");
 }
