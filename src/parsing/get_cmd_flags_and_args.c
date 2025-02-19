@@ -84,7 +84,7 @@ int	find_quotes_in_word(char *str)
 
 void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 {
-	char	*unquoted_str;
+	//char	*unquoted_str;
 	int		i;
 
 	i = 0;
@@ -101,11 +101,11 @@ void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 			i++;
 		token->cmd = ft_substr(full_cmd, 0, i);
 	}
-	if (ft_strcmp(token->cmd, "echo") == 0)
+	/* if (ft_strcmp(token->cmd, "echo") == 0)
 	{
 		unquoted_str = remove_double_quotes(token->full_cmd);
 		free(token->full_cmd);
 		token->full_cmd = unquoted_str;
-	}
+	} */
 	find_args(token, token->full_cmd);
 }

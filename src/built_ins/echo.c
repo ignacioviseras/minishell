@@ -33,17 +33,26 @@ int	is_option_n(char *str)
 
 void	command_echo(t_token *tokens)
 {
+	char	*remains;
+	char	*aux;
 	int		no_newline;
 
 	no_newline = 1;
-	if (tokens->flags && tokens->flags[0] == '-' && tokens->flags[1] == 'n' && \
-		(tokens->flags[2] == ' ' || tokens->flags[2] == '\0'))
+	if (ft_strcmp(tokens->flags, "-n") == 0 && !tokens->args)
+		return ;
+	remains = tokens->full_cmd + ft_strlen(tokens->cmd);
+	while (remains && *remains == ' ')
+		remains++;
+	aux = get_next_word(NULL, remains, 0);
+	if (ft_strcmp(aux, "-n") == 0)
+	{
 		no_newline = 0;
-	if (tokens->flags && !tokens->args && tokens->flags[0] == '-' && \
-	(tokens->flags[2] != ' ' || tokens->flags[2] != '\0'))
-		printf("%s", tokens->flags);
-	if (tokens->args)
-		printf("%s", tokens->args);
+		remains += ft_strlen(aux);
+	}
+	while (remains && *remains == ' ')
+		remains++;
+	printf("%s", remains);
 	if (no_newline)
 		printf("\n");
+	free(aux);
 }

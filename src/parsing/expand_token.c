@@ -20,6 +20,7 @@ void	handle_dollar_sign(const char *str, char *new_str, char **values, \
 		new_str[counters->k++] = str[counters->i++];
 	else
 	{
+		printf("%s\n", new_str);
 		ft_strcpy(new_str + counters->k, values[counters->j++]);
 		counters->k += ft_strlen(values[counters->j - 1]);
 		counters->i += copy_len(str + counters->i) + 1;
@@ -29,7 +30,8 @@ void	handle_dollar_sign(const char *str, char *new_str, char **values, \
 void	handle_double_quote(const char *old_str, char *new_str, char **values, \
 							t_counters *counters)
 {
-	new_str[counters->k++] = old_str[counters->i++];
+	//new_str[counters->k++] = old_str[counters->i++];
+	counters->i++;
 	while (old_str[counters->i] && old_str[counters->i] != '"')
 	{
 		if (old_str[counters->i] == '$')
@@ -38,7 +40,8 @@ void	handle_double_quote(const char *old_str, char *new_str, char **values, \
 			new_str[counters->k++] = old_str[counters->i++];
 	}
 	if (old_str[counters->i] == '"')
-		new_str[counters->k++] = old_str[counters->i++];
+		counters->i++;
+		//new_str[counters->k++] = old_str[counters->i++];
 }
 
 //TODO
@@ -73,37 +76,6 @@ void	process_string(char *full_cmd, char *new_param, char **values)
 	}
 	new_param[counters.k] = '\0';
 }
-
-/* char	*expand_token(char *cmd, char *param, char **values)
-{
-	char		*new_param;
-
-	if (findchar(param, '$') < 0)
-		return (param);
-	new_param = ft_malloc((ft_strlen(param) - keys_nbr - \
-	ft_strlen(keys) + ft_strlen(*values) + 1) * sizeof(char));
-	process_string(cmd, param, new_param, values);
-	values++;
-	free(param);
-	return (new_param);
-} */
-
-/* char	*expand_token(char *str, char **values)
-{
-	char		*new_str;
-	t_counters	counters;
-
-	if (findchar(str, '$') < 0)
-		return (str);
-	counters.i = 0;
-	counters.j = 0;
-	counters.k = 0;
-	new_str = ft_malloc((ft_strlen(*values) + 1) * sizeof(char));
-	process_string(str, new_str, values, &counters);
-	(*values)++;
-	free(str);
-	return (new_str);
-} */
 
 char	*expand_token(t_token *token, char **values, int size)
 {

@@ -60,21 +60,41 @@ char	*get_unquoted_str(char *str)
 char	*get_quoted_str(char *str, char quote)
 {
 	char	*quoted_str;
+	int		odd_quotes;
 	int		i;
 
 	i = 1;
+	odd_quotes = 0;
 	while (str[i] && str[i] != quote)
 		i++;
-	i++;
-	quoted_str = ft_malloc((i + 1) * sizeof(char));
-	quoted_str[0] = str[0];
-	i = 1;
-	while (str[i] && str[i] != quote)
+	if (!str[i])
 	{
-		quoted_str[i] = str[i];
-		i++;
+		i--;
+		odd_quotes = 1;
 	}
-	quoted_str[i++] = quote;
+	else
+		i++;
+	quoted_str = ft_malloc((i + 1) * sizeof(char));
+	if (odd_quotes == 0)
+	{
+		quoted_str[0] = str[0];
+		i = 1;
+		while (str[i] && str[i] != quote)
+		{
+			quoted_str[i] = str[i];
+			i++;
+		}
+		quoted_str[i++] = quote;
+	}
+	else
+	{
+		i = 0;
+		while (str[i + 1])
+		{
+			quoted_str[i] = str[i + 1];
+			i++;
+		}
+	}
 	quoted_str[i] = '\0';
 	return (quoted_str);
 }

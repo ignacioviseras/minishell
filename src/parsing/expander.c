@@ -91,7 +91,14 @@ void	replace_var(t_token *token, t_env *env)
 	values = get_values(env, keys, &keys_nbr);
 	size = ft_strlen(token->full_cmd) - ft_strlen_v2(keys) \
 	+ ft_strlen_v2(values) - keys_nbr + 1;
+	printf("1. Full cmd: %s\n", token->full_cmd);
+	//TODO echo $q-
 	token->full_cmd = expand_token(token, values, size);
+	
+	printf("2. Full cmd: %s\n", token->full_cmd);
+	printf("Flags: %s\n", token->flags);
+	printf("Args: %s\n", token->args);
+	exit(0);
 	free(token->cmd);
 	token->cmd = get_command(token->full_cmd);
 	if (token->flags && findchar(token->flags, '$') >= 0)
@@ -113,8 +120,8 @@ void	expander(t_token **tokens, t_env *env)
 	start = *tokens;
 	while (tokens && *tokens)
 	{
-		if (findchar((*tokens)->full_cmd, '$') >= 0)
-			replace_var(*tokens, env);
+		//if (findchar((*tokens)->full_cmd, '$') >= 0)
+		replace_var(*tokens, env);
 		if ((*tokens)->type < 2 && \
 			(findchar((*tokens)->cmd, '\'') >= 0 || \
 			findchar((*tokens)->cmd, '\'') >= 0))
