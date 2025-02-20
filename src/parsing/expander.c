@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/14 17:59:13 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:32:23 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,6 @@ int	get_word_len(char *full_cmd, int i)
 		i++;
 	}
 	return (i);
-}
-
-char	*get_command(char *full_cmd)
-{
-	char	*cmd;
-	int		i;
-
-	i = 0;
-	while (full_cmd[i] == ' ')
-		i++;
-	cmd = ft_substr(full_cmd, i, get_word_len(full_cmd, i));
-	return (cmd);
 }
 
 char	*append_new_var(char *cmd, char *str, int caller)
@@ -91,13 +79,7 @@ void	replace_var(t_token *token, t_env *env)
 	values = get_values(env, keys, &keys_nbr);
 	size = ft_strlen(token->full_cmd) - ft_strlen_v2(keys) \
 	+ ft_strlen_v2(values) - keys_nbr + 1;
-	//printf("1. Full cmd: %s\n", token->full_cmd);
-	//TODO echo $q-
 	token->full_cmd = expand_token(token, values, size);
-	//printf("2. Full cmd: %s\n", token->full_cmd);
-	//printf("Flags: %s\n", token->flags);
-	//printf("Args: %s\n", token->args);
-	//exit(0);
 	free(token->cmd);
 	token->cmd = get_command(token->full_cmd);
 	if (token->flags && findchar(token->flags, '$') >= 0)
@@ -119,7 +101,6 @@ void	expander(t_token **tokens, t_env *env)
 	start = *tokens;
 	while (tokens && *tokens)
 	{
-		//if (findchar((*tokens)->full_cmd, '$') >= 0)
 		replace_var(*tokens, env);
 		if ((*tokens)->type < 2 && \
 			(findchar((*tokens)->cmd, '\'') >= 0 || \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_flags_and_args.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:12:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/14 17:26:36 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:29:14 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ int	find_quotes_in_word(char *str)
 
 void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 {
-	//char	*unquoted_str;
 	int		i;
 
 	i = 0;
@@ -101,11 +100,5 @@ void	get_cmd_flags_and_args(t_token *token, char *full_cmd)
 			i++;
 		token->cmd = ft_substr(full_cmd, 0, i);
 	}
-	/* if (ft_strcmp(token->cmd, "echo") == 0)
-	{
-		unquoted_str = remove_double_quotes(token->full_cmd);
-		free(token->full_cmd);
-		token->full_cmd = unquoted_str;
-	} */
 	find_args(token, token->full_cmd);
 }

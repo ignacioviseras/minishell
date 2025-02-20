@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils07.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:11:16 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/14 20:42:44 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:33:47 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,29 +120,5 @@ char	*ft_str(long aux, long size, long n1, int n)
 		n1 = n1 / 10;
 		str[--size] = aux + '0';
 	}
-	return (str);
-}
-
-char	*ft_itoa(int n)
-{
-	char	*str;
-	long	size;
-	long	aux;
-	long	n1;
-
-	size = 1;
-	aux = (long)n;
-	if (aux < 0)
-	{
-		aux *= -1;
-		size++;
-	}
-	n1 = aux;
-	while (aux >= 10)
-	{
-		aux = aux / 10;
-		size++;
-	}
-	str = ft_str(aux, size, n1, n);
 	return (str);
 }

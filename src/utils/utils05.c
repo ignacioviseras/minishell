@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils05.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:11:56 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/22 17:32:01 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:33:46 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,28 @@ int	is_valid(char *str)
 		i++;
 	}
 	return (0);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*str;
+	long	size;
+	long	aux;
+	long	n1;
+
+	size = 1;
+	aux = (long)n;
+	if (aux < 0)
+	{
+		aux *= -1;
+		size++;
+	}
+	n1 = aux;
+	while (aux >= 10)
+	{
+		aux = aux / 10;
+		size++;
+	}
+	str = ft_str(aux, size, n1, n);
+	return (str);
 }

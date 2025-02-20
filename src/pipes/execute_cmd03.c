@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd03.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:44:47 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:43:09 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:29:02 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,12 @@ void	create_env(t_env *env, char **envp)
 		env = env->next;
 		envp++;
 	}
+}
+
+void	create_env_null(t_env **env)
+{
+	char	cwd[4096];
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		*env = new_node("PWD", cwd, 0);
 }

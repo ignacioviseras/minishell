@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/16 16:19:43 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:35:51 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ int					ft_atoi(const char *str);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
 void				*ft_realloc(void *ptr, size_t new_size);
 char				*ft_strcat(char *dest, const char *src);
+char				*ft_str(long aux, long size, long n1, int n);
 
 // BUILT_INS
 int					flags_validator(char *flags, char *command_flags);
@@ -277,6 +278,8 @@ int					get_nbr_of_keys(char *str);
 int					ft_strlen_v2(char **strs);
 int					copy_len(const char *s);
 char				*remove_double_quotes(char *str);
+char				*get_command(char *full_cmd);
+int					get_word_len(char *full_cmd, int i);
 
 // REMOVE QUOTES
 char				*remove_quotes(char *str);

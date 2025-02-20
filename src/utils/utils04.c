@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils04.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:10:36 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/06 16:49:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:30:00 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,5 @@ char	**split_formated(char *s, char c)
 		s += len_word;
 	}
 	str[i] = NULL;
-	free(aux);
-	return (str);
+	return (free(aux), str);
 }

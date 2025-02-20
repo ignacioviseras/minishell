@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:54:03 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/14 18:18:18 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:28:17 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	handle_dollar_sign(const char *str, char *new_str, char **values, \
 		new_str[counters->k++] = str[counters->i++];
 	else
 	{
-		//printf("%s\n", new_str);
 		ft_strcpy(new_str + counters->k, values[counters->j++]);
 		counters->k += ft_strlen(values[counters->j - 1]);
 		counters->i += copy_len(str + counters->i) + 1;
@@ -30,7 +29,6 @@ void	handle_dollar_sign(const char *str, char *new_str, char **values, \
 void	handle_double_quote(const char *old_str, char *new_str, char **values, \
 							t_counters *counters)
 {
-	//new_str[counters->k++] = old_str[counters->i++];
 	counters->i++;
 	while (old_str[counters->i] && old_str[counters->i] != '"')
 	{
@@ -41,18 +39,14 @@ void	handle_double_quote(const char *old_str, char *new_str, char **values, \
 	}
 	if (old_str[counters->i] == '"')
 		counters->i++;
-		//new_str[counters->k++] = old_str[counters->i++];
 }
 
-//TODO
 void	handle_single_quote(const char *str, char *new_str, \
 							t_counters *counters)
 {
-	//new_str[counters->k++] = str[counters->i++];
 	counters->i++;
 	while (str[counters->i] != '\'' && str[counters->i])
 		new_str[counters->k++] = str[counters->i++];
-	//new_str[counters->k++] = str[counters->i++];
 	counters->i++;
 }
 

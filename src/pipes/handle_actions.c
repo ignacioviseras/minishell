@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_actions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/16 16:35:29 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:27:52 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,10 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 	execute_ast(node->right, p, env, -1);
 }
 
-// void	handle_redirection(t_ast *node, t_params *p, t_env *env, int type)
-// {
-// 	t_token	*data;
-
-// 	data = (t_token *)(node->data);
-// 	if (data == NULL)
-// 		return ;
-// 	if (type == INFILE)
-// 		redirect_input(node);
-// 	else if (type == WRITE)
-// 		redirect_output(node);
-// 	else if (type == APPEND)
-// 		redirect_append(node);
-// 	else if (type == HEREDOC)
-// 		handle_heredoc(data, node, p, env);
-// }
 void	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
 {
-	t_list				*tmp;
-	t_redirect_file		*redirection;
+	t_list			*tmp;
+	t_redirect_file	*redirection;
 
 	tmp = data->infiles;
 	while (tmp)
@@ -58,8 +42,8 @@ void	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
 
 void	handle_output_redirections(t_ast *node, t_token *data)
 {
-	t_list				*tmp;
-	t_redirect_file		*redirection;
+	t_list			*tmp;
+	t_redirect_file	*redirection;
 
 	tmp = data->outfiles;
 	while (tmp)
@@ -112,23 +96,4 @@ int	is_builtin(char *cmd)
 		i++;
 	}
 	return (free(cmd_trim), 1);
-}
-
-void	create_env_null(t_env **env)
-{
-	char	cwd[4096];
-
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		*env = new_node("PWD", cwd, 0);
-}
-
-void	before_create_env(t_env **env, char **envp)
-{
-	if (envp[0] == NULL)
-		create_env_null(env);
-	else
-	{
-		*env = ft_malloc(sizeof(t_env));
-		create_env(*env, envp);
-	}
 }
