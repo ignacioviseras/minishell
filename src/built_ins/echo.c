@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:08 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:21:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:21:40 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	command_echo(t_token *tokens)
 	}
 	while (remains && *remains == ' ')
 		remains++;
-	printf("%s", remains);
+	if (remains)
+		printf("%s", remains);
 	if (no_newline)
 		printf("\n");
 	free(aux);

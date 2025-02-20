@@ -6,15 +6,14 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/02/14 20:42:19 by drestrep         ###   ########.fr        #
+#    Updated: 2025/02/20 18:23:06 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 			= 	minishell
 
 CC 				= 	gcc
-# CFLAGS 			= 	-g3 -Wall -Wextra -Werror -O3
-CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address
+CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address #-O3
 LDFLAGS			=	-lreadline
 INCLUDES		= 	-I ./inc/
 
@@ -83,6 +82,7 @@ UTILS_SRC		=	utils01.c \
 					utils09.c \
 					utils10.c \
 					utils11.c \
+					utils12.c \
 					skip_spaces.c \
 					remove_quotes.c \
 					mem_alloc.c \

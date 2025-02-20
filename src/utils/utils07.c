@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils07.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:11:16 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/20 17:33:47 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:44:28 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,20 @@ char	*get_unquoted_str(char *str)
 		else
 			unquoted_str[j++] = str[i++];
 	}
-	unquoted_str[j] = '\0';
-	return (unquoted_str);
+	return (unquoted_str[j] = '\0', unquoted_str);
 }
 
-char	*get_str(char *old_str, char quote, int i, int odd_quotes)
+char	*get_new_str(char *new_str, char *str, char quote, int odd_quotes)
 {
-	char	*new_str;
+	int	i;
 
-	new_str = ft_malloc((i + 1) * sizeof(char));
 	if (odd_quotes == 0)
 	{
-		new_str[0] = old_str[0];
+		new_str[0] = str[0];
 		i = 1;
-		while (old_str[i] && old_str[i] != quote)
+		while (str[i] && str[i] != quote)
 		{
-			new_str[i] = old_str[i];
+			new_str[i] = str[i];
 			i++;
 		}
 		new_str[i++] = quote;
@@ -74,9 +72,9 @@ char	*get_str(char *old_str, char quote, int i, int odd_quotes)
 	else
 	{
 		i = 0;
-		while (old_str[i + 1])
+		while (str[i + 1])
 		{
-			new_str[i] = old_str[i + 1];
+			new_str[i] = str[i + 1];
 			i++;
 		}
 	}
@@ -87,15 +85,22 @@ char	*get_str(char *old_str, char quote, int i, int odd_quotes)
 char	*get_quoted_str(char *str, char quote)
 {
 	char	*new_str;
+	int		odd_quotes;
 	int		i;
 
 	i = 1;
+	odd_quotes = 0;
 	while (str[i] && str[i] != quote)
 		i++;
 	if (!str[i])
-		new_str = get_str(str, quote, i--, 1);
+	{
+		i--;
+		odd_quotes = 1;
+	}
 	else
-		new_str = get_str(str, quote, i++, 0);
+		i++;
+	new_str = ft_malloc((i + 1) * sizeof(char));
+	new_str = get_new_str(new_str, str, quote, odd_quotes);
 	return (new_str);
 }
 
