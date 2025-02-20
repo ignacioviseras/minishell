@@ -106,10 +106,6 @@ char	*append_str(char *base, char *suffix)
 		return (ft_strdup(base));
 	base_len = ft_strlen(base);
 	suffix_len = ft_strlen(suffix);
-	/* result = ft_malloc((base_len + suffix_len + 2) * sizeof(char));
-	ft_strcpy(result, base);
-	result[base_len] = ' ';
-	ft_strcpy(result + base_len + 1, suffix); */
 	result = ft_malloc((base_len + suffix_len + 1) * sizeof(char));
 	ft_strcpy(result, base);
 	ft_strcpy(result + base_len, suffix);

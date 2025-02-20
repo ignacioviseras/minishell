@@ -20,7 +20,7 @@ void	handle_dollar_sign(const char *str, char *new_str, char **values, \
 		new_str[counters->k++] = str[counters->i++];
 	else
 	{
-		printf("%s\n", new_str);
+		//printf("%s\n", new_str);
 		ft_strcpy(new_str + counters->k, values[counters->j++]);
 		counters->k += ft_strlen(values[counters->j - 1]);
 		counters->i += copy_len(str + counters->i) + 1;

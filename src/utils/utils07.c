@@ -28,17 +28,15 @@ int	skip_quoted_string(char	*str, int counter)
 char	*get_unquoted_str(char *str)
 {
 	char	*unquoted_str;
-	int		nbr_of_quotes;
+	char	quote;
 	int		i;
 	int		j;
-	char	quote;
 
 	i = 0;
 	j = 0;
 	if (findchar(str, '"') < 0 && findchar(str, '\'') < 0)
 		return (ft_strdup(str));
-	nbr_of_quotes = count_quotes(str);
-	unquoted_str = ft_malloc((ft_strlen(str) - nbr_of_quotes + 1) \
+	unquoted_str = ft_malloc((ft_strlen(str) - count_quotes(str) + 1) \
 	* sizeof(char));
 	while (str[i])
 	{
@@ -57,46 +55,48 @@ char	*get_unquoted_str(char *str)
 	return (unquoted_str);
 }
 
-char	*get_quoted_str(char *str, char quote)
+char	*get_str(char *old_str, char quote, int i, int odd_quotes)
 {
-	char	*quoted_str;
-	int		odd_quotes;
-	int		i;
+	char	*new_str;
 
-	i = 1;
-	odd_quotes = 0;
-	while (str[i] && str[i] != quote)
-		i++;
-	if (!str[i])
-	{
-		i--;
-		odd_quotes = 1;
-	}
-	else
-		i++;
-	quoted_str = ft_malloc((i + 1) * sizeof(char));
+	new_str = ft_malloc((i + 1) * sizeof(char));
 	if (odd_quotes == 0)
 	{
-		quoted_str[0] = str[0];
+		new_str[0] = old_str[0];
 		i = 1;
-		while (str[i] && str[i] != quote)
+		while (old_str[i] && old_str[i] != quote)
 		{
-			quoted_str[i] = str[i];
+			new_str[i] = old_str[i];
 			i++;
 		}
-		quoted_str[i++] = quote;
+		new_str[i++] = quote;
 	}
 	else
 	{
 		i = 0;
-		while (str[i + 1])
+		while (old_str[i + 1])
 		{
-			quoted_str[i] = str[i + 1];
+			new_str[i] = old_str[i + 1];
 			i++;
 		}
 	}
-	quoted_str[i] = '\0';
-	return (quoted_str);
+	new_str[i] = '\0';
+	return (new_str);
+}
+
+char	*get_quoted_str(char *str, char quote)
+{
+	char	*new_str;
+	int		i;
+
+	i = 1;
+	while (str[i] && str[i] != quote)
+		i++;
+	if (!str[i])
+		new_str = get_str(str, quote, i--, 1);
+	else
+		new_str = get_str(str, quote, i++, 0);
+	return (new_str);
 }
 
 char	*ft_str(long aux, long size, long n1, int n)
