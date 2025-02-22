@@ -87,6 +87,7 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 	}
 	if (p->pid == 0)
 	{
+		son_signal();
 		if (in_fd != -1)
 		{
 			if (dup2(in_fd, STDIN_FILENO) == -1)
@@ -101,6 +102,7 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 	}
 	if (in_fd != -1)
 		close(in_fd);
+	signal(SIGINT, signals_handler_for_blockers);
 	waitpid(p->pid, &p->status, 0);
 }
 

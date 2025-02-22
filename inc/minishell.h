@@ -268,6 +268,7 @@ int					count_ast_nodes(t_ast *node);
 void				handle_signals(void);
 void				signals_handler(int sig);
 void				signals_handler_for_blockers(int sig);
+void				son_signal(void);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);

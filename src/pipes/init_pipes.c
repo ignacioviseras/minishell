@@ -15,6 +15,7 @@
 static void	execute_pipe_left_child(t_ast *node, t_params *p, t_env *env,
 		int in_fd)
 {
+	son_signal();
 	if (in_fd != -1)
 	{
 		if (dup2(in_fd, STDIN_FILENO) == -1)
@@ -37,6 +38,7 @@ static void	execute_pipe_left_child(t_ast *node, t_params *p, t_env *env,
 
 static void	execute_pipe_right_child(t_ast *node, t_params *p, t_env *env)
 {
+	son_signal();
 	if (dup2(p->fd[0], STDIN_FILENO) == -1)
 	{
 		perror("dup2");
@@ -80,6 +82,7 @@ void	execute_pipe_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 		close(in_fd);
 	close(p->fd[0]);
 	close(p->fd[1]);
+	signal(SIGINT, signals_handler_for_blockers);
 	waitpid(p->pid_left, &p->status, 0);
 	waitpid(p->pid_right, &p->status, 0);
 }

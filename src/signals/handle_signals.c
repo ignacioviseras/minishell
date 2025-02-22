@@ -12,13 +12,11 @@
 
 #include "../../inc/minishell.h"
 
-void	signals_handler_for_blockers(int sig)
+void    signals_handler_for_blockers(int sig)
 {
-	if (sig == SIGQUIT)
-		printf("Quit (core dumped)");
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
+    if (sig == SIGQUIT)
+        printf("Quit (core dumped)");
+    printf("\n");
 }
 
 void	signals_handler(int sig)
@@ -28,6 +26,12 @@ void	signals_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+}
+
+void    son_signal(void)
+{
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_IGN);
 }
 
 void	handle_signals(void)

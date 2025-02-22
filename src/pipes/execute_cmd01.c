@@ -30,6 +30,7 @@ void	wait_for_child(int pid, t_params *p)
 
 	close(p->fd[0]);
 	close(p->fd[1]);
+	signal(SIGINT, signals_handler_for_blockers);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		g_exit_status = WEXITSTATUS(status);
@@ -41,6 +42,7 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 {
 	int	builtin;
 
+	son_signal();
 	builtin = is_builtin(data->cmd);
 	if (data->type == TOKEN_PIPE)
 	{
@@ -54,30 +56,6 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 	}
 	else
 		init_execute(data, p);
-}
-
-void	handle_processes(t_ast *node, t_params *p, t_env *env, t_token *data)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		pipes_and_execute(node, p, env, data);
-	}
-	else if (pid > 0)
-	{
-		signal(SIGINT, signals_handler_for_blockers);
-		signal(SIGQUIT, signals_handler_for_blockers);
-		wait_for_child(pid, p);
-	}
-	else
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
 }
 
 void	execute_node(t_ast *node, t_params *p, t_env *env)
