@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/05 13:55:21 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:41:19 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void    signals_handler_for_blockers(int sig)
 {
+	unlink(".heredoc.tmp");
     if (sig == SIGQUIT)
         printf("Quit (core dumped)");
     printf("\n");
