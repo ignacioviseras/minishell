@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/16 16:19:57 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:31:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	wait_for_child(int pid, t_params *p)
 
 	close(p->fd[0]);
 	close(p->fd[1]);
-	signal(SIGINT, signals_handler_for_blockers);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		g_exit_status = WEXITSTATUS(status);
@@ -42,7 +41,6 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 {
 	int	builtin;
 
-	son_signal();
 	builtin = is_builtin(data->cmd);
 	if (data->type == TOKEN_PIPE)
 	{
@@ -58,11 +56,27 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 		init_execute(data, p);
 }
 
+void	handle_processes(t_ast *node, t_params *p, t_env *env, t_token *data)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+		pipes_and_execute(node, p, env, data);
+	else if (pid > 0)
+		wait_for_child(pid, p);
+	else
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void	execute_node(t_ast *node, t_params *p, t_env *env)
 {
 	t_token	*data;
 	int		builtin;
-	int		pid;
+	//int		pid;
 
 	data = (t_token *)(node->data);
 	if (data->cmd != NULL)
@@ -72,16 +86,7 @@ void	execute_node(t_ast *node, t_params *p, t_env *env)
 			build_switch(env, node, data);
 		else
 		{
-			pid = fork();
-			if (pid == 0)
-				pipes_and_execute(node, p, env, data);
-			else if (pid > 0)
-				wait_for_child(pid, p);
-			else
-			{
-				perror("fork");
-				exit(EXIT_FAILURE);
-			}
+			pipes_and_execute(node, p, env, data);
 		}
 	}
 }

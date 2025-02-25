@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/20 17:20:44 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:30:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 	}
 	if (p->pid == 0)
 	{
-		son_signal();
+		signal(SIGQUIT, SIG_DFL);
 		if (in_fd != -1)
 		{
 			if (dup2(in_fd, STDIN_FILENO) == -1)
@@ -103,6 +103,7 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 	if (in_fd != -1)
 		close(in_fd);
 	signal(SIGINT, signals_handler_for_blockers);
+	signal(SIGQUIT, signals_handler_for_blockers);
 	waitpid(p->pid, &p->status, 0);
 }
 
