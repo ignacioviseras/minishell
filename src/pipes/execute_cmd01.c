@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/25 15:31:38 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:19:12 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,6 @@ void	before_execute(t_ast *node, t_params *p, t_env *env)
 	if (have_redirect != -1)
 		handle_redirection(node, env);
 	execute_node(node, p, env);
-}
-
-void	wait_for_child(int pid, t_params *p)
-{
-	int	status;
-
-	close(p->fd[0]);
-	close(p->fd[1]);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		g_exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		g_exit_status = 128 + WTERMSIG(status);
 }
 
 void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
@@ -56,22 +43,6 @@ void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)
 		init_execute(data, p);
 }
 
-void	handle_processes(t_ast *node, t_params *p, t_env *env, t_token *data)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == 0)
-		pipes_and_execute(node, p, env, data);
-	else if (pid > 0)
-		wait_for_child(pid, p);
-	else
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-}
-
 void	execute_node(t_ast *node, t_params *p, t_env *env)
 {
 	t_token	*data;
@@ -85,8 +56,6 @@ void	execute_node(t_ast *node, t_params *p, t_env *env)
 		if (p->total_cmds == 1 && builtin == 0)
 			build_switch(env, node, data);
 		else
-		{
 			pipes_and_execute(node, p, env, data);
-		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:20:41 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:32:47 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,12 @@
 char	*get_content_var(char *str)
 {
 	char	*finder;
-	char	*variable;
-	int		start;
-	int		end;
 
 	finder = ft_strchr(str, '=');
 	if (!finder || *(finder + 1) == '\0')
 		return (NULL);
 	finder++;
-	start = 0;
-	if (finder[start] == '"' || finder[start] == '\'')
-		return (get_unquoted_str(finder + start));
-	end = ft_strlen(finder) - 1;
-	while (end > start && (finder[end] == '"' || finder[end] == '\''))
-		end--;
-	if (start > end)
-		return (ft_strdup(""));
-	variable = ft_substr(finder, start, end - start + 1);
-	return (variable);
+	return (get_unquoted_str(finder));
 }
 
 char	*get_var(char *str)

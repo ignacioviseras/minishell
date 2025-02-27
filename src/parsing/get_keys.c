@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:41:52 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/06 20:18:04 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:46:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,23 @@ char	*get_quoted_key(char *str, char *key, int *i)
 	return (key);
 }
 
+char	*get_common_key(char *str, char *key, int *i)
+{
+	if (str[*i] == '$' && (str[*i + 1] == '?' || is_number(str[*i + 1])))
+	{
+		key = ft_substr(str, *i + 1, 1);
+		*i += 2;
+	}
+	else if (str[*i] == '$')
+	{
+		key = ft_substr(str, *i + 1, copy_len(str + *i));
+		*i += copy_len(str + *i) + 1;
+	}
+	else
+		(*i)++;
+	return (key);
+}
+
 char	*get_key(char *str, int *i)
 {
 	static int	quoted;
@@ -56,13 +73,8 @@ char	*get_key(char *str, int *i)
 			quoted = 0;
 		key = get_quoted_key(str, key, i);
 	}
-	else if (str[*i] == '$')
-	{
-		key = ft_substr(str, *i + 1, copy_len(str + *i));
-		*i += copy_len(str + *i) + 1;
-	}
 	else
-		(*i)++;
+		key = get_common_key(str, key, i);
 	return (key);
 }
 

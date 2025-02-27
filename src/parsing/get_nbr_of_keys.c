@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_nbr_of_keys.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:01:43 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/20 17:32:13 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:32:05 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-void	update_nbr_of_keys(char **str, int *keys)
-{
-	char	quote;
-
-	if (**str == '\'' || **str == '"')
-	{
-		quote = *(*str)++;
-		while (**str && **str != quote)
-		{
-			if (quote == '"' && **str == '$')
-				(*keys)++;
-			(*str)++;
-		}
-		if (**str)
-			(*str)++;
-	}
-	else if (**str == '$' && (is_alpha(*(*str + 1)) || \
-			*(*str + 1) == '_' || *(*str + 1) == '?'))
-	{
-		(*str)++;
-		(*keys)++;
-	}
-	else
-		(*str)++;
-}
 
 int	get_nbr_of_keys(char *str)
 {
@@ -44,7 +18,11 @@ int	get_nbr_of_keys(char *str)
 
 	keys = 0;
 	while (*str)
-		update_nbr_of_keys(&str, &keys);
+	{
+		if (*str == '$')
+			keys++;
+		str++;
+	}
 	return (keys);
 }
 

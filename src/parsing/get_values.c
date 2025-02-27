@@ -6,13 +6,13 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:59:18 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/06 16:18:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:10:11 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	g_exit_status = 0;
+int	g_exit_status;
 
 char	*get_exit_status(int *keys_nbr)
 {
@@ -60,7 +60,7 @@ char	**get_values(t_env *env, char **keys, int *keys_nbr)
 
 	values = ft_malloc((*keys_nbr + 1) * sizeof(char *));
 	i = 0;
-	while (keys[i] && i <= *keys_nbr)
+	while (keys[i] && *keys_nbr > 0)
 	{
 		value = get_value(env, keys[i], keys_nbr);
 		if (value)

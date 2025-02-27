@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/20 17:32:23 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:38:13 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,28 +69,24 @@ char	*get_flags_or_args(t_token *token, char *var, int caller)
 
 void	replace_var(t_token *token, t_env *env)
 {
+	t_kv	kv;
 	int		size;
 	int		keys_nbr;
-	char	**keys;
-	char	**values;
 
 	keys_nbr = get_nbr_of_keys(token->full_cmd);
-	keys = get_keys(token->full_cmd, keys_nbr);
-	values = get_values(env, keys, &keys_nbr);
-	size = ft_strlen(token->full_cmd) - ft_strlen_v2(keys) \
-	+ ft_strlen_v2(values) - keys_nbr + 1;
-	token->full_cmd = expand_token(token, values, size);
+	kv.keys = get_keys(token->full_cmd, keys_nbr);
+	kv.values = get_values(env, kv.keys, &keys_nbr);
+	size = ft_strlen(token->full_cmd) - ft_strlen_v2(kv.keys) \
+	+ ft_strlen_v2(kv.values) - keys_nbr + 1;
+	token->full_cmd = expand_token(token, kv, size);
 	free(token->cmd);
 	token->cmd = get_command(token->full_cmd);
 	if (token->flags && findchar(token->flags, '$') >= 0)
 		token->flags = get_flags_or_args(token, token->flags, 0);
 	if (token->args && findchar(token->args, '$') >= 0)
 		token->args = get_flags_or_args(token, token->args, 1);
-	free_matrix(keys);
-	if (ft_strcmp(*values, ""))
-		free_matrix(values);
-	else
-		free(values);
+	free_matrix(kv.keys);
+	free(kv.values);
 }
 
 void	expander(t_token **tokens, t_env *env)

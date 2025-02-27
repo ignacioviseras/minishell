@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/25 15:30:35 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:18:19 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,10 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 	signal(SIGINT, signals_handler_for_blockers);
 	signal(SIGQUIT, signals_handler_for_blockers);
 	waitpid(p->pid, &p->status, 0);
+	if (WIFEXITED(p->status))
+		g_exit_status = WEXITSTATUS(p->status);
+	else if (WIFSIGNALED(p->status))
+		g_exit_status = 128 + WTERMSIG(p->status);
 }
 
 void	execute_ast(t_ast *node, t_params *p, t_env *env, int in_fd)

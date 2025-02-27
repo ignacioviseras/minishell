@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:51:58 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/14 17:18:07 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:28:19 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,20 @@ int	find_imposter(char *str)
 	return (0);
 }
 
-void	get_new_exit_status(char *full_cmd, char *flags, int i)
+int	too_many_arguments(char *full_cmd, int i)
+{
+	if (findchar(full_cmd + i, ' ') > 0)
+	{
+		i += findchar(full_cmd + i, ' ');
+		while (full_cmd[i] == ' ')
+			i++;
+		if (full_cmd[i] != '\0')
+			return (1);
+	}
+	return (0);
+}
+
+void	get_new_exit_status(char *full_cmd, char *args, char *flags, int i)
 {
 	char	*nbr;
 
@@ -38,16 +51,15 @@ void	get_new_exit_status(char *full_cmd, char *flags, int i)
 		g_exit_status = 2;
 		printf("megashell: exit: %s: numeric argument required\n", flags);
 	}
-	else if (findchar(full_cmd + i, ' ') > 0)
+	else if (full_cmd[i] != '-' && find_imposter(full_cmd + i))
 	{
-		i += findchar(full_cmd + i, ' ');
-		while (full_cmd[i] == ' ')
-			i++;
-		if (full_cmd[i] != '\0')
-		{
-			g_exit_status = 1;
-			printf("megashell: exit: too many arguments\n");
-		}
+		g_exit_status = 2;
+		printf("megashell: exit: %s: numeric argument required\n", args);
+	}
+	else if (too_many_arguments(full_cmd, i))
+	{
+		g_exit_status = 1;
+		printf("megashell: exit: too many arguments\n");
 	}
 	else if (nbr)
 		g_exit_status = ft_atoi(nbr);
@@ -69,10 +81,12 @@ void	exit_program(t_env *env, t_ast *ast, t_token *tokens)
 	(full_cmd[i + 2] == '\0' || full_cmd[i + 2] == ' '))
 		i += 2;
 	skip_spaces(full_cmd, &i);
-	get_new_exit_status(full_cmd, tokens->flags, i);
-	free(full_cmd);
+	get_new_exit_status(full_cmd, tokens->args, tokens->flags, i);
+	if (too_many_arguments(full_cmd, i))
+		return (free(full_cmd));
 	free_env(env);
 	free_ast(ast);
 	free_tokens(tokens);
+	free(full_cmd);
 	exit(g_exit_status);
 }

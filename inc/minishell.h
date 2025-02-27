@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/20 17:35:51 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:38:30 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,12 @@ typedef struct s_params
 	char			**cmd_exec;
 	char			**env;	
 }					t_params;
+
+typedef struct t_kv
+{
+	char			**keys;
+	char			**values;
+}					t_kv;
 
 /*
  * The environment translated into a linked list.
@@ -272,7 +278,7 @@ void				son_signal(void);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);
-char				*expand_token(t_token *token, char **values, int size);
+char				*expand_token(t_token *token, t_kv kv, int size);
 char				**get_keys(char *str, int keys_nbr);
 char				**get_values(t_env *env, char **keys, int *keys_nbr);
 int					get_nbr_of_keys(char *str);

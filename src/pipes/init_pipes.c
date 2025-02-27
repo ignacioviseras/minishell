@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/20 17:24:04 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:12:09 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,10 @@ void	execute_pipe_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 		close(in_fd);
 	close(p->fd[0]);
 	close(p->fd[1]);
-	signal(SIGINT, signals_handler_for_blockers);
+	signal(SIGINT, SIG_IGN);
 	waitpid(p->pid_left, &p->status, 0);
 	waitpid(p->pid_right, &p->status, 0);
+	//printf("\n");
 }
 
 void	before_create_env(t_env **env, char **envp)
