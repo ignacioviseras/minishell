@@ -67,6 +67,20 @@ char	*get_flags_or_args(t_token *token, char *var, int caller)
 	return (append_new_var(token->cmd, str, caller));
 }
 
+char	*trim_full_cmd(char *full_cmd)
+{
+	char	*trimmed_full_cmd;
+	char	*aux;
+
+	trimmed_full_cmd = full_cmd;
+	while (*trimmed_full_cmd == ' ')
+		trimmed_full_cmd++;
+	aux = ft_strdup(trimmed_full_cmd);
+	free(full_cmd);
+	full_cmd = aux;
+	return (full_cmd);
+}
+
 void	replace_var(t_token *token, t_env *env)
 {
 	t_kv	kv;
@@ -79,6 +93,7 @@ void	replace_var(t_token *token, t_env *env)
 	size = ft_strlen(token->full_cmd) - ft_strlen_v2(kv.keys) \
 	+ ft_strlen_v2(kv.values) - keys_nbr + 1;
 	token->full_cmd = expand_token(token, kv, size);
+	token->full_cmd = trim_full_cmd(token->full_cmd);
 	free(token->cmd);
 	token->cmd = get_command(token->full_cmd);
 	if (token->flags && findchar(token->flags, '$') >= 0)
