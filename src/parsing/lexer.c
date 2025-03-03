@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:10:56 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/28 19:49:46 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:48:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	input_checker(t_lexer lexer, char *input, int end)
 	if (end == 1 && get_symbol(ft_lstlastchar(lexer.tokens)) > 0 && \
 		get_symbol(ft_lstlastchar(lexer.tokens)) < 4)
 	{
+		g_exit_status = 2;
 		printf("syntax error\n");
 		return (0);
 	}
@@ -82,6 +83,7 @@ int	input_checker(t_lexer lexer, char *input, int end)
 		if (input[i] == '\0' && lexer.automaton_status != 0 \
 			&& lexer.automaton_status <= 9)
 		{
+			g_exit_status = 2;
 			printf("syntax error\n");
 			return (0);
 		}

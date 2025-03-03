@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_actions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/20 17:27:52 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:31:40 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 	execute_ast(node->right, p, env, -1);
 }
 
-void	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
+int	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
 {
 	t_list			*tmp;
 	t_redirect_file	*redirection;
+	int				error;
 
+	error = 0;
 	tmp = data->infiles;
 	while (tmp)
 	{
@@ -34,17 +36,20 @@ void	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
 			if (redirection->type == HEREDOC)
 				handle_heredoc(data, env);
 			else if (redirection->type == INFILE)
-				redirect_input(node);
+				error = redirect_input(node);
 		}
 		tmp = tmp->next;
 	}
+	return (error);
 }
 
-void	handle_output_redirections(t_ast *node, t_token *data)
+int	handle_output_redirections(t_ast *node, t_token *data)
 {
 	t_list			*tmp;
 	t_redirect_file	*redirection;
+	int				error;
 
+	error = 0;
 	tmp = data->outfiles;
 	while (tmp)
 	{
@@ -52,23 +57,27 @@ void	handle_output_redirections(t_ast *node, t_token *data)
 		if (redirection)
 		{
 			if (redirection->type == WRITE)
-				redirect_output(node);
+				error = redirect_output(node);
 			else if (redirection->type == APPEND)
-				redirect_append(node);
+				error = redirect_append(node);
 		}
 		tmp = tmp->next;
 	}
+	return (error);
 }
 
-void	handle_redirection(t_ast *node, t_env *env)
+int	handle_redirection(t_ast *node, t_env *env)
 {
 	t_token	*data;
+	int		error;
 
 	data = (t_token *)(node->data);
 	if (!data)
-		return ;
-	handle_input_redirections(node, env, data);
-	handle_output_redirections(node, data);
+		return (1); // TODO: No estoy seguro, antes estaba como return ;
+	error = handle_input_redirections(node, env, data);
+	if (!error)
+		handle_output_redirections(node, data);
+	return (error);
 }
 
 int	is_builtin(char *cmd)

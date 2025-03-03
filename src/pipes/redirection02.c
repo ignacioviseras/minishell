@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection02.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:11:39 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:32:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	open_append_files(t_token *data)
 		if (fd < 0)
 		{
 			perror("open append");
-			exit(EXIT_FAILURE);
+			return (-1);
 		}
 		if (outfiles->next)
 			close(fd);
@@ -36,13 +36,18 @@ int	open_append_files(t_token *data)
 	return (fd);
 }
 
-void	redirect_append(t_ast *ast)
+int	redirect_append(t_ast *ast)
 {
 	t_token	*token;
 	int		fd;
 
 	token = (t_token *)(ast->data);
 	fd = open_append_files(token);
+	if (fd == -1)
+	{
+		g_exit_status = 1;
+		return (-1);
+	}
 	if (dup2(fd, STDOUT_FILENO) < 0)
 	{
 		perror("dup2 append");
@@ -50,4 +55,5 @@ void	redirect_append(t_ast *ast)
 		exit(EXIT_FAILURE);
 	}
 	close(fd);
+	return (0);
 }

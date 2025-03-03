@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:54:03 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/26 17:42:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:28:23 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ void	handle_dollar_sign(t_kv kv, const char *str, char *new_str, \
 		ft_strcpy(new_str + counters->k, kv.values[counters->j++]);
 		counters->k += ft_strlen(kv.values[counters->j - 1]);
 		if (str[counters->i + 2] && !is_alnum(str[counters->i + 2]) \
-			&& str[counters->i + 2] != '?' && str[counters->i + 2] != ' ')
+			&& str[counters->i + 2] != '?' && str[counters->i + 2] != ' ' \
+			&& str[counters->i + 2] != '$' && str[counters->i + 2] != '"' \
+			&& str[counters->i + 2] != '\'')
 			counters->i += ft_strlen(kv.keys[counters->j - 1]);
 		else
 			counters->i += ft_strlen(kv.keys[counters->j - 1]) + 1;

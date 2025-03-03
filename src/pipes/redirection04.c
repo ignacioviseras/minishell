@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection04.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:39:48 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/24 19:37:00 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:24:53 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	read_heredoc(void)
 	return (fd_file);
 }
 
+//TODO: SIGNALS EN EL HEREDOC
 int	process_heredoc(t_token *data, t_env *env)
 {
 	int				fd_file;
@@ -73,6 +74,8 @@ int	process_heredoc(t_token *data, t_env *env)
 	heredoc = data->infiles;
 	heredocs = (t_redirect_file *)heredoc->content;
 	fd_file = open_heredoc();
+	//signal(SIGINT, heredoc_signals_handler);
+	//signal(SIGQUIT, heredoc_signals_handler);
 	while (1)
 	{
 		buffer = readline("> ");

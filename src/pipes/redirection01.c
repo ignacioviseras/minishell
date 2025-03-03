@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:25:08 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:24:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ int	open_input_files(t_token *data)
 		fd = open(infile->value, O_RDONLY);
 		if (fd < 0)
 		{
+			g_exit_status = 1;
 			perror("open input");
-			exit(EXIT_FAILURE);
+			return (-1);
+			//exit(EXIT_FAILURE);
 		}
 		if (infiles->next)
 			close(fd);
@@ -36,13 +38,15 @@ int	open_input_files(t_token *data)
 	return (fd);
 }
 
-void	redirect_input(t_ast *ast)
+int	redirect_input(t_ast *ast)
 {
 	int		fd;
 	t_token	*token;
 
 	token = (t_token *)(ast->data);
 	fd = open_input_files(token);
+	if (fd == -1)
+		return (-1);
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
 		perror("dup2 input");
@@ -50,4 +54,5 @@ void	redirect_input(t_ast *ast)
 		exit(EXIT_FAILURE);
 	}
 	close(fd);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/25 15:28:23 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:24:22 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,22 @@ void	signals_handler_for_blockers(int sig)
 		g_exit_status = 130;
 	printf("\n");
 }
+
+//TODO: Puede (y seguramente sea) modificado.
+void	heredoc_signals_handler(int sig)
+{
+	if (sig == SIGINT || sig == SIGQUIT)
+	{
+		//printf("\n");
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		if (sig == SIGINT)
+			exit (130);
+		else
+			exit (131);
+	}
+}
+
 
 void	signals_handler(int sig)
 {

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/26 17:38:30 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:57:23 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,9 +315,9 @@ void				validate_comand(char **comand_splited);
 char				*command_with_space(char *comand);
 char				*load_param(char **path, char *comand);
 void				before_execute(t_ast *node, t_params *p, t_env *env);
-void				handle_redirection(t_ast *node, t_env *env);
+int					handle_redirection(t_ast *node, t_env *env);
 int					is_builtin(char *cmd);
-void				redirect_append(t_ast *ast);
+int					redirect_append(t_ast *ast);
 int					open_heredoc(void);
 char				*get_env_value(const char *key, char **environ);
 void				write_to_heredoc(int fd_file, char *buffer, t_env *env);
@@ -329,8 +329,8 @@ char				*expand_variable_heredoc(const char **p, t_env *env, \
 // void				handle_heredoc(t_token *data, t_ast *node, t_params *p,
 // 						t_env *env);
 void				handle_heredoc(t_token *data, t_env *env);
-void				redirect_input(t_ast *ast);
-void				redirect_output(t_ast *ast);
+int					redirect_input(t_ast *ast);
+int					redirect_output(t_ast *ast);
 void				ft_lstadd_back(t_list **lst, t_list *new);
 void				exit_program(t_env *env, t_ast *ast, t_token *tokens);
 void				handle_command(char *cleaned, t_token *tokens, t_env *env,
@@ -340,3 +340,5 @@ void				create_pipe_processes(t_ast *node, t_params *p, \
 char				*expand_variables_heredoc(const char *line, t_env *env);
 void				execute_pipe_ast(t_ast *node, t_params *p, \
 					t_env *env, int in_fd);
+
+void	heredoc_signals_handler(int sig);
