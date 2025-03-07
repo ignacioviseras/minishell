@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_actions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/03 14:31:40 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/06 20:45:22 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 	execute_ast(node->right, p, env, -1);
 }
 
-int	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
+// int	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
+int	handle_input_redirections(t_ast *node, t_token *data)
 {
 	t_list			*tmp;
 	t_redirect_file	*redirection;
@@ -33,9 +34,10 @@ int	handle_input_redirections(t_ast *node, t_env *env, t_token *data)
 		redirection = (t_redirect_file *)tmp->content;
 		if (redirection)
 		{
-			if (redirection->type == HEREDOC)
-				handle_heredoc(data, env);
-			else if (redirection->type == INFILE)
+			// if (redirection->type == HEREDOC)
+			// 	handle_heredoc(data, env);
+			// else if (redirection->type == INFILE)
+			if (redirection->type == INFILE)
 				error = redirect_input(node);
 		}
 		tmp = tmp->next;
@@ -66,7 +68,8 @@ int	handle_output_redirections(t_ast *node, t_token *data)
 	return (error);
 }
 
-int	handle_redirection(t_ast *node, t_env *env)
+// int	handle_redirection(t_ast *node, t_env *env)
+int	handle_redirection(t_ast *node)
 {
 	t_token	*data;
 	int		error;
@@ -74,7 +77,8 @@ int	handle_redirection(t_ast *node, t_env *env)
 	data = (t_token *)(node->data);
 	if (!data)
 		return (1); // TODO: No estoy seguro, antes estaba como return ;
-	error = handle_input_redirections(node, env, data);
+	error = handle_input_redirections(node, data);
+	// error = handle_input_redirections(node, env, data);
 	if (!error)
 		handle_output_redirections(node, data);
 	return (error);

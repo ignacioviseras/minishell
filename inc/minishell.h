@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/03 14:57:23 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/06 20:45:37 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,8 @@ void				validate_comand(char **comand_splited);
 char				*command_with_space(char *comand);
 char				*load_param(char **path, char *comand);
 void				before_execute(t_ast *node, t_params *p, t_env *env);
-int					handle_redirection(t_ast *node, t_env *env);
+// int					handle_redirection(t_ast *node, t_env *env);
+int					handle_redirection(t_ast *node);
 int					is_builtin(char *cmd);
 int					redirect_append(t_ast *ast);
 int					open_heredoc(void);
