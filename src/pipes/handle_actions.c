@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/06 20:45:22 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:04:12 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,8 @@ int	handle_redirection(t_ast *node)
 	if (!data)
 		return (1); // TODO: No estoy seguro, antes estaba como return ;
 	error = handle_input_redirections(node, data);
-	// error = handle_input_redirections(node, env, data);
-	if (!error)
-		handle_output_redirections(node, data);
+	if (handle_output_redirections(node, data) < 0)
+		error = -1; 
 	return (error);
 }
 
