@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/03 15:24:22 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:46:49 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,3 +62,10 @@ void	handle_signals(void)
 	signal(SIGINT, signals_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+// void	sigint_handler(int sig)
+// {
+// 	(void)sig;
+// 	unlink(".heredoc.tmp");
+// 	exit(1);
+// }

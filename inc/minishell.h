@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/06 20:45:37 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:10:21 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,7 @@ void				handle_signals(void);
 void				signals_handler(int sig);
 void				signals_handler_for_blockers(int sig);
 void				son_signal(void);
+void				sigint_handler(int sig);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);
@@ -315,11 +316,11 @@ void				validate_comand(char **comand_splited);
 char				*command_with_space(char *comand);
 char				*load_param(char **path, char *comand);
 void				before_execute(t_ast *node, t_params *p, t_env *env);
-// int					handle_redirection(t_ast *node, t_env *env);
 int					handle_redirection(t_ast *node);
 int					is_builtin(char *cmd);
 int					redirect_append(t_ast *ast);
-int					open_heredoc(void);
+int					create_heredoc_file(char **temp_filename);
+void				process_heredocs_in_ast(t_ast *node, t_env *env);
 char				*get_env_value(const char *key, char **environ);
 void				write_to_heredoc(int fd_file, char *buffer, t_env *env);
 char				*get_env_value_heredoc(t_env *env, const char *key);
@@ -327,8 +328,6 @@ char				*expand_buffer(char *result, size_t *buf_size, \
 					size_t required_size);
 char				*expand_variable_heredoc(const char **p, t_env *env, \
 					char *result, size_t *buf_size);
-// void				handle_heredoc(t_token *data, t_ast *node, t_params *p,
-// 						t_env *env);
 void				handle_heredoc(t_token *data, t_env *env);
 int					redirect_input(t_ast *ast);
 int					redirect_output(t_ast *ast);

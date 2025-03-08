@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   redirection04.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:39:48 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/03 15:24:53 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:46:29 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	open_heredoc(void)
+int	create_heredoc_file(char **temp_filename)
 {
 	int	fd;
 
-	fd = open(".heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	*temp_filename = ft_strdup(".heredoc.tmp");
+	fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		perror("open heredoc");
+		perror("open temp heredoc");
 		exit(EXIT_FAILURE);
 	}
 	return (fd);
@@ -50,60 +51,55 @@ void	write_to_heredoc(int fd_file, char *buffer, t_env *env)
 	free(buffer);
 }
 
-int	read_heredoc(void)
+static void	process_single_heredoc(t_redirect_file *redir, t_env *env)
 {
-	int	fd_file;
+	char	*temp_filename;
+	int		fd;
+	char	*line;
 
-	fd_file = open(".heredoc.tmp", O_RDONLY);
-	if (fd_file < 0)
+	fd = create_heredoc_file(&temp_filename);
+	// signal(SIGINT, sigint_handler);
+	line = readline("> ");
+	while (line != NULL)
 	{
-		perror("open heredoc tmp");
-		exit(EXIT_FAILURE);
-	}
-	return (fd_file);
-}
-
-//TODO: SIGNALS EN EL HEREDOC
-int	process_heredoc(t_token *data, t_env *env)
-{
-	int				fd_file;
-	char			*buffer;
-	t_list			*heredoc;
-	t_redirect_file	*heredocs;
-
-	heredoc = data->infiles;
-	heredocs = (t_redirect_file *)heredoc->content;
-	fd_file = open_heredoc();
-	//signal(SIGINT, heredoc_signals_handler);
-	//signal(SIGQUIT, heredoc_signals_handler);
-	while (1)
-	{
-		buffer = readline("> ");
-		if (buffer == NULL || ft_strcmp(buffer, heredocs->value) == 0)
+		if (ft_strcmp(line, redir->value) == 0)
 		{
-			free(buffer);
+			free(line);
 			break ;
 		}
-		write_to_heredoc(fd_file, buffer, env);
+		write_to_heredoc(fd, line, env);
+		line = readline("> ");
 	}
-	close(fd_file);
-	fd_file = read_heredoc();
-	return (fd_file);
+	// signal(SIGINT, SIG_DFL);
+	close(fd);
+	redir->type = INFILE;
+	free(redir->value);
+	redir->value = ft_strdup(temp_filename);
+	free(temp_filename);
 }
 
-void	handle_heredoc(t_token *data, t_env *env)
+static void	process_heredoc_list(t_list *list, t_env *env)
 {
-	int	hd_fd;
+	t_redirect_file	*redir;
 
-	hd_fd = process_heredoc(data, env);
-	if (hd_fd == -1)
-		return ;
-	if (dup2(hd_fd, STDIN_FILENO) == -1)
+	while (list)
 	{
-		perror("dup2 heredoc");
-		close(hd_fd);
-		exit(EXIT_FAILURE);
+		redir = (t_redirect_file *)list->content;
+		if (redir && redir->type == HEREDOC)
+			process_single_heredoc(redir, env);
+		list = list->next;
 	}
-	close(hd_fd);
-	unlink(".heredoc.tmp");
+}
+
+void	process_heredocs_in_ast(t_ast *node, t_env *env)
+{
+	t_token	*data;
+
+	if (!node)
+		return ;
+	data = (t_token *)node->data;
+	if (data->infiles)
+		process_heredoc_list(data->infiles, env);
+	process_heredocs_in_ast(node->left, env);
+	process_heredocs_in_ast(node->right, env);
 }
