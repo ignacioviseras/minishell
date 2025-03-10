@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/08 17:03:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:35:01 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,9 @@ int	open_input_files(t_token *data)
 		fd = open(infile->value, O_RDONLY);
 		if (fd < 0)
 		{
-			// fd = open(infile->value, O_CREAT | O_WRONLY, 0644);
 			g_exit_status = 1;
-			// close(fd);
 			perror("open input");
 			return (-1);
-			//exit(EXIT_FAILURE);
 		}
 		if (ft_strncmp(infile->value, ".heredoc.tmp", 12) == 0)
 			unlink(infile->value);

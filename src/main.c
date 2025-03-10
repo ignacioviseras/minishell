@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 00:48:32 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:36:19 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_redirects(t_list *redirects, char *type)
 		redirection = (t_redirect_file *)redirects->content;
 		if (redirection)
 			printf("Value: %s, Type: %d\n", redirection->value,
-					redirection->type);
+				redirection->type);
 		redirects = redirects->next;
 	}
 }
@@ -67,21 +67,6 @@ int	count_ast_nodes(t_ast *node)
 		return (count_ast_nodes(node->left) + count_ast_nodes(node->right));
 	return (1 + count_ast_nodes(node->left) + count_ast_nodes(node->right));
 }
-
-// static int	create_heredoc_file(char **temp_filename)
-// {
-// 	int	fd;
-
-// 	*temp_filename = ft_strdup(".heredoc.tmp");
-// 	fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd < 0)
-// 	{
-// 		perror("open temp heredoc");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	return (fd);
-// }
-
 
 void	handle_input(t_env *env, char *input)
 {

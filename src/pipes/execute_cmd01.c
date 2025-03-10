@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 12:18:57 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:35:56 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	before_execute(t_ast *node, t_params *p, t_env *env)
 	have_redirect = have_redirection(data);
 	if (have_redirect != -1)
 		error = handle_redirection(node);
-		// error = handle_redirection(node, env);
 	if (error == 0)
 		execute_node(node, p, env);
 }

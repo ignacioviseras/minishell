@@ -3,29 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 13:49:54 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:34:37 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-#include <fcntl.h>
-#include <limits.h>
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <signal.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <unistd.h>
+# define _GNU_SOURCE
 
-#define USAGE_ERROR "Correct use: ./minishell\n"
-#define READ_FD 0
-#define WRITE_FD 1
+# include <fcntl.h>
+# include <limits.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdint.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include <unistd.h>
+
+# define USAGE_ERROR "Correct use: ./minishell\n"
+# define READ_FD 0
+# define WRITE_FD 1
 
 //* Types of tokens, used to create the AST in the parser.
 typedef enum token_type
@@ -126,7 +129,7 @@ typedef struct s_params
 	int				status;
 	char			*cmd_path;
 	char			**cmd_exec;
-	char			**env;	
+	char			**env;
 }					t_params;
 
 typedef struct t_kv
@@ -304,8 +307,8 @@ int					is_priority_command(t_token *data);
 void				pipes_and_execute(t_ast *node, t_params *p, t_env *env,
 						t_token *data);
 void				execute_node(t_ast *node, t_params *p, t_env *env);
-void				execute_ast(t_ast *node, t_params *p, \
-					t_env *env, int prev_fd);
+void				execute_ast(t_ast *node, t_params *p, t_env *env,
+						int prev_fd);
 char				*create_char(t_env *env);
 int					count_env_nodes(t_env *env);
 char				**init_env(t_env *env);
@@ -323,10 +326,10 @@ void				process_heredocs_in_ast(t_ast *node, t_env *env);
 char				*get_env_value(const char *key, char **environ);
 void				write_to_heredoc(int fd_file, char *buffer, t_env *env);
 char				*get_env_value_heredoc(t_env *env, const char *key);
-char				*expand_buffer(char *result, size_t *buf_size, \
-					size_t required_size);
-char				*expand_variable_heredoc(const char **p, t_env *env, \
-					char *result, size_t *buf_size);
+char				*expand_buffer(char *result, size_t *buf_size,
+						size_t required_size);
+char				*expand_variable_heredoc(const char **p, t_env *env,
+						char *result, size_t *buf_size);
 void				heredoc_signals_handler(int sig);
 int					redirect_input(t_ast *ast);
 int					redirect_output(t_ast *ast);
@@ -334,11 +337,14 @@ void				ft_lstadd_back(t_list **lst, t_list *new);
 void				exit_program(t_env *env, t_ast *ast, t_token *tokens);
 void				handle_command(char *cleaned, t_token *tokens, t_env *env,
 						t_ast *ast);
-void				create_pipe_processes(t_ast *node, t_params *p, \
-					t_env *env, int in_fd);
+void				create_pipe_processes(t_ast *node, t_params *p, t_env *env,
+						int in_fd);
 char				*expand_variables_heredoc(const char *line, t_env *env);
-void				execute_pipe_ast(t_ast *node, t_params *p, \
-					t_env *env, int in_fd);
-void				handle_heredoc_parent(pid_t pid, int fd, \
+void				execute_pipe_ast(t_ast *node, t_params *p, t_env *env,
+						int in_fd);
+void				handle_heredoc_parent(pid_t pid, int fd,
 						char *temp_filename, t_redirect_file *redir);
-void				handle_heredoc_child(t_redirect_file *redir, t_env *env, int fd);
+void				handle_heredoc_child(t_redirect_file *redir, t_env *env,
+						int fd);
+
+#endif
