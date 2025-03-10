@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 12:15:40 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 13:49:54 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,6 @@ void				handle_signals(void);
 void				signals_handler(int sig);
 void				signals_handler_for_blockers(int sig);
 void				son_signal(void);
-void				sigint_handler(int sig);
 
 // EXPANDER
 void				expander(t_token **tokens, t_env *env);
@@ -301,7 +300,6 @@ int					tramited(char *path, t_params *p, t_token *t);
 void				execute_cmd(t_params *p);
 void				init_execute(t_token *data, t_params *p);
 void				handle_pipe(t_ast *node, t_params *p, t_env *env);
-void				wait_for_child(int pid, t_params *p);
 int					is_priority_command(t_token *data);
 void				pipes_and_execute(t_ast *node, t_params *p, t_env *env,
 						t_token *data);
@@ -341,3 +339,6 @@ void				create_pipe_processes(t_ast *node, t_params *p, \
 char				*expand_variables_heredoc(const char *line, t_env *env);
 void				execute_pipe_ast(t_ast *node, t_params *p, \
 					t_env *env, int in_fd);
+void				handle_heredoc_parent(pid_t pid, int fd, \
+						char *temp_filename, t_redirect_file *redir);
+void				handle_heredoc_child(t_redirect_file *redir, t_env *env, int fd);
