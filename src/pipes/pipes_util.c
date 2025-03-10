@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 11:49:41 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:15:27 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,70 +36,35 @@ char	*create_char(t_env *env)
 	return (str);
 }
 
-int	count_env_nodes(t_env *env)
+void	handle_fork_error(void)
 {
-	int	count;
-
-	count = 0;
-	while (env)
-	{
-		count++;
-		env = env->next;
-	}
-	return (count);
+	perror("fork");
+	exit(EXIT_FAILURE);
 }
 
-char	**init_env(t_env *env)
+void	handle_child_process(t_ast *node, t_params *p, t_env *env, int in_fd)
 {
-	char	**env_matrix;
-	int		env_count;
-	int		x;
-
-	env_count = count_env_nodes(env);
-	env_matrix = ft_malloc((env_count + 1) * sizeof(char *));
-	if (!env_matrix)
-		return (NULL);
-	x = 0;
-	while (env)
+	signal(SIGQUIT, SIG_DFL);
+	if (in_fd != -1)
 	{
-		env_matrix[x] = create_char(env);
-		if (!env_matrix[x])
+		if (dup2(in_fd, STDIN_FILENO) == -1)
 		{
-			while (x-- > 0)
-				free(env_matrix[x]);
-			free(env_matrix);
-			return (NULL);
+			perror("dup2");
+			exit(EXIT_FAILURE);
 		}
-		x++;
-		env = env->next;
+		close(in_fd);
 	}
-	env_matrix[x] = NULL;
-	return (env_matrix);
+	before_execute(node, p, env);
+	exit(EXIT_FAILURE);
 }
 
 void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 {
 	p->pid = fork();
 	if (p->pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
+		handle_fork_error();
 	if (p->pid == 0)
-	{
-		signal(SIGQUIT, SIG_DFL);
-		if (in_fd != -1)
-		{
-			if (dup2(in_fd, STDIN_FILENO) == -1)
-			{
-				perror("dup2");
-				exit(EXIT_FAILURE);
-			}
-			close(in_fd);
-		}
-		before_execute(node, p, env);
-		exit(EXIT_FAILURE);
-	}
+		handle_child_process(node, p, env, in_fd);
 	if (in_fd != -1)
 		close(in_fd);
 	signal(SIGINT, signals_handler_for_blockers);

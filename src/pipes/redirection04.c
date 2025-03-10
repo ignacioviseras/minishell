@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:39:48 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 01:08:51 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:20:11 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	process_single_heredoc(t_redirect_file *redir, t_env *env)
 				break;
 			}
 			write_to_heredoc(fd, line, env);
-			free(line);
+			//free(line);
 		}
 		close(fd);
 		exit(0);

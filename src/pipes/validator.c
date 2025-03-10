@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:53:34 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/03 14:16:42 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:02:03 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ char	*access_validate(char **path, char *comand)
 		printf("command '%s'\n", comand);
 		printf("\t--- Error ---\nThere is no access to any directory\n");
 		exit(127);
-		//g_exit_status = 127;
-		//return (NULL);
 	}
 	return (NULL);
 }

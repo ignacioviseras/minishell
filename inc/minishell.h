@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 01:01:48 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:15:40 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,7 @@ void				*ft_memcpy(void *dest, const void *src, size_t n);
 void				*ft_realloc(void *ptr, size_t new_size);
 char				*ft_strcat(char *dest, const char *src);
 char				*ft_str(long aux, long size, long n1, int n);
+int					get_word_len(char *full_cmd, int i);
 
 // BUILT_INS
 int					flags_validator(char *flags, char *command_flags);

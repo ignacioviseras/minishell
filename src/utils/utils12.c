@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:08:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/20 18:34:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:00:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,21 @@ char	*get_next_word(char *cmd, char *str, int caller)
 		&& caller == 1 && str[i + 2] != ' ' && str[i + 2] != '\0')
 		return (ft_strdup(str + i));
 	return (get_word(str, i));
+}
+
+int	get_word_len(char *full_cmd, int i)
+{
+	char	quote;
+
+	while (full_cmd[i] && full_cmd[i] != ' ')
+	{
+		if (full_cmd[i] == '"' || full_cmd[i] == '\'')
+		{
+			quote = full_cmd[i++];
+			while (full_cmd[i] != quote)
+				i++;
+		}
+		i++;
+	}
+	return (i);
 }

@@ -6,28 +6,11 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/26 17:38:13 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:59:54 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-int	get_word_len(char *full_cmd, int i)
-{
-	char	quote;
-
-	while (full_cmd[i] && full_cmd[i] != ' ')
-	{
-		if (full_cmd[i] == '"' || full_cmd[i] == '\'')
-		{
-			quote = full_cmd[i++];
-			while (full_cmd[i] != quote)
-				i++;
-		}
-		i++;
-	}
-	return (i);
-}
 
 char	*append_new_var(char *cmd, char *str, int caller)
 {

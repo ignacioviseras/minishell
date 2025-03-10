@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/06 20:45:48 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:18:57 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	execute_node(t_ast *node, t_params *p, t_env *env)
 {
 	t_token	*data;
 	int		builtin;
-	//int		pid;
 
 	data = (t_token *)(node->data);
 	if (data->cmd != NULL)
@@ -62,5 +61,4 @@ void	execute_node(t_ast *node, t_params *p, t_env *env)
 		else
 			pipes_and_execute(node, p, env, data);
 	}
-	
 }
