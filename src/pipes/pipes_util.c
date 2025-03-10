@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 00:48:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:49:41 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,12 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 	signal(SIGINT, signals_handler_for_blockers);
 	signal(SIGQUIT, signals_handler_for_blockers);
 	waitpid(p->pid, &p->status, 0);
-	printf("111g_exit_status: %d\n", g_exit_status);
 	if (WIFEXITED(p->status))
 		g_exit_status = WEXITSTATUS(p->status);
 	else if (WIFSIGNALED(p->status))
 		g_exit_status = 128 + WTERMSIG(p->status);
-	printf("222g_exit_status: %d\n", g_exit_status);
+	if (p->pid_right == 0)
+		exit(g_exit_status);
 }
 
 void	execute_ast(t_ast *node, t_params *p, t_env *env, int in_fd)

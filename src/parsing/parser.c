@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 16:54:20 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 01:07:19 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:51:27 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ t_ast	*parsing(t_token *tokens, t_env *env)
 	if (!tokens)
 		return (NULL);
 	tree = NULL;
-	printf("Al llegar: %d\n", g_exit_status);
 	expander(&tokens, env);
 	build_tree(tokens, &tree);
 	return (tree);

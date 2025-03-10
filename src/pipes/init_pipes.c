@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:30:02 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/26 18:12:09 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:52:49 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ void	execute_pipe_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 	signal(SIGINT, SIG_IGN);
 	waitpid(p->pid_left, &p->status, 0);
 	waitpid(p->pid_right, &p->status, 0);
-	//printf("\n");
+	if (WIFEXITED(p->status))
+		g_exit_status = WEXITSTATUS(p->status);
+	else if (WIFSIGNALED(p->status))
+		g_exit_status = 128 + WTERMSIG(p->status);
 }
 
 void	before_create_env(t_env **env, char **envp)
