@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:41 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/05 18:54:34 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:54:13 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	handle_command(char *cleaned, t_token *tokens, t_env *env, t_ast *ast)
 	else if (ft_strcmp(cleaned, "cd") == 0)
 		command_cd(tokens, env);
 	else if (ft_strcmp(cleaned, "echo") == 0)
-		command_echo(tokens);
+		command_echo(tokens->full_cmd);
 	else if (ft_strcmp(cleaned, "export") == 0)
 		command_export(tokens, env);
 	else if (ft_strcmp(cleaned, "unset") == 0)

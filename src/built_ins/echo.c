@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:08 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/20 18:21:40 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/10 19:28:52 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,30 @@ int	is_option_n(char *str)
 	return (result);
 }
 
-void	command_echo(t_token *tokens)
+void	command_echo(char *input)
 {
-	char	*remains;
-	char	*aux;
+	char	**str_splited;
 	int		no_newline;
+	int		i;
 
+	i = 0;
 	no_newline = 1;
-	if (ft_strcmp(tokens->flags, "-n") == 0 && !tokens->args)
-		return ;
-	remains = tokens->full_cmd + ft_strlen(tokens->cmd);
-	while (remains && *remains == ' ')
-		remains++;
-	aux = get_next_word(NULL, remains, 0);
-	if (ft_strcmp(aux, "-n") == 0)
+	if (!input)
 	{
-		no_newline = 0;
-		remains += ft_strlen(aux);
+		printf("\n");
+		return ;
 	}
-	while (remains && *remains == ' ')
-		remains++;
-	if (remains)
-		printf("%s", remains);
+	str_splited = ft_split(input, ' ');
+	while (str_splited[++i] && is_option_n(str_splited[i]))
+		no_newline = 0;
+	while (str_splited[i])
+	{
+		printf("%s", str_splited[i]);
+		if (str_splited[i + 1])
+			printf(" ");
+		i++;
+	}
 	if (no_newline)
 		printf("\n");
-	free(aux);
+	free_matrix(str_splited);
 }

@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 17:34:37 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:45:16 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,8 @@ char				*get_var(char *str);
 void				command_export(t_token *tokens, t_env *envi);
 void				print_env(t_env *envi, int flag);
 void				command_unset(t_token *tokens, t_env *env);
-void				command_echo(t_token *tokens);
+void				command_echo(char *str);
+// void				command_echo(t_token *tokens);
 void				command_clear(t_token *tokens);
 int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
