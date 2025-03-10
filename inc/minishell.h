@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/08 17:10:21 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/10 01:01:48 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,7 @@ char				*expand_buffer(char *result, size_t *buf_size, \
 					size_t required_size);
 char				*expand_variable_heredoc(const char **p, t_env *env, \
 					char *result, size_t *buf_size);
-void				handle_heredoc(t_token *data, t_env *env);
+void				heredoc_signals_handler(int sig);
 int					redirect_input(t_ast *ast);
 int					redirect_output(t_ast *ast);
 void				ft_lstadd_back(t_list **lst, t_list *new);
@@ -340,5 +340,3 @@ void				create_pipe_processes(t_ast *node, t_params *p, \
 char				*expand_variables_heredoc(const char *line, t_env *env);
 void				execute_pipe_ast(t_ast *node, t_params *p, \
 					t_env *env, int in_fd);
-
-void	heredoc_signals_handler(int sig);

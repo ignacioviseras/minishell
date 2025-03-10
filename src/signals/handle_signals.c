@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:36:19 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/08 17:46:49 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/10 01:00:24 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,6 @@ void	signals_handler_for_blockers(int sig)
 		g_exit_status = 130;
 	printf("\n");
 }
-
-//TODO: Puede (y seguramente sea) modificado.
-void	heredoc_signals_handler(int sig)
-{
-	if (sig == SIGINT || sig == SIGQUIT)
-	{
-		//printf("\n");
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		if (sig == SIGINT)
-			exit (130);
-		else
-			exit (131);
-	}
-}
-
 
 void	signals_handler(int sig)
 {
@@ -63,9 +47,12 @@ void	handle_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-// void	sigint_handler(int sig)
-// {
-// 	(void)sig;
-// 	unlink(".heredoc.tmp");
-// 	exit(1);
-// }
+void	heredoc_signals_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_exit_status = 130;
+		printf("\n");
+		exit(130);
+	}
+}

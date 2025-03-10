@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection04.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:39:48 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/08 17:46:29 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/10 01:08:51 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,27 +55,58 @@ static void	process_single_heredoc(t_redirect_file *redir, t_env *env)
 {
 	char	*temp_filename;
 	int		fd;
-	char	*line;
+	pid_t	pid;
+	int		status;
 
 	fd = create_heredoc_file(&temp_filename);
-	// signal(SIGINT, sigint_handler);
-	line = readline("> ");
-	while (line != NULL)
+	pid = fork();
+	if (pid == 0)
 	{
-		if (ft_strcmp(line, redir->value) == 0)
+		signal(SIGINT, heredoc_signals_handler);
+		signal(SIGQUIT, SIG_IGN);
+		char *line;
+		while ((line = readline("> ")) != NULL)
 		{
+			if (ft_strcmp(line, redir->value) == 0)
+			{
+				free(line);
+				break;
+			}
+			write_to_heredoc(fd, line, env);
 			free(line);
-			break ;
 		}
-		write_to_heredoc(fd, line, env);
-		line = readline("> ");
+		close(fd);
+		exit(0);
 	}
-	// signal(SIGINT, SIG_DFL);
-	close(fd);
-	redir->type = INFILE;
-	free(redir->value);
-	redir->value = ft_strdup(temp_filename);
-	free(temp_filename);
+	else if (pid > 0)
+	{
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		signal(SIGINT, signals_handler);
+		close(fd);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_status = 128 + WTERMSIG(status);
+		if (g_exit_status == 130)
+		{
+			unlink(temp_filename);
+			free(redir->value);
+			redir->value = NULL;
+		}
+		else
+		{
+			redir->type = INFILE;
+			free(redir->value);
+			redir->value = ft_strdup(temp_filename);
+		}
+		free(temp_filename);
+	}
+	else
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 }
 
 static void	process_heredoc_list(t_list *list, t_env *env)
