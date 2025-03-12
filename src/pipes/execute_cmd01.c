@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:32:52 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/12 17:27:39 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:00:57 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,14 @@ void	before_execute(t_ast *node, t_params *p, t_env *env)
 	have_redirect = have_redirection(data);
 	if (have_redirect != -1)
 	{
-		//if (ft_strcmp(data->cmd, "echo") == 0 || ft_strcmp(data->cmd, "cat") == 0)
-		if (ft_strcmp(data->cmd, "ls"))
+		if (ft_strcmp(data->cmd, "ls") && ft_strcmp(data->cmd, "cat") != 0)
 			fd_dup(0);
 		error = handle_redirection(node);
 	}
 	if (error == 0)
 		execute_node(node, p, env);
-	//if (have_redirect != -1 && (ft_strcmp(data->cmd, "echo") == 0 || ft_strcmp(data->cmd, "cat") == 0))
-	if (have_redirect != -1 && ft_strcmp(data->cmd, "ls"))
+	if (have_redirect != -1 && ft_strcmp(data->cmd, "ls") \
+		&& ft_strcmp(data->cmd, "cat") != 0)
 		fd_dup(1);
 }
 

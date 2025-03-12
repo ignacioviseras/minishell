@@ -3,36 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc03.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:40:37 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/12 18:29:21 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:11:46 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int create_heredoc_file(char **temp_filename)
+int	create_heredoc_file(char **temp_filename)
 {
-    static int heredoc_count = 0;
-    char *count_str;
-    char *base_name = ".heredoc.tmp.";
-    
-    heredoc_count++;
-    count_str = ft_itoa(heredoc_count);
-    if (!count_str)
-        return (-1);
-    *temp_filename = ft_strjoin(base_name, count_str);
-    free(count_str);
-    if (!*temp_filename)
-        return (-1);
-    int fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd < 0)
-    {
-        perror("open temp heredoc");
-        return (-1);
-    }
-    return fd;
+	static int	heredoc_count;
+	char		*count_str;
+	char		*base_name;
+	int			fd;
+
+	base_name = ft_strdup(".heredoc.tmp.");
+	heredoc_count++;
+	count_str = ft_itoa(heredoc_count);
+	if (!count_str)
+		return (-1);
+	*temp_filename = ft_strjoin(base_name, count_str);
+	free(count_str);
+	if (!*temp_filename)
+		return (-1);
+	fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		perror("open temp heredoc");
+		return (-1);
+	}
+	free(base_name);
+	return (fd);
 }
 
 void	write_to_heredoc(int fd_file, char *buffer, t_env *env)
