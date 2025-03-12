@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 18:45:16 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:26:23 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,6 @@ void				command_export(t_token *tokens, t_env *envi);
 void				print_env(t_env *envi, int flag);
 void				command_unset(t_token *tokens, t_env *env);
 void				command_echo(char *str);
-// void				command_echo(t_token *tokens);
 void				command_clear(t_token *tokens);
 int					validate_export(char *key, char *value);
 void				unset_actions(t_token *tokens, t_env *env);
@@ -324,7 +323,6 @@ int					is_builtin(char *cmd);
 int					redirect_append(t_ast *ast);
 int					create_heredoc_file(char **temp_filename);
 void				process_heredocs_in_ast(t_ast *node, t_env *env);
-char				*get_env_value(const char *key, char **environ);
 void				write_to_heredoc(int fd_file, char *buffer, t_env *env);
 char				*get_env_value_heredoc(t_env *env, const char *key);
 char				*expand_buffer(char *result, size_t *buf_size,

@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 11:59:54 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:44:11 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*append_new_var(char *cmd, char *str, int caller)
 			free(word);
 			break ;
 		}
-		if (word[0] == '-' && caller == 0)
+		if (word[0] == '-')
 			new_var = append_str(new_var, word);
 		else if (word[0] != '-' && caller == 1)
 			new_var = append_str(new_var, word);

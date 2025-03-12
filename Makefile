@@ -6,29 +6,29 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/03/10 13:52:24 by drestrep         ###   ########.fr        #
+#    Updated: 2025/03/12 12:32:39 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 			= 	minishell
+NAME			=	minishell
 
-CC 				= 	gcc
-CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address #-O3
+CC				=	gcc
+CFLAGS			=	-g3 -Wall -Wextra -Werror -fsanitize=address #-O3
 LDFLAGS			=	-lreadline
-INCLUDES		= 	-I ./inc/
+INCLUDES		=	-I ./inc/
 
-PATH_BASE 		=	./src/
-PATH_UTILS 		=	./src/utils/
+PATH_BASE		=	./src/
+PATH_UTILS		=	./src/utils/
 PATH_PARSING	=	./src/parsing/
 PATH_SIGNALS	=	./src/signals/
 PATH_PIPES		=	./src/pipes/
-PATH_BUILT 		=	./src/built_ins/
-BASE	   		=	$(addprefix $(PATH_BASE), $(BASE_SRC))
-UTILS	   		=	$(addprefix $(PATH_UTILS), $(UTILS_SRC))
+PATH_BUILT		=	./src/built_ins/
+BASE			=	$(addprefix $(PATH_BASE), $(BASE_SRC))
+UTILS			=	$(addprefix $(PATH_UTILS), $(UTILS_SRC))
 PARSING			=	$(addprefix $(PATH_PARSING), $(PARSING_SRC))
 SIGNALS			=	$(addprefix $(PATH_SIGNALS), $(SIGNALS_SRC))
 PIPES			=	$(addprefix $(PATH_PIPES), $(PIPES_SRC))
-BUILT  	  		=	$(addprefix $(PATH_BUILT), $(BUILT_SRC))
+BUILT			=	$(addprefix $(PATH_BUILT), $(BUILT_SRC))
 
 BASE_SRC		=	main.c
 
@@ -55,22 +55,22 @@ PIPES_SRC		=	pipes_util.c				\
 					handle_actions.c			\
 					init_pipes.c				\
 					init_env.c					\
-					redirection01.c				\
-					redirection02.c				\
-					redirection03.c				\
-					redirection04.c				\
-					redirection05.c				\
-					redirection06.c				\
+					input.c						\
+					append.c					\
+					output.c					\
+					heredoc01.c					\
+					heredoc02.c					\
+					heredoc03.c					\
 
 BUILT_SRC		=	built_ins.c					\
 					cd.c						\
-					clear.c 					\
-					echo.c 						\
+					clear.c						\
+					echo.c						\
 					env.c		 				\
-					exit.c 						\
-					export.c 					\
-					pwd.c 						\
-					unset.c 					\
+					exit.c						\
+					export.c					\
+					pwd.c						\
+					unset.c						\
 
 UTILS_SRC		=	utils01.c					\
 					utils02.c					\

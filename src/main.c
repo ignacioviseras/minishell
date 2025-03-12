@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 17:36:19 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:30:38 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	handle_input(t_env *env, char *input)
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
-	g_exit_status = 0;
+	if (g_exit_status != 2)
+		g_exit_status = 0;
 	p.total_cmds = count_ast_nodes(ast);
 	p.env = init_env(env);
 	process_heredocs_in_ast(ast, env);

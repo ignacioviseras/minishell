@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:08 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 19:28:52 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:00:16 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_option_n(char *str)
 
 	i = 1;
 	result = 1;
-	if (str[0] != '-')
+	if (str[0] != '-' || (str[0] == '-' && str[1] != 'n'))
 		result = 0;
 	else
 	{
