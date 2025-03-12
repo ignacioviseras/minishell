@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_actions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 17:38:42 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:20:36 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,11 @@ int	handle_input_redirections(t_ast *node, t_token *data)
 
 	error = 0;
 	tmp = data->infiles;
-	while (tmp)
+	redirection = (t_redirect_file *)tmp->content;
+	if (redirection)
 	{
-		redirection = (t_redirect_file *)tmp->content;
-		if (redirection)
-		{
-			if (redirection->type == INFILE)
-				error = redirect_input(node);
-		}
-		tmp = tmp->next;
+		if (redirection->type == INFILE)
+			error = redirect_input(node);
 	}
 	return (error);
 }
