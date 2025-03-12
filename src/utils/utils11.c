@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils11.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:21:43 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/14 17:30:44 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/12 20:34:25 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (mem2);
 }
 
-void	*ft_realloc(void *ptr, size_t new_size)
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr;
 
@@ -107,7 +107,10 @@ void	*ft_realloc(void *ptr, size_t new_size)
 		return (NULL);
 	if (ptr)
 	{
-		ft_memcpy(new_ptr, ptr, new_size);
+		if (old_size < new_size)
+			ft_memcpy(new_ptr, ptr, old_size);
+		else
+			ft_memcpy(new_ptr, ptr, new_size);
 		free(ptr);
 	}
 	return (new_ptr);
