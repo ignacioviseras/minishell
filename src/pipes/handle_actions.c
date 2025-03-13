@@ -6,7 +6,7 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/12 18:20:36 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:41:32 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	handle_input_redirections(t_ast *node, t_token *data)
 	int				error;
 
 	error = 0;
+	if (!data->infiles)
+		return (0);
 	tmp = data->infiles;
 	redirection = (t_redirect_file *)tmp->content;
 	if (redirection)
