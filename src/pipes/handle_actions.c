@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_actions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:31:12 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/12 18:20:36 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/13 23:14:53 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@ void	handle_pipe(t_ast *node, t_params *p, t_env *env)
 	execute_ast(node->right, p, env, -1);
 }
 
-int	handle_input_redirections(t_ast *node, t_token *data)
+int	handle_input_redirections(t_ast *node, t_list *tmp)
 {
-	t_list			*tmp;
 	t_redirect_file	*redirection;
 	int				error;
 
 	error = 0;
-	tmp = data->infiles;
 	redirection = (t_redirect_file *)tmp->content;
 	if (redirection)
 	{
@@ -37,17 +35,17 @@ int	handle_input_redirections(t_ast *node, t_token *data)
 	return (error);
 }
 
-int	handle_output_redirections(t_ast *node, t_token *data)
+int	handle_output_redirections(t_ast *node, t_list *tmp)
 {
-	t_list			*tmp;
 	t_redirect_file	*redirection;
 	int				error;
 
 	error = 0;
-	tmp = data->outfiles;
 	while (tmp)
 	{
 		redirection = (t_redirect_file *)tmp->content;
+		if (redirection && redirection->type == INFILE)
+			break ;
 		if (redirection)
 		{
 			if (redirection->type == WRITE)
@@ -62,15 +60,25 @@ int	handle_output_redirections(t_ast *node, t_token *data)
 
 int	handle_redirection(t_ast *node)
 {
-	t_token	*data;
-	int		error;
+	t_token			*data;
+	t_list			*tmp;
+	t_redirect_file	*redirection;
+	int				error;
 
+	error = 0;
 	data = (t_token *)(node->data);
+	tmp = data->redir;
 	if (!data)
 		return (1);
-	error = handle_input_redirections(node, data);
-	if (handle_output_redirections(node, data) < 0)
-		error = -1;
+	while (tmp && error == 0)
+	{
+		redirection = (t_redirect_file *)tmp->content;
+		if (redirection->type == INFILE)
+			error = handle_input_redirections(node, tmp);
+		else if (redirection->type == WRITE || redirection->type == APPEND)
+			error = handle_output_redirections(node, tmp);
+		tmp = tmp->next;
+	}
 	return (error);
 }
 
@@ -98,5 +106,6 @@ int	is_builtin(char *cmd)
 			return (free(cmd_trim), 0);
 		i++;
 	}
-	return (free(cmd_trim), 1);
+	free(cmd_trim);
+	return (1);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection02.c                                    :+:      :+:    :+:   */
+/*   append.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:58:28 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/03 14:32:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:46:37 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ int	open_append_files(t_token *data)
 	t_list			*outfiles;
 
 	fd = -1;
-	outfiles = data->outfiles;
+	outfiles = data->redir;
 	while (outfiles)
 	{
 		outfile = (t_redirect_file *)outfiles->content;
+		if (outfile->type == INFILE)
+			break ;
 		fd = open(outfile->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
 		{

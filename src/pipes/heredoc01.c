@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection04.c                                    :+:      :+:    :+:   */
+/*   heredoc01.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:39:48 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 13:46:37 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:15:57 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	process_heredocs_in_ast(t_ast *node, t_env *env)
 	if (!node)
 		return ;
 	data = (t_token *)node->data;
-	if (data->infiles)
-		process_heredoc_list(data->infiles, env);
+	if (data->redir)
+		process_heredoc_list(data->redir, env);
 	process_heredocs_in_ast(node->left, env);
 	process_heredocs_in_ast(node->right, env);
 }

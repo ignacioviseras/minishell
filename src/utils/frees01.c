@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 19:12:20 by igvisera          #+#    #+#             */
-/*   Updated: 2025/01/28 17:58:25 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:19:22 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ void	free_tokens(t_token *token)
 	{
 		temp = token;
 		token = token->next;
-		free_redirections(temp->infiles);
-		free_redirections(temp->outfiles);
+		free_redirections(temp->redir);
 		free(temp->flags);
 		free(temp->args);
 		free(temp->cmd);

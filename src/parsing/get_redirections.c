@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 19:13:41 by drestrep          #+#    #+#             */
-/*   Updated: 2025/01/28 19:47:08 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:11:28 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	classify_redirection(t_token *token, t_redirect_file *redir)
 	{
 		new_node->content = redir;
 		new_node->next = NULL;
-		ft_lstadd_back(&token->outfiles, new_node);
+		ft_lstadd_back(&token->redir, new_node);
 		if (redir->value[1] == '>')
 			redir->type = APPEND;
 		else
@@ -43,7 +43,7 @@ void	classify_redirection(t_token *token, t_redirect_file *redir)
 	{
 		new_node->content = redir;
 		new_node->next = NULL;
-		ft_lstadd_back(&token->infiles, new_node);
+		ft_lstadd_back(&token->redir, new_node);
 		if (redir->value[1] == '<')
 			redir->type = HEREDOC;
 		else

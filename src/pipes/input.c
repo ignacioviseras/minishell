@@ -6,11 +6,27 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/12 19:04:51 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/13 23:09:10 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+int	compare_strings(char *value, char *heredoc)
+{
+	char	*aux;
+
+	aux = value;
+	while (heredoc && *heredoc == *value)
+	{
+		heredoc++;
+		value++;
+	}
+	value = aux;
+	if (!heredoc)
+		return (0);
+	return (1);
+}
 
 int	open_input_files(t_token *data)
 {
@@ -20,7 +36,7 @@ int	open_input_files(t_token *data)
 	t_redirect_file	*infile;
 
 	fd = -1;
-	current = data->infiles;
+	current = data->redir;
 	while (current)
 	{
 		infile = (t_redirect_file *)current->content;
@@ -43,14 +59,21 @@ int	open_input_files(t_token *data)
 
 int	redirect_input(t_ast *ast)
 {
-	int		fd;
-	t_token	*token;
+	int				fd;
+	t_token			*token;
+	t_list			*list;
+	t_redirect_file	*infile;
 
 	token = (t_token *)(ast->data);
+	list = (t_list *)token->redir;
+	infile = (t_redirect_file *)list->content;
 	fd = open_input_files(token);
-	if (fd == -1)
+	if (fd == -1 && compare_strings(infile->value, ".heredoc.tmp") == 0)
+	{
 		return (-1);
-	if (dup2(fd, STDIN_FILENO) < 0)
+	}
+	if (dup2(fd, STDIN_FILENO) < 0 && \
+	compare_strings(infile->value, ".heredoc.tmp") == 0)
 	{
 		perror("dup2 input");
 		close(fd);

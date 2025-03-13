@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection03.c                                    :+:      :+:    :+:   */
+/*   output.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:38:07 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/03 14:28:45 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:47:12 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ int	open_output_files(t_token *data)
 	t_list			*outfiles;
 
 	fd = -1;
-	outfiles = data->outfiles;
+	outfiles = data->redir;
 	while (outfiles)
 	{
 		outfile = (t_redirect_file *)outfiles->content;
+		if (outfile->type == INFILE)
+			break ;
 		fd = open(outfile->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
 		{

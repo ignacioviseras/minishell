@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd03.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:44:47 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/20 17:29:02 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:11:08 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,9 @@ int	have_redirection(t_token *token)
 {
 	t_redirect_file	*redirection;
 
-	if (token->outfiles)
+	if (token->redir)
 	{
-		redirection = (t_redirect_file *)token->outfiles->content;
-		if (redirection)
-			return (redirection->type);
-	}
-	else if (token->infiles)
-	{
-		redirection = (t_redirect_file *)token->infiles->content;
+		redirection = (t_redirect_file *)token->redir->content;
 		if (redirection)
 			return (redirection->type);
 	}
