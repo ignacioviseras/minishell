@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/14 16:43:21 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/14 18:02:03 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	open_input_files(t_token *data)
 	{
 		infile = (t_redirect_file *)current->content;
 		temp_fd = open(infile->value, O_RDONLY);
+		printf("input_file '%s', fd'%d'\n", infile->value, temp_fd);
 		if (temp_fd < 0)
 			return (-1);
 		if (fd != -1)

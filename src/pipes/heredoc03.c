@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc03.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:40:37 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/12 19:11:46 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/14 18:16:25 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	handle_heredoc_parent(pid_t pid, int fd, \
 	else
 	{
 		redir->type = INFILE;
+		redir->bool = 1;
 		free(redir->value);
 		redir->value = ft_strdup(temp_filename);
 	}

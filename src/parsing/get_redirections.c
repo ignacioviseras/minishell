@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_redirections.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 19:13:41 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/13 16:11:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/14 18:15:57 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	classify_redirection(t_token *token, t_redirect_file *redir)
 			redir->type = HEREDOC;
 		else
 			redir->type = INFILE;
+		redir->bool = 0;
 	}
 }
 
