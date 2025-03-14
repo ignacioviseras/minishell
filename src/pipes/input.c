@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/13 23:09:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:43:21 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	compare_strings(char *value, char *heredoc)
 	char	*aux;
 
 	aux = value;
+	if (value[0] != '.')
+		return (0);
 	while (heredoc && *heredoc == *value)
 	{
 		heredoc++;
@@ -42,11 +44,7 @@ int	open_input_files(t_token *data)
 		infile = (t_redirect_file *)current->content;
 		temp_fd = open(infile->value, O_RDONLY);
 		if (temp_fd < 0)
-		{
-			g_exit_status = 1;
-			perror("open input");
 			return (-1);
-		}
 		if (fd != -1)
 			close(fd);
 		fd = temp_fd;
@@ -70,6 +68,8 @@ int	redirect_input(t_ast *ast)
 	fd = open_input_files(token);
 	if (fd == -1 && compare_strings(infile->value, ".heredoc.tmp") == 0)
 	{
+		g_exit_status = 1;
+		perror("open input");
 		return (-1);
 	}
 	if (dup2(fd, STDIN_FILENO) < 0 && \

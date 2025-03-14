@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/13 15:02:03 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/14 17:06:37 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,8 @@ typedef struct s_token
 	char			*flags;
 	char			*cmd;
 	char			*args;
-	t_token_type	type;
 	t_list			*redir;
-	t_list			*infiles;
-	t_list			*outfiles;
+	t_token_type	type;
 	struct s_token	*next;
 }					t_token;
 
@@ -346,5 +344,6 @@ void				handle_heredoc_parent(pid_t pid, int fd,
 						char *temp_filename, t_redirect_file *redir);
 void				handle_heredoc_child(t_redirect_file *redir, t_env *env,
 						int fd);
+int					compare_strings(char *value, char *heredoc);
 
 #endif
