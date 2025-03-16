@@ -36,7 +36,6 @@ int	handle_input_redirections(t_ast *node, t_token *data)
 		if (redirection->type == INFILE)
 			error = redirect_input(node);
 	}
-	tmp = tmp->next;
 	return (error);
 }
 

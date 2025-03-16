@@ -20,7 +20,7 @@ char	*access_absolute(char *path)
 	fd_dir1 = access(path, X_OK);
 	if (fd_dir1 == -1)
 	{
-		printf("\t--- Error ---\nThere is no access\n");
+		printf("bash: %s: No such file or directory\n", path);
 		return (NULL);
 	}
 	comand_ok = ft_strdup(path);
@@ -46,8 +46,7 @@ char	*access_validate(char **path, char *comand)
 	}
 	if (fd_dir1 == -1)
 	{
-		printf("command '%s'\n", comand);
-		printf("\t--- Error ---\nThere is no access to any directory\n");
+		printf("%s: command not found\n", comand);
 		exit(127);
 	}
 	return (NULL);

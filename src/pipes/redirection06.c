@@ -12,18 +12,27 @@
 
 #include "../../inc/minishell.h"
 
-int	create_heredoc_file(char **temp_filename)
+int create_heredoc_file(char **temp_filename)
 {
-	int	fd;
-
-	*temp_filename = ft_strdup(".heredoc.tmp");
-	fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-	{
-		perror("open temp heredoc");
-		exit(EXIT_FAILURE);
-	}
-	return (fd);
+    static int heredoc_count = 0;
+    char *count_str;
+    char *base_name = ".heredoc.tmp.";
+    
+    heredoc_count++;
+    count_str = ft_itoa(heredoc_count);
+    if (!count_str)
+        return (-1);
+    *temp_filename = ft_strjoin(base_name, count_str);
+    free(count_str);
+    if (!*temp_filename)
+        return (-1);
+    int fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0)
+    {
+        perror("open temp heredoc");
+        return (-1);
+    }
+    return fd;
 }
 
 void	write_to_heredoc(int fd_file, char *buffer, t_env *env)
