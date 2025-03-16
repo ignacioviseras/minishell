@@ -74,8 +74,8 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 		g_exit_status = WEXITSTATUS(p->status);
 	else if (WIFSIGNALED(p->status))
 		g_exit_status = 128 + WTERMSIG(p->status);
-	if (p->pid_right == 0)
-		exit(g_exit_status);
+	// if (p->pid_right == 0)
+	// 	exit(g_exit_status);
 }
 
 void	execute_ast(t_ast *node, t_params *p, t_env *env, int in_fd)

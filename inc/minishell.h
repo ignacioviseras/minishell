@@ -225,7 +225,7 @@ int					count_words_smart(const char *input);
 char				**smart_split(const char *input);
 int					ft_atoi(const char *str);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
-void				*ft_realloc(void *ptr, size_t new_size);
+void				*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char				*ft_strcat(char *dest, const char *src);
 char				*ft_str(long aux, long size, long n1, int n);
 int					get_word_len(char *full_cmd, int i);

@@ -28,7 +28,7 @@ char	*append_new_var(char *cmd, char *str, int caller)
 			free(word);
 			break ;
 		}
-		if (word[0] == '-' && caller == 0)
+		if (word[0] == '-')
 			new_var = append_str(new_var, word);
 		else if (word[0] != '-' && caller == 1)
 			new_var = append_str(new_var, word);

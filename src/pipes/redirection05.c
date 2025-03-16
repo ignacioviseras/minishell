@@ -26,7 +26,7 @@ char	*get_env_value_heredoc(t_env *env, const char *key)
 char	*expand_buffer(char *result, size_t *buf_size, size_t required_size)
 {
 	*buf_size = required_size * 2;
-	result = ft_realloc(result, *buf_size);
+	result = ft_realloc(result, ft_strlen(result) + 1, *buf_size);
 	if (!result)
 	{
 		perror("ft_realloc");
@@ -65,12 +65,14 @@ char	*expand_variable_heredoc(const char **p, t_env *env, char *result,
 char	*append_char_to_result(char *result, size_t *buf_size, const char **p)
 {
 	size_t	current_len;
+	size_t	old_size;
 
 	current_len = ft_strlen(result);
 	if (current_len + 2 > *buf_size)
 	{
+		old_size = *buf_size;
 		*buf_size *= 2;
-		result = ft_realloc(result, *buf_size);
+		result = ft_realloc(result, old_size, *buf_size);
 		if (!result)
 		{
 			perror("ft_realloc");

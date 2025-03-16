@@ -27,17 +27,16 @@ int	handle_input_redirections(t_ast *node, t_token *data)
 	int				error;
 
 	error = 0;
+	if (!data->infiles)
+		return (0);
 	tmp = data->infiles;
-	while (tmp)
+	redirection = (t_redirect_file *)tmp->content;
+	if (redirection)
 	{
-		redirection = (t_redirect_file *)tmp->content;
-		if (redirection)
-		{
-			if (redirection->type == INFILE)
-				error = redirect_input(node);
-		}
-		tmp = tmp->next;
+		if (redirection->type == INFILE)
+			error = redirect_input(node);
 	}
+	tmp = tmp->next;
 	return (error);
 }
 

@@ -76,7 +76,8 @@ void	handle_input(t_env *env, char *input)
 
 	tokens = lexer(input);
 	ast = parsing(tokens, env);
-	g_exit_status = 0;
+	if (g_exit_status != 2)
+		g_exit_status = 0;
 	p.total_cmds = count_ast_nodes(ast);
 	p.env = init_env(env);
 	process_heredocs_in_ast(ast, env);

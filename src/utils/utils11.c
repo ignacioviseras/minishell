@@ -93,7 +93,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (mem2);
 }
 
-void	*ft_realloc(void *ptr, size_t new_size)
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr;
 
@@ -107,7 +107,10 @@ void	*ft_realloc(void *ptr, size_t new_size)
 		return (NULL);
 	if (ptr)
 	{
-		ft_memcpy(new_ptr, ptr, new_size);
+		if (old_size < new_size)
+			ft_memcpy(new_ptr, ptr, old_size);
+		else
+			ft_memcpy(new_ptr, ptr, new_size);
 		free(ptr);
 	}
 	return (new_ptr);
