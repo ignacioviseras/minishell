@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -12,6 +13,27 @@
 
 #include "../../inc/minishell.h"
 
+void	fd_dup(int call)
+{
+	static int	stdin_copy;
+	static int	stdout_copy;
+
+	if (call == 0)
+	{
+		stdin_copy = dup(STDIN_FILENO);
+		stdout_copy = dup(STDOUT_FILENO);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+	}
+	else
+	{
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		dup2(stdin_copy, STDIN_FILENO);
+		dup2(stdout_copy, STDOUT_FILENO);
+	}
+}
+
 void	before_execute(t_ast *node, t_params *p, t_env *env)
 {
 	t_token	*data;
@@ -22,9 +44,15 @@ void	before_execute(t_ast *node, t_params *p, t_env *env)
 	data = (t_token *)(node->data);
 	have_redirect = have_redirection(data);
 	if (have_redirect != -1)
+	{
+		if (is_builtin(data->cmd) == 0)
+			fd_dup(0);
 		error = handle_redirection(node);
+	}
 	if (error == 0)
 		execute_node(node, p, env);
+	if (have_redirect != -1 && is_builtin(data->cmd) == 0)
+		fd_dup(1);
 }
 
 void	pipes_and_execute(t_ast *node, t_params *p, t_env *env, t_token *data)

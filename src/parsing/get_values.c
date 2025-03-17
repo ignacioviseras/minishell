@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:59:18 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/26 18:10:11 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:04:18 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,10 @@ char	**get_values(t_env *env, char **keys, int *keys_nbr)
 {
 	char	**values;
 	char	*value;
+	int		aux;
 	int		i;
 
+	aux = *keys_nbr;
 	values = ft_malloc((*keys_nbr + 1) * sizeof(char *));
 	i = 0;
 	while (keys[i] && *keys_nbr > 0)
@@ -66,6 +68,7 @@ char	**get_values(t_env *env, char **keys, int *keys_nbr)
 		if (value)
 			values[i++] = value;
 	}
+	*keys_nbr = aux;
 	values[i] = NULL;
 	return (values);
 }

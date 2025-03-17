@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/10 17:35:01 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:09:44 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int open_input_files(t_token *data)
         {
             g_exit_status = 1;
             perror("open input");
-            return -1;
+            return (-1);
         }
         if (fd != -1)
             close(fd);

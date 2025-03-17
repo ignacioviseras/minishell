@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:01:43 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/26 17:32:05 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:22:02 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,23 @@ int	get_nbr_of_keys(char *str)
 	keys = 0;
 	while (*str)
 	{
-		if (*str == '$')
+		if (*str == '\'')
+		{
+			str++;
+			while (*str != '\'')
+				str++;
+		}
+		else if (*str == '"')
+		{
+			str++;
+			while (*str != '"')
+			{
+				if (*str == '$')
+					keys++;
+				str++;
+			}
+		}
+		else if (*str == '$')
 			keys++;
 		str++;
 	}

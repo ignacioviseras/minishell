@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/05 18:51:11 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:52:21 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,7 @@ void	command_pwd(t_token *tokens)
 	int		x;
 	char	cwd[4096];
 
-	if (tokens->args != NULL)
-	{
-		printf("pwd: too many arguments\n");
-		g_exit_status = 1;
-	}
-	else if (tokens->flags && ft_charcmp(tokens->flags[0], '-') == 0)
+	if (tokens->flags && ft_charcmp(tokens->flags[0], '-') == 0)
 	{
 		x = flags_validator(tokens->flags, "L P");
 		if (x == 0)
@@ -63,7 +58,7 @@ void	command_pwd(t_token *tokens)
 		}
 		g_exit_status = 2;
 	}
-	else if (tokens->args == NULL)
+	else if (tokens->args == NULL || ft_strcmp(tokens->args, "") == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)) != NULL)
 			printf("%s\n", cwd);
