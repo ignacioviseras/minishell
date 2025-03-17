@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/17 19:02:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/17 20:51:14 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,6 @@ void	command_pwd(t_token *tokens)
 		}
 		g_exit_status = 2;
 	}
-	else if (tokens->args == NULL || ft_strcmp(tokens->args, "") == 0)
-	{
-		if (getcwd(cwd, sizeof(cwd)) != NULL)
-			printf("%s\n", cwd);
-	}
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		printf("%s\n", cwd);
 }
