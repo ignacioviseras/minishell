@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:41:52 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/17 17:48:03 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:50:03 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ char	*get_key(char *str, int *i)
 	}
 	else
 		key = get_common_key(str, key, i);
+	quoted = 0;
 	return (key);
 }
 

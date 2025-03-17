@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clear.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:56:10 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/17 21:33:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:40:27 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	command_clear(t_token *tokens)
 		else
 			printf("clear: invalid option -- '%c'\n", tokens->flags[x]);
 	}
-	else if (tokens->args == NULL || ft_strcmp(tokens->args, "")==0)
+	else if (tokens->args == NULL || ft_strcmp(tokens->args, "") == 0)
 		printf("\033[2J\033[H");
-	if ((tokens->args != NULL && ft_strcmp(tokens->args, "")!=0) || x == 1)
+	if ((tokens->args != NULL && ft_strcmp(tokens->args, "") != 0) || x == 1)
 	{
 		printf("Usage: clear [options]\n\nOptions:\n");
 		printf("  -T TERM     use this instead of $TERM\n");
