@@ -3,36 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   redirection06.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:40:37 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 13:49:59 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:17:11 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int create_heredoc_file(char **temp_filename)
+int	create_heredoc_file(char **temp_filename)
 {
-    static int heredoc_count = 0;
-    char *count_str;
-    char *base_name = ".heredoc.tmp.";
-    
-    heredoc_count++;
-    count_str = ft_itoa(heredoc_count);
-    if (!count_str)
-        return (-1);
-    *temp_filename = ft_strjoin(base_name, count_str);
-    free(count_str);
-    if (!*temp_filename)
-        return (-1);
-    int fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd < 0)
-    {
-        perror("open temp heredoc");
-        return (-1);
-    }
-    return fd;
+	static int	heredoc_count;
+	char		*count_str;
+	char		*base_name;
+	int			fd;
+
+	base_name = ".heredoc.tmp.";
+	heredoc_count++;
+	count_str = ft_itoa(heredoc_count);
+	if (!count_str)
+		return (-1);
+	*temp_filename = ft_strjoin(base_name, count_str);
+	free(count_str);
+	if (!*temp_filename)
+		return (-1);
+	fd = open(*temp_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		perror("open temp heredoc");
+		return (-1);
+	}
+	return (fd);
 }
 
 void	write_to_heredoc(int fd_file, char *buffer, t_env *env)
@@ -81,8 +83,8 @@ void	handle_heredoc_child(t_redirect_file *redir, t_env *env, int fd)
 	exit(0);
 }
 
-void	handle_heredoc_parent(pid_t pid, int fd, \
-	char *temp_filename, t_redirect_file *redir)
+void	handle_heredoc_parent(pid_t pid, int fd, char *temp_filename,
+		t_redirect_file *redir)
 {
 	int	status;
 

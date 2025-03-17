@@ -6,11 +6,12 @@
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:08 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/17 18:59:34 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:02:31 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
 int	is_option_n(char *str)
 {
 	int	i;

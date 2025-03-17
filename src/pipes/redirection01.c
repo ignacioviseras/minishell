@@ -3,39 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   redirection01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:03:53 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/17 17:09:44 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:16:13 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int open_input_files(t_token *data)
+int	open_input_files(t_token *data)
 {
-    int         fd = -1;
-    t_list      *current = data->infiles;
-    t_redirect_file *infile = NULL;
+	int				fd;
+	t_list			*current;
+	t_redirect_file	*infile;
+	int				temp_fd;
 
+	fd = -1;
+	current = data->infiles;
 	while (current)
-    {
-        infile = (t_redirect_file *)current->content;
-        int temp_fd = open(infile->value, O_RDONLY);
-        if (temp_fd < 0)
-        {
-            g_exit_status = 1;
-            perror("open input");
-            return (-1);
-        }
-        if (fd != -1)
-            close(fd);
-        fd = temp_fd;
-        current = current->next;
+	{
+		infile = (t_redirect_file *)current->content;
+		temp_fd = open(infile->value, O_RDONLY);
+		if (temp_fd < 0)
+		{
+			g_exit_status = 1;
+			perror("open input");
+			return (-1);
+		}
+		if (fd != -1)
+			close(fd);
+		fd = temp_fd;
+		current = current->next;
 		if (ft_strncmp(infile->value, ".heredoc.tmp", 12) == 0)
 			unlink(infile->value);
-    }
-    return fd;
+	}
+	return (fd);
 }
 
 int	redirect_input(t_ast *ast)

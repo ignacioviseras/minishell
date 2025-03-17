@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 19:43:00 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/17 16:54:33 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:03:38 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ void	execute_simple_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
 		g_exit_status = WEXITSTATUS(p->status);
 	else if (WIFSIGNALED(p->status))
 		g_exit_status = 128 + WTERMSIG(p->status);
-	 if (p->pid_right == 0)
-	 	exit(g_exit_status);
+	if (p->pid_right == 0)
+		exit(g_exit_status);
 }
 
 void	execute_ast(t_ast *node, t_params *p, t_env *env, int in_fd)
