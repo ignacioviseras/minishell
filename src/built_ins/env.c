@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:34:57 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/05 18:57:31 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:25:18 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	print_env(t_env *env, int flag)
 
 void	command_env(t_token *tokens, t_env *envi)
 {
-	if (tokens->args != NULL)
+	if (tokens->args != NULL && ft_strcmp(tokens->args, ""))
 	{
 		printf("env: ‘%s’: No such file or directory\n", tokens->args);
 		g_exit_status = 127;
