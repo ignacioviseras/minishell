@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/17 20:59:12 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:26:18 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,6 @@ void	command_pwd(t_token *tokens)
 		}
 		g_exit_status = 2;
 	}
-	else if (tokens->args == NULL || ft_strcmp(tokens->args, "") == 0)
-	{
-		if (getcwd(cwd, sizeof(cwd)) != NULL)
-			printf("%s\n", cwd);
-	}
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		printf("%s\n", cwd);
 }
