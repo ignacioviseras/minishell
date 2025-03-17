@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:52:06 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/05 18:55:28 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 20:58:53 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	handle_cd_flags(t_token *tokens)
 	}
 	else
 	{
-		printf("bash: cd: -%c: invalid option\n", tokens->flags[x]);
+		printf("megashell: cd: -%c: invalid option\n", tokens->flags[x]);
 		printf("cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n");
 		g_exit_status = 2;
 	}
@@ -57,9 +57,9 @@ void	cd_actions(t_token *tokens, t_env *env)
 	}
 	else if (ft_strcmp(tokens->cmd, "cd") == 0 && n_words(tokens->args,
 			' ') > 1)
-		printf("bash: cd: too many arguments\n");
+		printf("megashell: cd: too many arguments\n");
 	else if (chdir(tokens->args) != 0)
-		printf("bash: cd: %s: No such file or directory\n", tokens->args);
+		printf("megashell: cd: %s: No such file or directory\n", tokens->args);
 	else
 	{
 		if (getcwd(cwd, sizeof(cwd)) != NULL)

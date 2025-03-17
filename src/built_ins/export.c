@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:35:03 by igvisera          #+#    #+#             */
-/*   Updated: 2025/02/27 18:32:47 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 20:59:04 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ int	validate_export(char *key, char *value)
 	{
 		if (value == NULL)
 		{
-			printf("bash: export: `%s':", key);
+			printf("megashell: export: `%s':", key);
 			printf(" not a valid identifier\n");
 		}
 		else
 		{
-			printf("bash: export: `%s=%s':", key, value);
+			printf("megashell: export: `%s=%s':", key, value);
 			printf(" not a valid identifier\n");
 		}
 		g_exit_status = 2;

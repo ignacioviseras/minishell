@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:53:19 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/05 18:53:59 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:11:06 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	unset_actions(t_token *tokens, t_env *env)
 			remove_node(&env, splt_vars[x]);
 		else
 		{
-			printf("bash: unset: `%s': not a valid identifier\n", splt_vars[x]);
+			printf("megsahell: unset: `%s': not a valid identifier\n", \
+			splt_vars[x]);
 			g_exit_status = 1;
 		}
 	}
@@ -46,7 +47,7 @@ void	handle_unset_flags(t_token *tokens)
 	}
 	else
 	{
-		printf("bash: unset: -%c:", tokens->flags[x]);
+		printf("megashell: unset: -%c:", tokens->flags[x]);
 		printf(" invalid option\n");
 		printf("unset: usage: unset [-f] [-v] [-n] [name ...]\n");
 		g_exit_status = 2;

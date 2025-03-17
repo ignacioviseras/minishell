@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:56:01 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/10 18:45:16 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:22:35 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 
 # include <fcntl.h>
 # include <limits.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdint.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
@@ -314,10 +314,10 @@ char				*create_char(t_env *env);
 int					count_env_nodes(t_env *env);
 char				**init_env(t_env *env);
 char				*access_absolute(char *path);
-char				*access_validate(char **path, char *comand);
-void				validate_comand(char **comand_splited);
-char				*command_with_space(char *comand);
-char				*load_param(char **path, char *comand);
+char				*access_validate(char **path, char *command);
+void				validate_command(char **command_splited);
+char				*command_with_space(char *command);
+char				*load_param(char **path, char *command);
 void				before_execute(t_ast *node, t_params *p, t_env *env);
 int					handle_redirection(t_ast *node);
 int					is_builtin(char *cmd);

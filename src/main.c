@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:18:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/17 16:14:32 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:08:49 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	handle_input(t_env *env, char *input)
 		g_exit_status = 0;
 	p.total_cmds = count_ast_nodes(ast);
 	p.env = init_env(env);
+	p.pid_right = -1;
 	process_heredocs_in_ast(ast, env);
 	execute_ast(ast, &p, env, -1);
 	free_matrix(p.env);

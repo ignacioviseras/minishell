@@ -6,11 +6,22 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:01:43 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/17 16:22:02 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 21:20:45 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	count_quoted_keys(char *str, int *keys)
+{
+	str++;
+	while (*str != '"')
+	{
+		if (*str == '$')
+			(*keys)++;
+		str++;
+	}
+}
 
 int	get_nbr_of_keys(char *str)
 {
@@ -26,15 +37,7 @@ int	get_nbr_of_keys(char *str)
 				str++;
 		}
 		else if (*str == '"')
-		{
-			str++;
-			while (*str != '"')
-			{
-				if (*str == '$')
-					keys++;
-				str++;
-			}
-		}
+			count_quoted_keys(str, &keys);
 		else if (*str == '$')
 			keys++;
 		str++;

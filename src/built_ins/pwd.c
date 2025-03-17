@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:47:37 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/17 19:02:41 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/17 20:59:12 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	command_pwd(t_token *tokens)
 			printf("flags are not implemented\n");
 		else
 		{
-			printf("bash: pwd: -%c: invalid option\n", tokens->flags[x]);
+			printf("megashell: pwd: -%c: invalid option\n", tokens->flags[x]);
 			printf("pwd: usage: pwd [-LP]\n");
 		}
 		g_exit_status = 2;
