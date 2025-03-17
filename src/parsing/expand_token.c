@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:54:03 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/17 19:02:51 by igvisera         ###   ########.fr       */
+/*   Updated: 2025/03/17 22:17:22 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	process_string(t_kv kv, char *full_cmd, char *new_str)
 			handle_single_quote(full_cmd, new_str, &counters);
 		else if (full_cmd[counters.i] == '"')
 			handle_double_quote(kv, full_cmd, new_str, &counters);
-		else if (full_cmd[counters.i] == '$')
+		else if (full_cmd[counters.i] == '$' && full_cmd[counters.i + 1] != '$')
 			handle_dollar_sign(kv, full_cmd, new_str, &counters);
 		else
 			new_str[counters.k++] = full_cmd[counters.i++];

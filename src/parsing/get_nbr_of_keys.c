@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:01:43 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/17 21:53:26 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/17 22:08:07 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ int	get_nbr_of_keys(char *str)
 		}
 		else if (*str == '"')
 			count_quoted_keys(&str, &keys);
+		else if (*str == '$' && *(str + 1) == '$')
+		{
+			while (*str == '$')
+				str++;
+		}
 		else if (*str == '$')
 			keys++;
-		str++;
+		if (*str)
+			str++;
 	}
 	return (keys);
 }
