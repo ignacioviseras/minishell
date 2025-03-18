@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 19:33:27 by drestrep          #+#    #+#             */
-/*   Updated: 2025/02/11 18:52:10 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:55:42 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,14 @@ void	add_token(t_token **head, t_token *new_token)
 			temp = temp->next;
 		temp->next = new_token;
 	}
+}
+
+char	*update_args(char *args)
+{
+	if (ft_strcmp(args, "") == 0)
+	{
+		free(args);
+		args = NULL;
+	}
+	return (args);
 }

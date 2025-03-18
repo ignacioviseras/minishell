@@ -6,14 +6,14 @@
 #    By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 00:49:01 by drestrep          #+#    #+#              #
-#    Updated: 2025/03/10 13:52:24 by drestrep         ###   ########.fr        #
+#    Updated: 2025/03/18 17:31:15 by drestrep         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 			= 	minishell
 
 CC 				= 	gcc
-CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address #-O3
+CFLAGS 			= 	-g3 -Wall -Wextra -Werror -fsanitize=address
 LDFLAGS			=	-lreadline
 INCLUDES		= 	-I ./inc/
 
@@ -101,9 +101,6 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(NAME) $(INCLUDES)
-
-exe: all
-	valgrind --leak-check=full --track-origins=yes ./$(NAME)
 
 clean:
 	@rm -rf $(OBJS)

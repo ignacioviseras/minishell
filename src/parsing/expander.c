@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:31:45 by drestrep          #+#    #+#             */
-/*   Updated: 2025/03/17 22:17:19 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:55:17 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,6 @@ void	expander(t_token **tokens, t_env *env)
 	*tokens = start;
 	aux = get_unquoted_str((*tokens)->flags);
 	free((*tokens)->flags);
+	(*tokens)->args = update_args((*tokens)->args);
 	(*tokens)->flags = aux;
 }

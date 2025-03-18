@@ -6,7 +6,7 @@
 /*   By: drestrep <drestrep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:52:06 by igvisera          #+#    #+#             */
-/*   Updated: 2025/03/17 20:58:53 by drestrep         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:57:02 by drestrep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,11 @@ void	command_cd(t_token *tokens, t_env *env)
 
 	if (tokens == NULL)
 		return ;
-	if (tokens->args || tokens->flags)
+	if ((tokens->args || tokens->flags) && \
+		(ft_strcmp(tokens->args, "") != 0 && ft_strcmp(tokens->args, "~") != 0))
 		cd_actions(tokens, env);
-	else if ((tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0))
+	else if ((tokens->args == NULL || ft_strcmp(tokens->args, "~") == 0) \
+		|| ft_strcmp(tokens->args, "") == 0)
 	{
 		home = have_home(env);
 		if (home != NULL)
